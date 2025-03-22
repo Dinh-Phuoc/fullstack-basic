@@ -1,6 +1,6 @@
 
 
-import Board from './pages/Board/Board'
+import Board from './pages/Boards/Board'
 function App() {
     return (
         <Board />
