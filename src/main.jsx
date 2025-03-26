@@ -4,11 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
 import theme from './assets/theme.js'
+import { CssBaseline } from '@mui/material'
+import { BoardProvider } from './contexts/FormatterContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <CssVarsProvider theme={theme}>
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>
-    </CssVarsProvider>
+    <React.StrictMode>
+        <CssVarsProvider theme={theme}>
+            <CssBaseline />
+            <BoardProvider>
+                <App />
+            </BoardProvider>
+        </CssVarsProvider>
+    </React.StrictMode>
 )
