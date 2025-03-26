@@ -13,7 +13,6 @@ export default function ListColomn({ columns }) {
             <Box sx={{
                 bgcolor: 'inherit',
                 width: '100%',
-                height: '100%',
                 display: 'flex',
                 overflowX: 'auto',
                 overflowY: 'hidden',
