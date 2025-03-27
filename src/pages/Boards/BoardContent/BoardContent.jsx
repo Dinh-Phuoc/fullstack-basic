@@ -15,8 +15,7 @@ import { arrayMove } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
 import ListColumn from './ListColumns/ListColumn'
 import mapOrder from '~/utils/sortter.js'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { BoardContext } from '~/contexts/FormatterContext'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { cloneDeep, isEmpty } from 'lodash'
 
 import CardItem from './ListColumns/Column/ListCards/CardItem/CardItem'
@@ -28,8 +27,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
     CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
  
-export default function BoardContent() {
-    const board = useContext(BoardContext).board
+export default function BoardContent({ board }) {
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })

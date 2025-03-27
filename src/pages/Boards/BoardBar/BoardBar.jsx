@@ -1,6 +1,3 @@
-import { useContext } from 'react'
-import { BoardContext } from '~/contexts/FormatterContext'
-
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import DashboardIcon from '@mui/icons-material/Dashboard'
@@ -30,8 +27,7 @@ const MENU_STYLES = {
     }
 }
 
-export default function BoardBar() {
-    const board = useContext(BoardContext).board
+export default function BoardBar({ board }) {
     return (
         <Box sx={{
             width: '100%',
