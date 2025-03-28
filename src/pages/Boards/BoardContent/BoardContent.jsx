@@ -1,9 +1,6 @@
 import { 
     DndContext, 
     DragOverlay,
-    PointerSensor, 
-    MouseSensor, 
-    TouchSensor, 
     useSensor, 
     useSensors, 
     defaultDropAnimationSideEffects,
@@ -21,13 +18,14 @@ import { cloneDeep, isEmpty } from 'lodash'
 import CardItem from './ListColumns/Column/ListCards/CardItem/CardItem'
 import Column from './ListColumns/Column/Column'
 import { generatePlaceHolderCard } from '~/utils/formatter'
+import { MouseSensor, TouchSensor, PointerSensor } from '~/customLibs/DnDKitSensors'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMNS',
     CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
  
-export default function BoardContent({ board }) {
+export default function BoardContent({ board, createNewColumn, createNewCard }) {
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -244,11 +242,11 @@ export default function BoardContent({ board }) {
             <Box sx={{
                 bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'), 
                 width: '100%',
-                height: (theme) => theme.trelloCustom.BoardContentHeight,
+                height: (theme) => theme.trelloCustom.boardContentHeight,
                 display: 'flex',
                 p: '10px 0'
             }}> 
-                <ListColumn columns = {orderedColumns}/>
+                <ListColumn createNewCard={createNewCard} createNewColumn={createNewColumn} columns = {orderedColumns}/>
                 <DragOverlay dropAnimation={dropAnimation}>
                     {!activeDragItemType && null}
                     {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData}/>}

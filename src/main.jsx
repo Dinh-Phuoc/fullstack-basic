@@ -6,6 +6,8 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import theme from './assets/theme.js'
 import { CssBaseline } from '@mui/material'
 import { BoardProvider } from './contexts/FormatterContext.jsx'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -14,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <BoardProvider>
                 <App />
             </BoardProvider>
+            <ToastContainer />
         </CssVarsProvider>
     </React.StrictMode>
 )
