@@ -7,6 +7,24 @@ export const fetchBoardDetailsApi = async (boardId) => {
     return response.data
 }
 
+// Call Api Update Board
+export const updateBoardDetailsApi = async (boardId, updateData) => {
+    const response = await axios.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
+    return response.data
+}
+
+// Call Api Update Column
+export const updateColumnDetailsApi = async (columnId, updateData) => {
+    const response = await axios.put(`${API_ROOT}/v1/columns/${columnId}`, updateData)
+    return response.data
+}
+
+//moveCardToDifferentColumn
+export const moveCardToDifferentColumnApi = async (updateData) => {
+    const response = await axios.put(`${API_ROOT}/v1/boards/supports/moving_cards`, updateData)
+    return response.data
+}
+
 // Call Api CardModel
 export const createNewCardApi = async (newCardData) => {
     const response = await axios.post(`${API_ROOT}/v1/cards`, newCardData)

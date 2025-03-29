@@ -11,7 +11,6 @@ import {
 import { arrayMove } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
 import ListColumn from './ListColumns/ListColumn'
-import mapOrder from '~/utils/sortter.js'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { cloneDeep, isEmpty } from 'lodash'
 
@@ -25,7 +24,14 @@ const ACTIVE_DRAG_ITEM_TYPE = {
     CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
  
-export default function BoardContent({ board, createNewColumn, createNewCard }) {
+export default function BoardContent({ 
+    board, 
+    createNewColumn, 
+    createNewCard,
+    moveColumns, 
+    moveCardInTheSameColumn,
+    moveCardToDifferentColumn
+}) {
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -42,8 +48,7 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
 
     
     useEffect(() => {
-        const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
-        setOrderedColumns(orderedColumns)
+        setOrderedColumns(board.columns)
     }, [board])
 
     const findColumnByCardId = (cardId) => {
@@ -57,7 +62,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
         overColumn,
         activeDraggingCardId,
         overCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        triggerFrom
     ) => {
         setOrderedColumns(prevColumns => {
             const overCardIndex = overColumn.cards.findIndex(card => card._id === overCardId)
@@ -89,6 +95,10 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
             nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuid_activeDraggingCardData)
             nextOverColumn.cards = nextOverColumn.cards.filter(card => !card.FE_PlaceholderCard)
             nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
+
+            if (triggerFrom === 'handleDragEnd') {
+                moveCardToDifferentColumn(activeDragItemId, oldColumn._id, nextOverColumn._id, nextColumns)
+            }
 
             return nextColumns
         })  
@@ -127,7 +137,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
                 overColumn,
                 activeDraggingCardId,
                 overCardId,
-                activeDraggingCardData
+                activeDraggingCardData,
+                'handleDragOver'
             )
         }
     }
@@ -154,7 +165,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
                     overColumn,
                     activeDraggingCardId,
                     overCardId,
-                    activeDraggingCardData
+                    activeDraggingCardData,
+                    'handleDragEnd'
                 )
             } else {
                 const oldCardIndex = oldColumn?.cards?.findIndex(column => column._id === activeDragItemId)
@@ -162,7 +174,7 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
                 const newCardIndex = overColumn?.cards?.findIndex(column => column._id === overCardId)
 
                 const dndOrderedCard = arrayMove(oldColumn?.cards, oldCardIndex, newCardIndex)
-                
+                const dndOrderedCardIds = dndOrderedCard.map(card => card._id)
                 setOrderedColumns(prevColumns => {
                     const nextColumns = cloneDeep(prevColumns)  
                     const targetColumn = nextColumns.find(column => column._id === overColumn._id)
@@ -172,6 +184,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
 
                     return nextColumns
                 })
+
+                moveCardInTheSameColumn(dndOrderedCard, dndOrderedCardIds, oldColumn._id)
             }
         }
 
@@ -183,8 +197,9 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
                 const newColumnIndex = orderedColumns.findIndex(column => column._id === over.id)
     
                 const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
-                // const dndOrderedColumnsIds = dndOrderedColumns.map(column => column._id)
+
                 setOrderedColumns(dndOrderedColumns)
+                moveColumns(dndOrderedColumns )
             }
         }
         setActiveDragItemData(null)

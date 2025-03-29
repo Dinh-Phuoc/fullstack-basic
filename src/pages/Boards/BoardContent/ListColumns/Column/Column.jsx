@@ -24,7 +24,6 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 import ListCards from './ListCards/ListCards'
-import mapOrder from '~/utils/sortter.js'
 import { Close } from '@mui/icons-material'
 import { TextField } from '@mui/material'
 import { toast } from 'react-toastify'
@@ -39,14 +38,14 @@ export default function Column({ column, createNewCard }) {
         setAnchorEl(null)
     }
 
-    const orderCard = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+    const orderCard = column.cards
 
     const [openNewCardForm, setOpenNewCardForm] = useState(false)
     const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
     const [newCardTitle, setNewCardTitle] = useState('')
 
-    const addNewCard = async () => {
+    const addNewCard = () => {
         if (!newCardTitle) {
             toast.error('Please provide a new title')
             return
@@ -57,7 +56,7 @@ export default function Column({ column, createNewCard }) {
             columnId: column._id
         }
 
-        await createNewCard(newCardData)
+        createNewCard(newCardData)
         
         toggleOpenNewCardForm()
         setNewCardTitle('')
