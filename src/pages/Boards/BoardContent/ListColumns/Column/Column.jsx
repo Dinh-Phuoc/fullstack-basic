@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
+import { useConfirm } from 'material-ui-confirm'
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -28,7 +29,7 @@ import { Close } from '@mui/icons-material'
 import { TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 
-export default function Column({ column, createNewCard }) {
+export default function Column({ column, createNewCard, deleteColumnDetails }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
@@ -44,6 +45,19 @@ export default function Column({ column, createNewCard }) {
     const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
     const [newCardTitle, setNewCardTitle] = useState('')
+
+    const confirmDeleteColumn = useConfirm()
+    const handleDeleteColumn = () => {
+        confirmDeleteColumn({
+            description: 'Are you sure you want to delete this column?',
+            confirmationText: 'Delete',
+            confirmationButtonProps: { color: 'error' },
+            cancellationButtonProps: { color: 'inherit', variant: 'outlined' },
+            buttonOrder: ['confirm', 'cancel']
+        }).then(() => {
+            deleteColumnDetails(column._id)
+        }).catch(() => {})
+    }
 
     const addNewCard = () => {
         if (!newCardTitle) {
@@ -121,12 +135,21 @@ export default function Column({ column, createNewCard }) {
                             anchorEl={anchorEl}
                             open={open}
                             onClose={handleClose}
+                            onClick={handleClose}
                             MenuListProps={{
                                 'aria-labelledby': 'basic-column-dropdown'
                             }}
                         >
-                            <MenuItem>
-                                <ListItemIcon> <AddCard fontSize="small" /></ListItemIcon>
+                            <MenuItem 
+                                sx={{ 
+                                    '&:hover': { 
+                                        color: 'success.light', 
+                                        '& .add-card': { color: 'success.light' }
+                                    } 
+                                }}
+                                onClick={toggleOpenNewCardForm}
+                            >
+                                <ListItemIcon> <AddCard className='add-card' fontSize="small" /></ListItemIcon>
                                 <ListItemText>Add new card</ListItemText>
                             </MenuItem>
                             <MenuItem>
@@ -141,17 +164,27 @@ export default function Column({ column, createNewCard }) {
                                 <ListItemIcon> <ContentPaste fontSize="small" /></ListItemIcon>
                                 <ListItemText>Paste</ListItemText>
                             </MenuItem>
+
                             <Divider />
+
                             <MenuItem>
                                 <ListItemIcon> <Cloud fontSize="small" /></ListItemIcon>
                                 <ListItemText>Archive this column</ListItemText>
                             </MenuItem>
     
-                            <MenuItem>
+                            <MenuItem 
+                                sx={{ 
+                                    '&:hover': { 
+                                        color: 'warning.dark', 
+                                        '& .delete-icon': { color: 'warning.dark' }
+                                    } 
+                                }}
+                                onClick={handleDeleteColumn}
+                            >
                                 <ListItemIcon>
-                                    <DeleteForever fontSize="small" />
+                                    <DeleteForever className='delete-icon' fontSize="small" />
                                 </ListItemIcon>
-                                <ListItemText>Remove this column</ListItemText>
+                                <ListItemText >Remove this column</ListItemText>
                             </MenuItem>
                         </Menu>
                     </Box>

@@ -8,15 +8,18 @@ import { CssBaseline } from '@mui/material'
 import { BoardProvider } from './contexts/FormatterContext.jsx'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { ConfirmProvider } from 'material-ui-confirm'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <CssVarsProvider theme={theme}>
-            <CssBaseline />
-            <BoardProvider>
-                <App />
-            </BoardProvider>
-            <ToastContainer />
+            <ConfirmProvider>
+                <CssBaseline />
+                <BoardProvider>
+                    <App />
+                </BoardProvider>
+                <ToastContainer/>
+            </ConfirmProvider>
         </CssVarsProvider>
     </React.StrictMode>
 )
