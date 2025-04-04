@@ -34,7 +34,6 @@ export default function ListColomn({ columns, createNewColumn, createNewCard, de
     return (
         <SortableContext items={columns?.map((column) => column._id)} strategy={horizontalListSortingStrategy}>
             <Box sx={{
-                bgcolor: 'inherit',
                 width: '100%',
                 display: 'flex',
                 overflowX: 'auto',
@@ -67,7 +66,8 @@ export default function ListColomn({ columns, createNewColumn, createNewCard, de
                         > 
                             Add new Column
                         </Button>
-                    </Box> :
+                    </Box> 
+                    :
                     <Box sx={{
                         minWidth: '250px',
                         maxWidth: '250px',

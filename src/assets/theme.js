@@ -17,6 +17,33 @@ const theme = extendTheme({
         columnFooterHeight: COLUMN_FOOTER_HEIGHT
     },
 
+    colorSchemes: {
+        light: {
+            palette: {
+                primary: {
+                    main: '#ff9a9cc4'
+                }
+            },
+            components: {
+                MuiTooltip: {
+                    styleOverrides: {
+                        tooltip: {
+                            backgroundColor: '#ffffffc4',
+                            color: '#ff9a9cc4'
+                        }
+                    }
+                }
+            }
+        },
+        dark: {
+            palette: {
+                primary: {
+                    main: '#9a9a9a'
+                }
+            }
+        }
+    },
+
     components: {
         MuiButton: {
             styleOverrides: {

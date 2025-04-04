@@ -256,11 +256,10 @@ export default function BoardContent({
             onDragEnd={handleDragEnd} 
         >
             <Box sx={{
-                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'), 
+                bgcolor: (theme) => (theme.palette.primary.main), 
                 width: '100%',
                 height: (theme) => theme.trelloCustom.boardContentHeight,
-                display: 'flex',
-                p: '10px 0'
+                display: 'flex'
             }}> 
                 <ListColumn 
                     createNewCard={createNewCard} 

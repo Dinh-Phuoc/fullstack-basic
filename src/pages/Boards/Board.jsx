@@ -10,10 +10,12 @@ import { isEmpty } from 'lodash'
 import mapOrder from '~/utils/sortter.js'
 import { Box, CircularProgress } from '@mui/material'
 import { toast } from 'react-toastify'
+// import { mockData } from '~/apis/mockdata'
 
 
 function Board() {
     const [board, setBoard] = useState(null)
+    // const board = mockData 
     
     useEffect(() => {
         const boardId = '67e602c4a1646c22a8095493'

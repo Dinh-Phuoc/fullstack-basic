@@ -98,7 +98,7 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                 sx={{
                     minWidth: '300px',
                     maxWidth: '300px',
-                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
+                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ffffffc4'),
                     ml : 2,
                     overflowX: 'auto',
                     overflowY: 'auto',
@@ -203,10 +203,15 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                         <Box sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent:'space-between'
+                            justifyContent:'space-between',
+                            color: 'white'
                         }}> 
                             <Button startIcon={<AddCard/>} onClick={toggleOpenNewCardForm}>Add new card</Button>
-                            <Tooltip title='Drag to move'>
+                            <Tooltip 
+                                sx={{
+                                    color: (theme) => (theme.palette.primary.main)
+                                }}
+                                title='Drag to move'>
                                 <DragHandle/>
                             </Tooltip>
                         </Box> :
@@ -218,7 +223,7 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                         }}>
                             <TextField 
                                 type='text' 
-                                label='Enter title card...' 
+                                label='Title card...' 
                                 size='small'
                                 variant='outlined'
                                 autoFocus
@@ -226,9 +231,9 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                                 onChange={(e) => setNewCardTitle(e.target.value)}
                                 sx={{ 
                                     '& label': { color: 'text.primary' },
+                                    '&::placeholder': { color: 'text.primary' },
                                     '& input': { 
-                                        color: theme => theme.palette.primary.main,
-                                        bgcolor: theme => theme.palette.mode === 'dark' ? '#333643' : 'white'
+                                        color: theme => theme.palette.primary.main
                                     },
                                     '& label.Mui-focused': { color: theme => theme.palette.primary.main },
                                     '& .MuiOutlinedInput-root': {
@@ -245,14 +250,15 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                 <Button 
                                     variant='contained' 
-                                    color='success' 
+                                    color = 'primary'
                                     size='small'
                                     onClick={addNewCard}
                                     sx={{
                                         boxShadow: 'none',
-                                        borderColor: (theme) => theme.palette.success.main,
+                                        color: 'white',
+                                        borderColor: (theme) => theme.palette.primary.main,
                                         '&:hover': {
-                                            bgcolor: (theme) => theme.palette.success.light, boxShadow: 'none'
+                                            bgcolor: (theme) => theme.palette.primary.light, boxShadow: 'none'
                                         }
                                     }}
                                 >Add</Button>

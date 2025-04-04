@@ -38,7 +38,7 @@ export default function BoardBar({ board }) {
             gap: 2,
             overflowX: 'auto',
             paddingX: 2,
-            bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
+            bgcolor: (theme) => (theme.palette.primary.main)
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Chip 
