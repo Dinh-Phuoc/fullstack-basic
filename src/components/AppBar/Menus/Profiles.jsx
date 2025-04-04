@@ -180,15 +180,16 @@ export default function Profiles() {
                             }}
                         >
                             <form>
-                                <Button onClick={handleSetContentFormLogin}>Đăng nhập</Button>
-                                <Button onClick={handleSetContentFormRegister}>Đăng ký</Button>
+                                <Box sx={{ mb: 2 }}>
+                                    <Button onClick={handleSetContentFormLogin}>Đăng nhập</Button>
+                                    <Button onClick={handleSetContentFormRegister}>Đăng ký</Button>
+                                </Box>
                                 { contentFormLogin === 'login' ? 
                                     <Login/>
                                     : 
                                     <Register/>
                                 }
                             </form>
-                            <Button onClick={handleClose}>Close Child Modal</Button>
                         </Box>
                         <Box 
                             sx={{
