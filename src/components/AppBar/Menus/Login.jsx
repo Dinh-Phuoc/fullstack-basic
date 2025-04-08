@@ -1,33 +1,21 @@
 import { Facebook, Google } from '@mui/icons-material'
 import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material'
-const style = {
-    '.MuiFormControl-root': {
-        mt: 2
-    },
-    '& .MuiInputBase-root .MuiInput-root': {
-        mt: 1
-    },
-    '& .Mui-focused': {
-        fontSize: '1.1rem'
-    } 
-}
+
 export default function Login() {
     const handleLogin = () => {
-        console.log('register success')
+        console.log('Login success')
     }
     return (
         <Box>
-            <Stack spacing={3}>
-                <FormControl 
-                    sx={style}
-                >
+            <Stack spacing={2}>
+                <FormControl>
                     <InputLabel htmlFor="username">Tài khoản</InputLabel>
-                    <Input id="username" aria-describedby="my-helper-text" />
+                    <Input id="usernamelogin" aria-describedby="my-helper-text" />
                 </FormControl> 
 
-                <FormControl sx={style}>
+                <FormControl>
                     <InputLabel htmlFor="password">Mật khẩu</InputLabel>
-                    <Input id="password" aria-describedby="my-helper-text" />
+                    <Input id="passwordlogin" aria-describedby="my-helper-text" />
                 </FormControl>
 
                 <Button variant='outlined' onClick={handleLogin}>Đăng nhập</Button>

@@ -1,18 +1,6 @@
 import { Facebook, Google } from '@mui/icons-material'
 import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
 
-const styleOverride ={
-    '.MuiFormControl-root': {
-        mt: 2
-    },
-    '& .MuiInputBase-root .MuiInput-root': {
-        mt: 1
-    },
-    '& .Mui-focused': {
-        fontSize: '1.1rem'
-    } 
-}
 export default function Register() {
     const handleRegister = () => {
         console.log('register success')
@@ -20,15 +8,15 @@ export default function Register() {
     return (
         <Box>
             <Stack spacing={2}>
-                <FormControl sx={{ styleOverride }}>
+                <FormControl>
                     <InputLabel htmlFor="username">Tài khoản</InputLabel>
                     <Input id="username" aria-describedby="my-helper-text" />
                 </FormControl> 
-                <FormControl sx={{ styleOverride }}>
+                <FormControl>
                     <InputLabel htmlFor="password">Mật khẩu</InputLabel>
                     <Input id="password" aria-describedby="my-helper-text" />
                 </FormControl>
-                <FormControl sx={{ styleOverride }}>
+                <FormControl>
                     <InputLabel htmlFor="repassword">Nhập lại mật khẩu</InputLabel>
                     <Input id="repassword" aria-describedby="my-helper-text" />
                 </FormControl>

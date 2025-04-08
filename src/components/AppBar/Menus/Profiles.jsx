@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import IconButton from '@mui/material/IconButton'
@@ -10,20 +10,24 @@ import Avatar from '@mui/material/Avatar'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
-import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 
 import bgImageFormLogin from '~/assets/loginform2.jpg'
 import Login from './Login'
 import Register from './Register'
+import MyTabs from '~/components/Tabs/store/MyTabs'
+import MyTabList from '~/components/Tabs/MyTabList'
+import MyTabItem from '~/components/Tabs/MyTabItem'
+import MyTabPanel from '~/components/Tabs/MyTabPanel'
+import { Typography } from '@mui/material'
 
 
 export default function Profiles() {
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorModal, setAnchorModal] = useState(null)
     const [user, setUser] = useState(false)
-    const [contentFormLogin, setContentFormLogin] = useState('login')
-
+    const [titleForm, setleTitleForm] = useState('login')
+    
     const open = Boolean(anchorEl)
     const openModal = Boolean(anchorModal)
 
@@ -35,19 +39,20 @@ export default function Profiles() {
     }
 
     //Handle Modal
-    const handleModalOpen = (e) => {
-        setAnchorModal(e.currentTarget)
+    const handleModalOpen = () => {
+        setAnchorModal(true)
     }
+    
     const handleModalClose = () => {
         setAnchorModal(null)
     }
-    // Handle Form Login/Register
-    const handleSetContentFormLogin = () => {
-        setContentFormLogin('login')
+
+    const handleTitleLoginForm = () => {
+        setleTitleForm('login')
     }
 
-    const handleSetContentFormRegister= () => {
-        setContentFormLogin('register')
+    const handleTitleRegisterForm = () => {
+        setleTitleForm('register')
     }
 
     return (
@@ -73,7 +78,6 @@ export default function Profiles() {
                 id="account-menu"
                 open={open}
                 onClose={handleClose}
-                // onClick={handleClose}
                 slotProps={{
                     paper: {
                         elevation: 0,
@@ -139,98 +143,102 @@ export default function Profiles() {
                             </ListItemIcon>
                             Settings
                         </MenuItem>
-                        <MenuItem onClick={handleModalOpen}>
+                        <MenuItem onClick={ handleModalOpen }>
                             <ListItemIcon>
                                 <Logout fontSize="small" />
                             </ListItemIcon>
                             Login
                         </MenuItem>
-                    </>}
-                <Modal 
-                    open={openModal}
-                    onClose={handleModalClose}
-                    aria-labelledby="child-modal-title"
-                    aria-describedby="child-modal-description">
-                    <Box 
-                        sx={{   
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            border: '1px solid',
-                            borderColor: '#ff9a9cc4',
-                            borderRadius: '6px',
-                            width: { md: '844px' },
-                            height: { md: '475px' },
-                            backgroundImage: `url(${bgImageFormLogin})`,
-                            backgroundSize: 'cover',
-                            backgroundRepeat: 'no-repeat'
-                        }}
-                    >
-                        <Box 
-                            sx={{ 
-                                position: 'absolute',
-                                bgcolor: 'white', 
-                                width: '424px', 
-                                height: '430px',
-                                borderRadius: '6px',
-                                ml: 5,
-                                mt: 3,
-                                p: 3
-                            }}
-                        >
-                            <form>
-                                <Box sx={{ mb: 2 }}>
-                                    <Button onClick={handleSetContentFormLogin}>Đăng nhập</Button>
-                                    <Button onClick={handleSetContentFormRegister}>Đăng ký</Button>
-                                </Box>
-                                { contentFormLogin === 'login' ? 
-                                    <Login/>
-                                    : 
-                                    <Register/>
-                                }
-                            </form>
-                        </Box>
-                        <Box 
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                position: 'absolute',
-                                top: '40px',
-                                right: '52px',
-                                width: '230px',
-                                height: '142px',
-                                background: 'white',
-                                border: '2px solid',
-                                borderColor: (theme) => theme.palette.primary.main,
-                                borderRadius: '10px',
-                                padding: '15px 20px',
-                                maxWidth: '250px',
-                                fontSize: '16px',
-                                boxShadow: '3px 3px 0px #ff9a9cc4',
-                                '&::after': {
-                                    content: '""',
+                        <Modal 
+                            open={openModal}
+                            onClose={handleModalClose}
+                            aria-labelledby="child-modal-title"
+                            aria-describedby="child-modal-description">
+                            <Box 
+                                sx={{   
                                     position: 'absolute',
-                                    bottom: '-18px', /* Điều chỉnh vị trí của đuôi */
-                                    left: '45%', /* Thay đổi vị trí trái/phải */
-                                    width: 0,
-                                    height: 0,
-                                    borderLeft: '10px solid transparent',
-                                    borderRight: '10px solid transparent',
-                                    borderTop: '15px solid #ff9a9cc4'
-                                }
-                            }}
-                        ><span style={{ 
-                                fontFamily: 'El Messiri', 
-                                fontSize: '2.2rem', 
-                                fontWeight: 600, 
-                                color: '#ff9a9cc4'
-                            }}>
-                                { contentFormLogin === 'login' ? 'Đăng nhập' : 'Đăng ký'}
-                            </span></Box>
-                    </Box>
-                </Modal>
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    border: '1px solid',
+                                    borderColor: '#ff9a9cc4',
+                                    borderRadius: '6px',
+                                    width: '844px',
+                                    height: '475px',
+                                    backgroundImage: `url(${bgImageFormLogin})`,
+                                    backgroundSize: 'cover',
+                                    backgroundRepeat: 'no-repeat'
+                                }}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        position: 'absolute',
+                                        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white',
+                                        width: '424px', 
+                                        height: '430px',
+                                        borderRadius: '6px',
+                                        ml: 5,
+                                        mt: 3,
+                                        p: '16px 24px 24px'
+                                    }}
+                                >
+                                    <form>
+                                        <MyTabs>
+                                            <MyTabList>
+                                                <MyTabItem handleTitleLoginForm={handleTitleLoginForm} value={0} active='true'>Đăng nhập</MyTabItem>
+                                                <MyTabItem handleTitleRegisterForm={handleTitleRegisterForm} value={1}>Đăng ký</MyTabItem>
+                                            </MyTabList>
+                                            <MyTabPanel value={0}><Login/></MyTabPanel>
+                                            <MyTabPanel value={1}><Register/></MyTabPanel>
+                                        </MyTabs>
+                                    </form>
+                                </Box>
+                                <Box 
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        position: 'absolute',
+                                        top: '40px',
+                                        right: '52px',
+                                        width: '230px',
+                                        height: '142px',
+                                        background: 'white',
+                                        border: '2px solid',
+                                        borderColor: (theme) => theme.palette.primary.main,
+                                        borderRadius: '10px',
+                                        padding: '15px 20px',
+                                        maxWidth: '250px',
+                                        fontSize: '16px',
+                                        boxShadow: '3px 3px 0px #ff9a9cc4',
+                                        '&::after': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            bottom: '-18px', /* Điều chỉnh vị trí của đuôi */
+                                            left: '45%', /* Thay đổi vị trí trái/phải */
+                                            width: 0,
+                                            height: 0,
+                                            borderLeft: '10px solid transparent',
+                                            borderRight: '10px solid transparent',
+                                            borderTop: '15px solid #ff9a9cc4'
+                                        }
+                                    }}
+                                >
+                                    <Typography style={{ 
+                                        fontFamily: 'El Messiri', 
+                                        fontSize: '1.8rem', 
+                                        fontWeight: 600, 
+                                        color: '#ff9a9cc4',
+                                        textAlign: 'center',
+                                        lineHeight: '2.2rem'
+                                    }}>
+                                        { titleForm === 'login' ? 'Đăng nhập thôi nàooooo!' : 'Tạo mới tài khoản ngay thôiiiii!'}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Modal>
+                    </>}
+                
             </Menu>
         </Box>
     )

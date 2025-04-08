@@ -49,9 +49,9 @@ const theme = extendTheme({
             styleOverrides: {
                 root: {
                     textTransform: 'none',
-                    borderWidth: '1px',
-                    '&:hover': {
-                        borderWidth: '2px'
+                    borderWidth: '2px',
+                    '&.MuiButton-outlined:hover': {
+                        border: '2px solid'
                     }
                 }
             }
@@ -59,9 +59,13 @@ const theme = extendTheme({
     
         MuiInputLabel: {
             styleOverrides: {
-                root: () => ({
-                    fontSize: '0.875rem'
-                })
+                root: {
+                    fontSize: '0.875rem',
+                    marginBottom: '4px',
+                    '&.MuiInputLabel-shrink': {
+                        fontSize: '1.1rem'
+                    }
+                }
             }
         },
         MuiTypography: {
@@ -83,6 +87,18 @@ const theme = extendTheme({
                 },
                 '&.Mui-focused fieldset': {
                     borderWidth: '2px !important'
+                }
+            }
+        },
+        MuiInputBase: {
+            styleOverrides: {
+                root: {
+                    '&.MuiInput-root': {
+                        marginTop: '6px',
+                        '&:hover:not(.Mui-disabled, .Mui-error):before': {
+                            borderColor: '#ff9a9cc4'
+                        }
+                    }
                 }
             }
         }
