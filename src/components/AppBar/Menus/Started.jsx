@@ -22,7 +22,7 @@ export default function Started() {
     return (
         <Box>
             <Button
-                sx={{ color: 'white' }}
+                sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}
                 id="basic-button-started"
                 aria-controls={open ? 'basic-menu-started' : undefined}
                 aria-haspopup="true"

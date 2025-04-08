@@ -21,8 +21,8 @@ export default function ModeSelect() {
             <InputLabel 
                 id="label-select-dark-light-mode"
                 sx={{
-                    color: 'white',
-                    '&.Mui-focused': { color: 'white' }
+                    color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
+                    '&.Mui-focused': { color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }
                 }}
             >
                 Mode
@@ -34,20 +34,20 @@ export default function ModeSelect() {
                 label="Mode"
                 onChange={handleChange}
                 sx={{
-                    color: 'white',
+                    color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                     '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white'
+                        borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
                     },
                     '&:hover': {
                         '.MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'white'
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
                         }
                     },
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white'
+                        borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
                     },
                     '.MuiSvgIcon-root': {
-                        color: 'white'
+                        color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
                     }
                 }}
             >

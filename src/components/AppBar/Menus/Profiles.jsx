@@ -12,7 +12,8 @@ import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
 import Modal from '@mui/material/Modal'
 
-import bgImageFormLogin from '~/assets/loginform2.jpg'
+import bgImageFormLoginLight from '~/assets/loginform2.jpg'
+import bgImageFormLoginDark from '~/assets/loginformdark.jpg'
 import Login from './Login'
 import Register from './Register'
 import MyTabs from '~/components/Tabs/store/MyTabs'
@@ -165,7 +166,7 @@ export default function Profiles() {
                                     borderRadius: '6px',
                                     width: '844px',
                                     height: '475px',
-                                    backgroundImage: `url(${bgImageFormLogin})`,
+                                    backgroundImage: (theme) => theme.palette.mode === 'dark' ? `url(${bgImageFormLoginDark})` : `url(${bgImageFormLoginLight})`,
                                     backgroundSize: 'cover',
                                     backgroundRepeat: 'no-repeat'
                                 }}
@@ -173,7 +174,7 @@ export default function Profiles() {
                                 <Box 
                                     sx={{ 
                                         position: 'absolute',
-                                        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white',
+                                        bgcolor: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.default : 'white',
                                         width: '424px', 
                                         height: '430px',
                                         borderRadius: '6px',
@@ -203,7 +204,7 @@ export default function Profiles() {
                                         right: '52px',
                                         width: '230px',
                                         height: '142px',
-                                        background: 'white',
+                                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                                         border: '2px solid',
                                         borderColor: (theme) => theme.palette.primary.main,
                                         borderRadius: '10px',
@@ -224,14 +225,17 @@ export default function Profiles() {
                                         }
                                     }}
                                 >
-                                    <Typography style={{ 
-                                        fontFamily: 'El Messiri', 
-                                        fontSize: '1.8rem', 
-                                        fontWeight: 600, 
-                                        color: '#ff9a9cc4',
-                                        textAlign: 'center',
-                                        lineHeight: '2.2rem'
-                                    }}>
+                                    <Typography 
+                                        sx={{ 
+                                            fontFamily: 'El Messiri', 
+                                            fontWeight: 600, 
+                                            color: (theme) => theme.palette.mode === 'dark' ? 'black' : '#ff9a9cc4',
+                                            textAlign: 'center',
+                                            lineHeight: '2.2rem',
+                                            '&.MuiTypography-body1': { fontSize: '1.8rem' }
+                                        }}
+                                        variant='body1'
+                                    >
                                         { titleForm === 'login' ? 'Đăng nhập thôi nàooooo!' : 'Tạo mới tài khoản ngay thôiiiii!'}
                                     </Typography>
                                 </Box>

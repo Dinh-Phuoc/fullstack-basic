@@ -57,14 +57,14 @@ export default function ListColomn({ columns, createNewColumn, createNewCard, de
                         <Button 
                             startIcon={<NoteAdd/>}
                             sx={{ 
-                                color: 'white',
+                                color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                                 width: '100%',
                                 justifyContent: 'flex-start',
                                 pl: 2.5,
                                 py: 1
                             }}
                         > 
-                            Add new Column
+                            Thêm danh sách khác
                         </Button>
                     </Box> 
                     :

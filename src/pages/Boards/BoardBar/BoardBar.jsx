@@ -14,13 +14,13 @@ import Button from '@mui/material/Button'
 import capitalizeFirstLetter from '~/utils/formatter.js'
 
 const MENU_STYLES = { 
-    color: 'white', 
+    color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white', 
     bgcolor: 'transparent', 
     border: 'none', 
     paddingX: '5px', 
     borderRadius: '4px',
     '.MuiSvgIcon-root': {
-        color: 'white'
+        color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
     },
     '&:hover': {
         bgcolor: 'primary.50'
@@ -78,10 +78,10 @@ export default function BoardBar({ board }) {
                     variant='outlined' 
                     startIcon={<PersonAddIcon/>}
                     sx={{ 
-                        color: 'white', 
-                        borderColor: 'white',
+                        color:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white', 
+                        borderColor:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                         '&:hover': {
-                            borderColor: 'white'
+                            borderColor:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
                         } 
                     }}
                 >

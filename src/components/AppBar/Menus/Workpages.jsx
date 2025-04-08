@@ -26,7 +26,7 @@ export default function Workspaces() {
     return (
         <Box>
             <Button
-                sx={{ color: 'white' }}
+                sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}
                 id="basic-button-workspaces"
                 aria-controls={open ? 'basic-menu-workspaces' : undefined}
                 aria-haspopup="true"

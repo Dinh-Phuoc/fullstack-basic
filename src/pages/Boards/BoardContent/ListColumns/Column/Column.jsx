@@ -150,7 +150,7 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                                 onClick={toggleOpenNewCardForm}
                             >
                                 <ListItemIcon> <AddCard className='add-card' fontSize="small" /></ListItemIcon>
-                                <ListItemText>Add new card</ListItemText>
+                                <ListItemText>Thêm thẻ</ListItemText>
                             </MenuItem>
                             <MenuItem>
                                 <ListItemIcon> <ContentCut fontSize="small" /></ListItemIcon>
@@ -206,10 +206,20 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                             justifyContent:'space-between',
                             color: 'white'
                         }}> 
-                            <Button startIcon={<AddCard/>} onClick={toggleOpenNewCardForm}>Add new card</Button>
+                            <Button 
+                                sx={{ 
+                                    color: '#ff9a9cc4',
+                                    '&:hover': {
+                                        backgroundColor: theme => theme.palette.primary.main,
+                                        color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
+                                    }
+                                }}
+                                startIcon={<AddCard/>} 
+                                onClick={toggleOpenNewCardForm}
+                            >Thêm thẻ</Button>
                             <Tooltip 
                                 sx={{
-                                    color: (theme) => (theme.palette.primary.main)
+                                    color: '#ff9a9cc4'
                                 }}
                                 title='Drag to move'>
                                 <DragHandle/>

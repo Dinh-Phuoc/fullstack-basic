@@ -38,7 +38,10 @@ const theme = extendTheme({
         dark: {
             palette: {
                 primary: {
-                    main: '#9a9a9a'
+                    main: '#121212'
+                },
+                background: {
+                    default: '#ff9a9cc4'
                 }
             }
         }

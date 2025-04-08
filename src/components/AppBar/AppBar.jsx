@@ -41,10 +41,10 @@ export default function AppBar() {
             bgcolor: (theme) => (theme.palette.primary.main) 
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <AppsIcon sx={{ color: 'white' }}/>
+                <AppsIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                    <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: 'white' }}/>
-                    <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white' }}>Trello</Typography>
+                    <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
+                    <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}>Trello</Typography>
                 </Box>
 
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
@@ -56,7 +56,7 @@ export default function AppBar() {
                         variant='outlined' 
                         startIcon={<LibraryAddIcon/>} 
                         sx={{ 
-                            color: 'white',
+                            color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                             border: 'none',
                             '&:hover': {
                                 border: 'none'
@@ -79,7 +79,7 @@ export default function AppBar() {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <SearchIcon sx={{ color: 'white' }}/>
+                                <SearchIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                             </InputAdornment>
                         ),
                         endAdornment: searchValue ? (
@@ -87,7 +87,7 @@ export default function AppBar() {
                                 onClick = {() => setSearchValue('')}
                                 fontSize="small"
                                 sx={{ 
-                                    color: 'white',
+                                    color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                                     cursor: 'pointer'
                                 }}
                             />
@@ -96,25 +96,25 @@ export default function AppBar() {
                     sx={{ 
                         minWidth: '120px',
                         maxWidth: '180px',
-                        '& label': { color: 'white' }, 
-                        '& input': { color: 'white' },
-                        '& label.Mui-focused': { color: 'white' },
+                        '& label': { color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }, 
+                        '& input': { color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' },
+                        '& label.Mui-focused': { color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' },
                         '.MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: 'white' },
-                            '&:hover fieldset': { borderColor: 'white' },
-                            '&.Mui-focused fieldset': { borderColor: 'white' }
+                            '& fieldset': { borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' },
+                            '&:hover fieldset': { borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' },
+                            '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }
                         } 
                     }}
                 />
                 <ModeSelect /> 
                 <Tooltip title='Notification' sx={{ cursor: 'pointer' }}>
                     <Badge color="error" variant="dot">
-                        <NotificationsNoneIcon sx={{ color: 'white' }}/>
+                        <NotificationsNoneIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                     </Badge>
                 </Tooltip>
 
                 <Tooltip title='Help' sx={{ cursor: 'pointer' }}>
-                    <HelpOutlineIcon sx={{ color: 'white' }}/>
+                    <HelpOutlineIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                 </Tooltip>
 
                 <Profiles sx={{
