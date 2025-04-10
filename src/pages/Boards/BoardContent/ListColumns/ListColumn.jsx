@@ -57,7 +57,8 @@ export default function ListColomn({ columns, createNewColumn, createNewCard, de
                         <Button 
                             startIcon={<NoteAdd/>}
                             sx={{ 
-                                color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
+                                backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#333643' : '#ffffffc4',
+                                color: '#ff9a9cc4',
                                 width: '100%',
                                 justifyContent: 'flex-start',
                                 pl: 2.5,

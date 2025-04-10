@@ -1,6 +1,4 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
-
-
 const APP_BAR_HEIGHT = '58px'
 const BOARD_BAR_HEIGHT = '60px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${BOARD_BAR_HEIGHT} - ${APP_BAR_HEIGHT})`
@@ -32,6 +30,24 @@ const theme = extendTheme({
                             color: '#ff9a9cc4'
                         }
                     }
+                },
+                MuiCssBaseline: {
+                    styleOverrides: {
+                        '*': {
+                            '&::-webkit-scrollbar': {
+                                borderRadius: 0,
+                                height: '6px'
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                borderRadius: '6px',
+                                backgroundColor: 'rgba(0, 0, 0, 0.15)'
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                borderRadius: 0,
+                                backgroundColor: 'rgba(0, 0, 0, 0)'
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -42,6 +58,34 @@ const theme = extendTheme({
                 },
                 background: {
                     default: '#ff9a9cc4'
+                }
+            },
+            components: {
+                MuiTooltip: {
+                    styleOverrides: {
+                        tooltip: {
+                            backgroundColor: '#333643',
+                            color: '#ff9a9cc4'
+                        }
+                    }
+                },
+                MuiCssBaseline: {
+                    styleOverrides: {
+                        '*': {
+                            '&::-webkit-scrollbar': {
+                                borderRadius: 0,
+                                height: '6px'
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                borderRadius: '6px',
+                                backgroundColor: '#ff9a9cc4'
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                borderRadius: 0,
+                                backgroundColor: 'rgba(248, 248, 248, 0)'
+                            }
+                        }
+                    }
                 }
             }
         }

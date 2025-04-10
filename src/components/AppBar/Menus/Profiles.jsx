@@ -12,8 +12,10 @@ import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
 import Modal from '@mui/material/Modal'
 
-import bgImageFormLoginLight from '~/assets/loginform2.jpg'
-import bgImageFormLoginDark from '~/assets/loginformdark.jpg'
+import bgImageFormLoginLightMD from '~/assets/loginformlight.jpg'
+import bgImageFormLoginDarkMD from '~/assets/loginformdark.jpg'
+import bgImageFormLoginLightSM from '~/assets/loginformlightSM.jpg'
+import bgImageFormLoginDarkSM from '~/assets/loginformdarkSM.jpg'
 import Login from './Login'
 import Register from './Register'
 import MyTabs from '~/components/Tabs/store/MyTabs'
@@ -164,22 +166,27 @@ export default function Profiles() {
                                     border: '1px solid',
                                     borderColor: '#ff9a9cc4',
                                     borderRadius: '6px',
-                                    width: '844px',
-                                    height: '475px',
-                                    backgroundImage: (theme) => theme.palette.mode === 'dark' ? `url(${bgImageFormLoginDark})` : `url(${bgImageFormLoginLight})`,
-                                    backgroundSize: 'cover',
-                                    backgroundRepeat: 'no-repeat'
+                                    minWidth: { xs: '300px', sm: '580px', md: '844px' },
+                                    maxWidth: { xs: '300px', sm: '890px', md: '844px' },
+                                    width: { xs: '95%', sm: '80%' },
+                                    height: { xs: '460px', sm: '475px', md: '475px' },
+                                    backgroundImage: (theme) => 
+                                        theme.palette.mode === 'dark' ? 
+                                            { xs: 'none', sm: `url(${bgImageFormLoginDarkMD})` } : 
+                                            { xs: 'none', sm: `url(${bgImageFormLoginLightMD})` },
+                                    backgroundSize: { sx: 'contain', md: 'cover' },
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'right bottom'
                                 }}
                             >
                                 <Box 
                                     sx={{ 
                                         position: 'absolute',
                                         bgcolor: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.default : 'white',
-                                        width: '424px', 
-                                        height: '430px',
+                                        width: { xs:'100%', sm: '324px', md: '424px' }, 
+                                        height: { xs:'100%', sm: '445px', md: '445px' },
                                         borderRadius: '6px',
-                                        ml: 5,
-                                        mt: 3,
+                                        m: { xs:'0', sm: '12px' },
                                         p: '16px 24px 24px'
                                     }}
                                 >
@@ -196,14 +203,14 @@ export default function Profiles() {
                                 </Box>
                                 <Box 
                                     sx={{
-                                        display: 'flex',
+                                        display: { xs: 'none', sm: 'flex', md: 'flex' },
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         position: 'absolute',
-                                        top: '40px',
-                                        right: '52px',
-                                        width: '230px',
-                                        height: '142px',
+                                        top: { sm: '65px', md: '12px' },
+                                        right: { sm: '22px', md: '22px' },
+                                        width: { sm: '200px', md: '255px' },
+                                        height: { sm: '135px', md: '180px' },
                                         backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                                         border: '2px solid',
                                         borderColor: (theme) => theme.palette.primary.main,
@@ -215,8 +222,8 @@ export default function Profiles() {
                                         '&::after': {
                                             content: '""',
                                             position: 'absolute',
-                                            bottom: '-18px', /* Điều chỉnh vị trí của đuôi */
-                                            left: '45%', /* Thay đổi vị trí trái/phải */
+                                            bottom: '-18px',
+                                            left: { md: '50%' }, 
                                             width: 0,
                                             height: 0,
                                             borderLeft: '10px solid transparent',
@@ -228,11 +235,11 @@ export default function Profiles() {
                                     <Typography 
                                         sx={{ 
                                             fontFamily: 'El Messiri', 
-                                            fontWeight: 600, 
+                                            fontWeight: { sm: 700, md: 800 }, 
                                             color: (theme) => theme.palette.mode === 'dark' ? 'black' : '#ff9a9cc4',
                                             textAlign: 'center',
-                                            lineHeight: '2.2rem',
-                                            '&.MuiTypography-body1': { fontSize: '1.8rem' }
+                                            lineHeight: { sm: '2rem', md: '2.6rem' },
+                                            '&.MuiTypography-body1': { fontSize: { sm: '1.8rem', md: '2.4rem' } }
                                         }}
                                         variant='body1'
                                     >
