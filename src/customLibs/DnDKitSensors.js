@@ -25,15 +25,27 @@ export class PointerSensor extends LibPointerSensor {
         {
             eventName: 'onPointerDown',
             handler: ({ nativeEvent: event }) => {
-                if (
-                    !event.isPrimary ||
-                event.button !== 0 ||
-                isInteractiveElement(event.target)
-                ) {
+                if (event.pointerType === 'touch') {
+                    if (
+                        !event.isPrimary ||
+                    event.button !== 0 ||
+                    isInteractiveElement(event.target)
+                    ) {
+                        return true
+                    }
                     return false
                 }
-    
-                return true
+                else {
+                    if (
+                        !event.isPrimary ||
+                    event.button !== 0 ||
+                    isInteractiveElement(event.target)
+                    ) {
+                        return false
+                    }
+        
+                    return true
+                }
             }
         }
     ]
@@ -49,10 +61,10 @@ export class TouchSensor extends LibTouchSensor {
                 event.button !== 0 ||
                 isInteractiveElement(event.target)
                 ) {
-                    return false
+                    return true
                 }
-    
-                return true
+                
+                return false
             }
         }
     ]

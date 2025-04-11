@@ -7,6 +7,7 @@ import {
     closestCorners, 
     pointerWithin,
     getFirstCollision
+    
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
@@ -36,7 +37,7 @@ export default function BoardContent({
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
-    const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
+    const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 250 } })
 
     const sensors = useSensors(pointerSensor, mouseSensor, touchSensor)
     const [orderedColumns, setOrderedColumns] = useState([])
