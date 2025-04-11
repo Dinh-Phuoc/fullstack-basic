@@ -17,7 +17,7 @@ export default function ModeSelect() {
     }
 
     return (
-        <FormControl sx={{ minWidth: '120px' }} size="small">
+        <FormControl sx={{ minWidth: '120px', display: { xs: 'none' } }} size="small">
             <InputLabel 
                 id="label-select-dark-light-mode"
                 sx={{

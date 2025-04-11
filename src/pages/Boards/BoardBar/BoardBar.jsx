@@ -8,10 +8,11 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import Avatar from '@mui/material/Avatar'
 import AvatarGroup from '@mui/material/AvatarGroup'
-import { Tooltip } from '@mui/material'
+import { ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 
 import capitalizeFirstLetter from '~/utils/formatter.js'
+import { useState } from 'react'
 
 const MENU_STYLES = { 
     color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white', 
@@ -28,6 +29,15 @@ const MENU_STYLES = {
 }
 
 export default function BoardBar({ board }) {
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl)
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
     return (
         <Box sx={{
             width: '100%',
@@ -41,31 +51,62 @@ export default function BoardBar({ board }) {
             bgcolor: (theme) => (theme.palette.primary.main),
             overflow: 'overlay'
         }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Chip 
+                    onClick={handleClick}
                     sx={MENU_STYLES}
                     icon={<DashboardIcon />} 
                     label={board?.title}
                     clickable
                 />
-                <Chip 
-                    sx={MENU_STYLES}
-                    icon={<VpnLockIcon />} 
-                    label={capitalizeFirstLetter(board?.type)}
-                    clickable
-                />
-                <Chip 
-                    sx={MENU_STYLES}
-                    icon={<AddToDriveIcon />} 
-                    label={board?.title}
-                    clickable
-                />
-                <Chip 
-                    sx={MENU_STYLES}
-                    icon={<BoltIcon />} 
-                    label='Automation'
-                    clickable
-                />
+                <Menu
+                    anchorEl={anchorEl}
+                    id="boardbarmenu"
+                    open={open}
+                    onClose={handleClose}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                    <MenuItem>
+                        <ListItemIcon>
+                            <VpnLockIcon fontSize='small'/>
+                        </ListItemIcon>
+                        Công khai
+                    </MenuItem>
+                    <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
+                        <ListItemIcon>
+                            <AddToDriveIcon fontSize='small'/>      
+                        </ListItemIcon>
+                        Tải lên Google Drive
+                    </MenuItem>
+                    <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
+                        <ListItemIcon>
+                            <BoltIcon fontSize='small'/> 
+                        </ListItemIcon>
+                        Tự động
+                    </MenuItem>
+                </Menu>
+
+                <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block' } }}>
+                    <Chip 
+                        sx={MENU_STYLES}
+                        icon={<VpnLockIcon />} 
+                        label={capitalizeFirstLetter(board?.type)}
+                        clickable
+                    />
+                    <Chip 
+                        sx={MENU_STYLES}
+                        icon={<AddToDriveIcon />} 
+                        label={board?.title}
+                        clickable
+                    />
+                    <Chip 
+                        sx={MENU_STYLES}
+                        icon={<BoltIcon />} 
+                        label='Automation'
+                        clickable
+                    />
+                </Box>
                 <Chip 
                     sx={MENU_STYLES}
                     icon={<FilterListIcon />} 
@@ -74,11 +115,12 @@ export default function BoardBar({ board }) {
                 />
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button 
                     variant='outlined' 
                     startIcon={<PersonAddIcon/>}
                     sx={{ 
+                        display: { xs: 'none', sm: 'flex', md: 'flex' },
                         color:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white', 
                         borderColor:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                         '&:hover': {
@@ -86,8 +128,27 @@ export default function BoardBar({ board }) {
                         } 
                     }}
                 >
-                    Invite
+                    <Typography variant='body1' >Invite</Typography>
                 </Button>
+                <Box 
+                    sx={{ 
+                        display: { xs: 'block', sm: 'none', md: 'none' },
+                        position: 'relative',
+                        width:  '32px',
+                        height:  '32px',
+                        padding:  '0',
+                        border: '1px solid',
+                        borderColor:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
+                        borderRadius: '50%'
+                    }}>
+                    <PersonAddIcon sx={{ 
+                        position: 'absolute',
+                        top: '50%',
+                        left: '45%',
+                        color:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
+                        transform: 'translate(-50%, -50%)' }}
+                    />
+                </Box>
                 <AvatarGroup 
                     max={4} 
                     sx={{

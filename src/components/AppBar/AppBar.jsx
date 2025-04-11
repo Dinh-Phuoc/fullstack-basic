@@ -41,7 +41,6 @@ export default function AppBar() {
             bgcolor: (theme) => (theme.palette.primary.main) 
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <AppsIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                     <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}>Trello</Typography>
@@ -106,15 +105,17 @@ export default function AppBar() {
                         } 
                     }}
                 />
+
                 <ModeSelect /> 
-                <Tooltip title='Notification' sx={{ cursor: 'pointer' }}>
+
+                <Tooltip title='Notification' sx={{ cursor: 'pointer', display: { xs: 'none', sm: 'block', md: 'block' } }}>
                     <Badge color="error" variant="dot">
                         <NotificationsNoneIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                     </Badge>
                 </Tooltip>
 
                 <Tooltip title='Help' sx={{ cursor: 'pointer' }}>
-                    <HelpOutlineIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
+                    <HelpOutlineIcon sx={{ display: { xs: 'none', sm: 'block', md: 'block' }, color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                 </Tooltip>
 
                 <Profiles sx={{
@@ -124,5 +125,3 @@ export default function AppBar() {
         </Box>
     )
 }
-
-7
