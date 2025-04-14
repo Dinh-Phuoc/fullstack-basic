@@ -12,6 +12,7 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
+import { Checkbox } from '@mui/material'
 
 
 export default function CardItem({ card }) {
@@ -32,7 +33,7 @@ export default function CardItem({ card }) {
         transform: CSS.Translate.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : undefined,
-        border: isDragging ? '1px solid rgb(25 118 210)' : undefined
+        border: isDragging ? '1px solid #ff9a9cc4' : undefined
     }
     return (
         <Card 
@@ -47,24 +48,24 @@ export default function CardItem({ card }) {
             }}
         >
             {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
-            <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-                <Typography> { card?.title }</Typography>
+            <CardContent sx={{ p: 0, mt: '8px' }}>
+                <Checkbox sx={{ p: 0, ml: '13px' }}/> { card?.title }
             </CardContent>
             { shouldShowCardAction() && 
             <CardActions sx={{ p: '0 4px 8px 4px' }}>
                 {!!card?.memberIds?.length &&
-                <Button size="small" startIcon={<Group/>}>
-                    {card.memberIds.length}
+                <Button sx={{ color: '#ff9a9cc4' }} size="small" startIcon={<Group/>}>
+                    <Typography variant='body1'>{card.memberIds.length}</Typography>
                 </Button>}
 
                 {!!card?.comments?.length &&
-                <Button size="small" startIcon={<Comment/>}>
-                    {card.comments.length}
+                <Button sx={{ color: '#ff9a9cc4' }} size="small" startIcon={<Comment/>}>
+                    <Typography variant='body1'>{card.comments.length}</Typography>
                 </Button>}
 
                 {!!card?.attachments?.length &&
-                <Button size="small" startIcon={<Attachment/>}>
-                    {card.attachments.length}
+                <Button sx={{ color: '#ff9a9cc4' }} size="small" startIcon={<Attachment/>}>
+                    <Typography variant='body1'>{card.attachments.length}</Typography>
                 </Button>}      
             </CardActions>}
         </Card>

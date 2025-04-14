@@ -27,7 +27,7 @@ import { AccountCircleOutlined, HelpOutline, NotificationsNone } from '@mui/icon
 export default function Profiles() {
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorModal, setAnchorModal] = useState(null)
-    const [user, setUser] = useState(true)
+    const [user, setUser] = useState(false)
     const [titleForm, setleTitleForm] = useState('login')
     const [checked, setChecked] = useState(false)
     const { setMode } = useColorScheme()
@@ -245,12 +245,13 @@ export default function Profiles() {
                                     minWidth: { xs: '300px', sm: '580px', md: '844px' },
                                     maxWidth: { xs: '300px', sm: '890px', md: '844px' },
                                     width: { xs: '95%', sm: '80%' },
-                                    height: { xs: '460px', sm: '475px', md: '475px' },
+                                    height: '520px',
+                                    backgroundColor: '#ffeef8',
                                     backgroundImage: (theme) => 
                                         theme.palette.mode === 'dark' ? 
                                             { xs: 'none', sm: `url(${bgImageFormLoginDarkMD})` } : 
                                             { xs: 'none', sm: `url(${bgImageFormLoginLightMD})` },
-                                    backgroundSize: { sx: 'contain', md: 'cover' },
+                                    backgroundSize: { sx: 'contain', md: 'contain' },
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'right bottom'
                                 }}
@@ -260,22 +261,20 @@ export default function Profiles() {
                                         position: 'absolute',
                                         bgcolor: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.default : 'white',
                                         width: { xs:'100%', sm: '324px', md: '424px' }, 
-                                        height: { xs:'100%', sm: '445px', md: '445px' },
+                                        height: { xs:'100%', sm: '497px', md: '497px' },
                                         borderRadius: '6px',
                                         m: { xs:'0', sm: '12px' },
                                         p: '16px 24px 24px'
                                     }}
                                 >
-                                    <form>
-                                        <MyTabs>
-                                            <MyTabList>
-                                                <MyTabItem handleTitleLoginForm={handleTitleLoginForm} value={0} active='true'>Đăng nhập</MyTabItem>
-                                                <MyTabItem handleTitleRegisterForm={handleTitleRegisterForm} value={1}>Đăng ký</MyTabItem>
-                                            </MyTabList>
-                                            <MyTabPanel value={0}><Login/></MyTabPanel>
-                                            <MyTabPanel value={1}><Register/></MyTabPanel>
-                                        </MyTabs>
-                                    </form>
+                                    <MyTabs>
+                                        <MyTabList>
+                                            <MyTabItem handleTitleLoginForm={handleTitleLoginForm} value={0} active='true'>Đăng nhập</MyTabItem>
+                                            <MyTabItem handleTitleRegisterForm={handleTitleRegisterForm} value={1}>Đăng ký</MyTabItem>
+                                        </MyTabList>
+                                        <MyTabPanel value={0}><Login/></MyTabPanel>
+                                        <MyTabPanel value={1}><Register/></MyTabPanel>
+                                    </MyTabs>
                                 </Box>
                                 <Box 
                                     sx={{

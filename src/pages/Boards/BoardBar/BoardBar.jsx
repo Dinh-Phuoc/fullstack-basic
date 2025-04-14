@@ -66,6 +66,7 @@ export default function BoardBar({ board }) {
                     onClose={handleClose}
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                    sx={{ display: { md: 'none' } }}
                 >
                     <MenuItem>
                         <ListItemIcon>
@@ -73,13 +74,13 @@ export default function BoardBar({ board }) {
                         </ListItemIcon>
                         Công khai
                     </MenuItem>
-                    <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
+                    <MenuItem>
                         <ListItemIcon>
                             <AddToDriveIcon fontSize='small'/>      
                         </ListItemIcon>
                         Tải lên Google Drive
                     </MenuItem>
-                    <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
+                    <MenuItem>
                         <ListItemIcon>
                             <BoltIcon fontSize='small'/> 
                         </ListItemIcon>
@@ -87,7 +88,7 @@ export default function BoardBar({ board }) {
                     </MenuItem>
                 </Menu>
 
-                <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block' } }}>
+                <Box sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
                     <Chip 
                         sx={MENU_STYLES}
                         icon={<VpnLockIcon />} 
