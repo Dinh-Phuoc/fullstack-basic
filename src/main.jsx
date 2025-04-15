@@ -1,25 +1,25 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
+import 'react-toastify/dist/ReactToastify.css'
+import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import { ToastContainer } from 'react-toastify'
+import { ConfirmProvider } from 'material-ui-confirm'
+import { BrowserRouter } from 'react-router-dom'
+
 import App from './App.jsx'
 import './index.css'
-import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
 import theme from './assets/theme.js'
-import { CssBaseline } from '@mui/material'
-import { BoardProvider } from './contexts/FormatterContext.jsx'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { ConfirmProvider } from 'material-ui-confirm'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     // <React.StrictMode>
+    <BrowserRouter>
         <CssVarsProvider theme={theme}>
             <ConfirmProvider>
                 <CssBaseline enableColorScheme />
-                <BoardProvider>
-                    <App />
-                </BoardProvider>
+                <App />
                 <ToastContainer/>
             </ConfirmProvider>
         </CssVarsProvider>
+    </BrowserRouter>
     // </React.StrictMode>
 )

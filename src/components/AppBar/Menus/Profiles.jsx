@@ -21,26 +21,40 @@ import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
 import { FormControlLabel, Switch, Typography, useColorScheme } from '@mui/material'
-import { AccountCircleOutlined, HelpOutline, NotificationsNone } from '@mui/icons-material'
-import { loginApi } from '~/apis'
+import { HelpOutline, NotificationsNone, PersonOutlineOutlined, SentimentDissatisfied } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
+import { getInforUserApi, loginApi } from '~/apis'
 
 
 export default function Profiles() {
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorModal, setAnchorModal] = useState(null)
+    const [openChildModal, setOpenChildModal] = useState(false)
     const [user, setUser] = useState(null)
     const [titleForm, setleTitleForm] = useState('login')
     const [checked, setChecked] = useState(false)
     const { setMode } = useColorScheme()
 
+    useEffect(() => {
+        getInforUserApi().then((data) => setUser(data))
+    }, [])
+
     const handleLogin = async (data) => {
         const token = await loginApi(data)
+        if (token.statusCode) {
+            handleChildModalOpen()
+            return
+        }
+
         localStorage.setItem('token', token)
-        localStorage.getItem('token') ? setUser(token) : ''
+        getInforUserApi().then((data) => setUser(data))
+        handleClose()
     }
 
     const handleLogOut = () => {
-        setUser(false)
+        localStorage.removeItem('token')
+        setUser(null)
+        handleModalOpen()
     }
     
     const open = Boolean(anchorEl)
@@ -75,6 +89,10 @@ export default function Profiles() {
     const handleTitleRegisterForm = () => {
         setleTitleForm('register')
     }
+
+    // Modal Child
+    const handleChildModalOpen = () => setOpenChildModal(true)
+    const handleChildModalClose = () => setOpenChildModal(false)
 
     return (
         <Box>
@@ -132,26 +150,95 @@ export default function Profiles() {
             >
                 {user ? 
                     <>
-                        <MenuItem>
-                            <ListItemIcon>
-                                <AccountCircleOutlined fontSize='small'/>
-                            </ListItemIcon>
-                            Tài khoản
-                        </MenuItem>
-                        <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
-                            <ListItemIcon>
-                                <HelpOutline fontSize='small'/>      
-                            </ListItemIcon>
-                            Phản hồi
-                        </MenuItem>
-                        <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
-                            <ListItemIcon>
-                                <NotificationsNone fontSize='small'/> 
-                            </ListItemIcon>
-                            Thông báo
-                        </MenuItem>
+                        <Typography 
+                            sx={{ 
+                                ml: '8px',
+                                mb: '12px',
+                                fontSize: '1.1rem'  
+                            }}
+                            variant='h6'
+                        >Tài khoản</Typography>
+                        <Box 
+                            sx={{
+                                display: 'flex', 
+                                height: '32px',
+                                p: '0 16px 0 16px',
+                                mb: '8px',
+                                width: '100%'
+                            }}
+                        >
+                            <Avatar 
+                                sx={{ '&.MuiAvatar-root': { width: 30, height: 30 } }} 
+                                alt='Your Avatar'
+                                src= {user ? user.avatar : 'https://scontent.fsgn2-9.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_eui2=AeHqQE3on298CPVk3u69jaEuWt9TLzuBU1Ba31MvO4FTUFhDxoZtUH-dRPf7El8qQgUnbjMfmSOGfSnmHksnLgLR&_nc_ohc=a1K6_KaoqeEQ7kNvgHzC7kp&_nc_oc=AdkRjhHLU9H8YlcRXa6xwjBM8CUNK6C-uOq5hG1trLniobaNddY6zwK2q6FAq9NVt2U&_nc_zt=24&_nc_ht=scontent.fsgn2-9.fna&oh=00_AYHnf59jjfC5rvYvsSxoQ4dsw_gKEFwd7KaeglaIswcncw&oe=6813DF7A'}
+                            />
+                            <Box 
+                                sx={{ 
+                                    display: 'flex', 
+                                    flexDirection: 'column',
+                                    height: '32px'
+                                }}
+                            >
+                                <Typography 
+                                    sx={{
+                                        lineHeight: 1,
+                                        color: theme => theme.palette.primary.contrastText
+                                    }}
+                                >{user.fullName}</Typography>
 
-                        <MenuItem>
+                                <Typography 
+                                    sx={{
+                                        lineHeight: 1,
+                                        color: theme => theme.palette.primary.contrastText,
+                                        '&.MuiTypography-body1': { fontSize: '0.8rem' }  
+                                    }}
+                                >@{user.userName}</Typography>
+                            </Box>
+                        </Box >
+                        
+                        <Divider/>
+
+                        <Link to='/profile' style={{ textDecoration: 'none' }}>
+                            <MenuItem>
+                                <ListItemIcon>
+                                    <PersonOutlineOutlined/>
+                                </ListItemIcon>
+                                <Typography 
+                                    sx={{
+                                        color: theme => theme.palette.primary.contrastText,
+                                        '&.MuiTypography-body1': { fontSize: '1rem' }  
+                                    }}>Thông tin tài khoản</Typography>
+                            </MenuItem>
+                        </Link>
+
+                        <Link to='/profile' style={{ textDecoration: 'none' }}>
+                            <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
+                                <ListItemIcon>
+                                    <HelpOutline fontSize='medium'/>      
+                                </ListItemIcon>
+                                <Typography 
+                                    sx={{
+                                        color: theme => theme.palette.primary.contrastText,
+                                        '&.MuiTypography-body1': { fontSize: '1rem' }  
+                                    }}>Phản hồi</Typography>
+                            </MenuItem>
+                        </Link>
+
+                        <Link to='/profile' style={{ textDecoration: 'none' }}>
+                            <MenuItem sx={{ display: { sm: 'none', md: 'none' } }}>
+                                <ListItemIcon>
+                                    <NotificationsNone fontSize='medium'/> 
+                                </ListItemIcon>
+                                <Typography 
+                                    sx={{
+                                        color: theme => theme.palette.primary.contrastText,
+                                        '&.MuiTypography-body1': { fontSize: '1rem' }  
+                                    }}>Thông báo</Typography>
+                            </MenuItem>
+                        </Link>
+
+                        <MenuItem sx={{ height: '32px' }}
+                        >
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -194,6 +281,9 @@ export default function Profiles() {
                                                 opacity: 1,
                                                 backgroundColor: theme => theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
                                                 borderRadius: 20 / 2
+                                            },
+                                            '& .MuiFormControlLabel-label': {
+                                                padding: '12px 70px 12px 0px'
                                             }
                                         }}
                                         checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }}/>
@@ -205,26 +295,26 @@ export default function Profiles() {
                         <Divider />
                         <MenuItem>
                             <ListItemIcon>
-                                <PersonAdd fontSize="small" />
+                                <PersonAdd fontSize="medium" />
                             </ListItemIcon>
                                 Add another account
                         </MenuItem>
                         <MenuItem>
                             <ListItemIcon>
-                                <Settings fontSize="small" />
+                                <Settings fontSize="medium" />
                             </ListItemIcon>
                             Settings
                         </MenuItem>
                         <MenuItem onClick={handleLogOut}>
                             <ListItemIcon>
-                                <Logout fontSize="small" />
+                                <Logout fontSize="medium" />
                             </ListItemIcon>
                             Logout
                         </MenuItem>
                     </> : <>
                         <MenuItem>
                             <ListItemIcon>
-                                <Settings fontSize="small" />
+                                <Settings fontSize="medium" />
                             </ListItemIcon>
                             Settings
                         </MenuItem>
@@ -283,7 +373,7 @@ export default function Profiles() {
 
                         <MenuItem onClick={ handleModalOpen }>
                             <ListItemIcon>
-                                <Logout fontSize="small" />
+                                <Logout fontSize="medium" />
                             </ListItemIcon>
                             Login
                         </MenuItem>
@@ -344,6 +434,29 @@ export default function Profiles() {
                                         <MyTabPanel value={0}><Login handleLogin={handleLogin}/></MyTabPanel>
                                         <MyTabPanel value={1}><Register/></MyTabPanel>
                                     </MyTabs>
+                                    <Modal 
+                                        open={openChildModal}
+                                        onClose={handleChildModalClose}
+                                        aria-labelledby="child-modal-title"
+                                        aria-describedby="child-modal-description">
+                                        <Box 
+                                            sx={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                width: 400,
+                                                bgcolor: 'background.paper',
+                                                border: '2px solid #000',
+                                                boxShadow: 24,
+                                                p: 4
+                                            }}
+                                        >
+                                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                                <SentimentDissatisfied/>Tài khoản hoặc mật khẩu không chính xác nhé bae 
+                                            </Typography>
+                                        </Box>
+                                    </Modal>
                                 </Box>
                                 <Box 
                                     sx={{

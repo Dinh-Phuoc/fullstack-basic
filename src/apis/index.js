@@ -42,8 +42,18 @@ export const createNewColumnApi = async (newColumnData) => {
     const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
     return response.data
 }
-
+// Call Api for Login
 export const loginApi = async (infoAccount) => {
     const response = await axios.post(`${API_ROOT}/v1/login`, infoAccount)
+    return response.data
+}
+
+// Call the Api to get the User's information
+export const getInforUserApi = async () => {
+    const response = await axios.get(`${API_ROOT}/v1/profile`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
     return response.data
 }
