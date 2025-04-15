@@ -1,15 +1,25 @@
 import { Facebook, Google } from '@mui/icons-material'
-import { Button, FormControl, Input, InputLabel, Stack, TextField, Typography } from '@mui/material'
+import { Button, FormControl, Stack, TextField, Typography } from '@mui/material'
+import { useEffect, useRef } from 'react'
 
-export default function Login() {
-    const handleLogin = () => {
-        console.log('Login success')
-    }
+export default function Login({ handleLogin }) {
+    const userNameRef = useRef()
+    const passwordRef = useRef()
+
+    const login = () => {
+        const infoAccount = {
+            userName: userNameRef.current.value,
+            password: passwordRef.current.value
+        }
+
+        handleLogin(infoAccount)
+    } 
     return (
         <form>
             <Stack spacing={2}>
                 <FormControl>
-                    <TextField 
+                    <TextField
+                        inputRef={userNameRef} 
                         sx={{ 
                             '& input': {
                                 p: '8px'
@@ -22,7 +32,8 @@ export default function Login() {
                 </FormControl> 
 
                 <FormControl>
-                    <TextField 
+                    <TextField
+                        inputRef={passwordRef} 
                         sx={{ 
                             '& input': {
                                 p: '8px'
@@ -34,7 +45,7 @@ export default function Login() {
                         label='Mật khẩu' id="passwordlogin" aria-describedby="my-helper-text" />
                 </FormControl>
 
-                <Button variant='outlined' onClick={handleLogin}>Đăng nhập</Button>
+                <Button variant='outlined' onClick={login}>Đăng nhập</Button>
                 <Typography sx={{ textAlign: 'center' }} variant='body1'> Hoặc </Typography>
                 <Button variant='outlined'>Đăng nhập bằng Facebook <Facebook /></Button>
                 <Button variant='outlined'>Đăng nhập bằng Google <Google/></Button>

@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import SvgIcon from '@mui/material/SvgIcon'
 import TextField from '@mui/material/TextField'
-import AppsIcon from '@mui/icons-material/Apps'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -49,17 +48,14 @@ export default function AppBar() {
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
                     <Workspaces />
                     <Recent />
-                    <Started />
                     <Templates />
                     <Button 
                         variant='outlined' 
                         startIcon={<LibraryAddIcon/>} 
                         sx={{ 
                             color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
-                            border: 'none',
-                            '&:hover': {
-                                border: 'none'
-                            }
+                            border: '1px solid #ff9a9cc4',
+                            p: '8px 10px'
                         }}
                     >
                         Create

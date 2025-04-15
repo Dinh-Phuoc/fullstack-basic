@@ -49,7 +49,7 @@ export default function CardItem({ card }) {
         >
             {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
             <CardContent sx={{ p: 0, mt: '8px' }}>
-                <Checkbox sx={{ p: 0, ml: '13px' }}/> { card?.title }
+                <Checkbox sx={{ p: 0, ml: '13px', color: '#ff9a9cc4', '&.Mui-checked': { color: '#ff9a9cc4' } }}/> { card?.title }
             </CardContent>
             { shouldShowCardAction() && 
             <CardActions sx={{ p: '0 4px 8px 4px' }}>

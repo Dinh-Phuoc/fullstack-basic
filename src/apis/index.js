@@ -19,7 +19,7 @@ export const updateColumnDetailsApi = async (columnId, updateData) => {
     return response.data
 }
 
-//
+// Call Api Delete Column
 export const deleteColumnDetailsApi = async (columnId, updateData) => {
     const response = await axios.delete(`${API_ROOT}/v1/columns/${columnId}`, updateData)
     return response.data
@@ -40,5 +40,10 @@ export const createNewCardApi = async (newCardData) => {
 // Call Api ColumnModel
 export const createNewColumnApi = async (newColumnData) => {
     const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
+    return response.data
+}
+
+export const loginApi = async (infoAccount) => {
+    const response = await axios.post(`${API_ROOT}/v1/login`, infoAccount)
     return response.data
 }

@@ -18,17 +18,14 @@ const MENU_STYLES = {
     color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white', 
     bgcolor: 'transparent', 
     border: 'none', 
-    paddingX: '5px', 
     borderRadius: '4px',
     '.MuiSvgIcon-root': {
         color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
-    },
-    '&:hover': {
-        bgcolor: 'primary.50'
     }
 }
 
 export default function BoardBar({ board }) {
+    const [user, setUser] = useState(true)
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
 
@@ -45,9 +42,9 @@ export default function BoardBar({ board }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 2,
+            gap: 1,
+            paddingX: 1,
             overflowX: 'auto',
-            paddingX: 2,
             bgcolor: (theme) => (theme.palette.primary.main),
             overflow: 'overlay'
         }}>
@@ -116,7 +113,7 @@ export default function BoardBar({ board }) {
                 />
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: user ? 'flex' : 'none', alignItems: 'center', gap: 1 }}>
                 <Button 
                     variant='outlined' 
                     startIcon={<PersonAddIcon/>}
@@ -135,8 +132,8 @@ export default function BoardBar({ board }) {
                     sx={{ 
                         display: { xs: 'block', sm: 'none', md: 'none' },
                         position: 'relative',
-                        width:  '32px',
-                        height:  '32px',
+                        width:  '28px',
+                        height:  '28px',
                         padding:  '0',
                         border: '1px solid',
                         borderColor:(theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
@@ -151,11 +148,11 @@ export default function BoardBar({ board }) {
                     />
                 </Box>
                 <AvatarGroup 
-                    max={4} 
+                    max={3} 
                     sx={{
                         '& .MuiAvatar-root': {
-                            width: 32, 
-                            height: 32,
+                            width: '28px', 
+                            height: '28px',
                             fontSize: 16,
                             border: '1px solid white',
                             color: 'white',

@@ -96,9 +96,9 @@ const theme = extendTheme({
             styleOverrides: {
                 root: {
                     textTransform: 'none',
-                    borderWidth: '2px',
+                    borderWidth: '1px',
                     '&.MuiButton-outlined:hover': {
-                        border: '2px solid'
+                        border: '1px solid'
                     }
                 }
             }
