@@ -425,14 +425,16 @@ export default function Profiles() {
                                 >
                                     <MyTabs>
                                         <MyTabList>
-                                            <MyTabItem 
+                                            <MyTabItem
+                                                myStyleChild={{ textTransform: 'upperCase' }} 
                                                 handleTitleLoginForm={handleTitleLoginForm} 
                                                 value={0} 
                                                 active='true'>
                                                     Đăng nhập
                                             </MyTabItem>
 
-                                            <MyTabItem 
+                                            <MyTabItem
+                                                myStyleChild={{ textTransform: 'upperCase' }} 
                                                 handleTitleRegisterForm={handleTitleRegisterForm} 
                                                 value={1}>
                                                 Đăng ký

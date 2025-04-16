@@ -1,12 +1,11 @@
 import { Box, Typography } from '@mui/material'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useContext } from 'react'
 import Context from './store/Context'
 
-const MyTabItem = ({ active, value, children, handleTitleLoginForm, handleTitleRegisterForm }) => {
+const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitleLoginForm, handleTitleRegisterForm }) => {
     const [, dispatch] = useContext(Context)
-    
     const myTabItemRef = useRef()
 
     const handleSwithTab = () => {
@@ -33,20 +32,18 @@ const MyTabItem = ({ active, value, children, handleTitleLoginForm, handleTitleR
                 fontSize: '1.6rem',
                 textAlign: 'center',
                 color: theme => theme.palette.primary.main,
-                borderTopLeftRadius: '5px',
-                borderTopRightRadius: '5px',
                 borderBottom: '5px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.5s ease',
                 '&:hover': {
-                    opacity: 1,
-                    backgroundColor: 'rgba(194, 53, 100, 0.05)',
+                    backgroundColor: theme => theme.palette.mode === 'dark' ? '#302c2c' : 'rgba(194, 53, 100, 0.05)',
                     borderColor: 'rgba(194, 53, 100, 0.1)'
-                }
+                },
+                ...myStyle
             }}
             onClick={setActive}
         >
-            <Typography sx={{ textTransform: 'upperCase' }}>{ children }</Typography>
+            <Typography sx={{ width: '100%', ...myStyleChild }}>{ children }</Typography>
         </Box>
     )
 }

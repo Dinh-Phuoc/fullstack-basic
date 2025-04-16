@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import Board from './pages/Boards/Board'
-import { Profile } from './pages/Profile/Profile'
+import { Profile } from './pages/Profile/ProfileDetail'
 function App() {
     return (
         <Routes>
