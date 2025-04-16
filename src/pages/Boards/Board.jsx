@@ -105,7 +105,7 @@ function Board() {
 
         let oldCardOrderIds = dndOrderedColumns.find(column => column._id === oldColumnId)?.cardOrderIds
 
-        if (oldCardOrderIds[0].includes('placehoder-card')) oldCardOrderIds = []
+        if (oldCardOrderIds[0].includes('placeholder-card')) oldCardOrderIds = []
         
         moveCardToDifferentColumnApi({
             currentCardId,

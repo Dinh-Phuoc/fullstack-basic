@@ -1,6 +1,6 @@
 import { Facebook, Google } from '@mui/icons-material'
 import { Button, FormControl, Stack, TextField, Typography } from '@mui/material'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 export default function Login({ handleLogin }) {
     const userNameRef = useRef()
@@ -42,7 +42,7 @@ export default function Login({ handleLogin }) {
                                 top: '-6px'
                             } 
                         }} 
-                        label='Mật khẩu' id="passwordlogin" aria-describedby="my-helper-text" />
+                        label='Mật khẩu' type='password' id="passwordlogin" aria-describedby="my-helper-text" />
                 </FormControl>
 
                 <Button variant='outlined' onClick={login}>Đăng nhập</Button>

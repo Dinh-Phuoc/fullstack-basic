@@ -74,7 +74,12 @@ const theme = extendTheme({
                         '*': {
                             '&::-webkit-scrollbar': {
                                 borderRadius: 0,
-                                height: '6px'
+                                height: '6px',
+                                width: '6px'
+                            },
+                            '&::-webkit-scrollbar:horizontal': {
+                                borderRadius: 0,
+                                width: '6px'
                             },
                             '&::-webkit-scrollbar-thumb': {
                                 borderRadius: '6px',

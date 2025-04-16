@@ -20,7 +20,6 @@ import { ModeSelect } from '~/components/ModeSelect'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import Workspaces from './Menus/Workpages'
 import Recent from './Menus/Recent'
-import Started from './Menus/Started'
 import Templates from './Menus/Templates'
 import Profiles from './Menus/Profiles'
 
@@ -54,7 +53,8 @@ export default function AppBar() {
                         startIcon={<LibraryAddIcon/>} 
                         sx={{ 
                             color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
-                            border: '1px solid #ff9a9cc4',
+                            border: '1px solid',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                             p: '8px 10px'
                         }}
                     >

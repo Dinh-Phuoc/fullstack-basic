@@ -20,7 +20,7 @@ import MyTabs from '~/components/Tabs/store/MyTabs'
 import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
-import { FormControlLabel, Switch, Typography, useColorScheme } from '@mui/material'
+import { CircularProgress, FormControlLabel, Switch, Typography, useColorScheme } from '@mui/material'
 import { HelpOutline, NotificationsNone, PersonOutlineOutlined, SentimentDissatisfied } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { getInforUserApi, loginApi } from '~/apis'
@@ -30,25 +30,29 @@ export default function Profiles() {
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorModal, setAnchorModal] = useState(null)
     const [openChildModal, setOpenChildModal] = useState(false)
+    const [childModalLoginProcessing, setChildModalLoginProcessing] = useState(false)
     const [user, setUser] = useState(null)
-    const [titleForm, setleTitleForm] = useState('login')
+    const [token, setToken] = useState(localStorage.getItem('token'))
+    const [titleForm, setTitleForm] = useState('login')
     const [checked, setChecked] = useState(false)
     const { setMode } = useColorScheme()
 
     useEffect(() => {
-        getInforUserApi().then((data) => setUser(data))
-    }, [])
+        token && getInforUserApi().then((data) => setUser(data))
+    }, [token])
 
-    const handleLogin = async (data) => {
+    const handleLogin = async(data) => {
+        handleChildModalLoginProcessingOpen()
         const token = await loginApi(data)
+        handleChildModalLoginProcessingClose()
+
         if (token.statusCode) {
             handleChildModalOpen()
             return
         }
-
-        localStorage.setItem('token', token)
-        getInforUserApi().then((data) => setUser(data))
+        setToken(token)
         handleClose()
+        localStorage.setItem('token', token)
     }
 
     const handleLogOut = () => {
@@ -83,17 +87,20 @@ export default function Profiles() {
     }
 
     const handleTitleLoginForm = () => {
-        setleTitleForm('login')
+        setTitleForm('login')
     }
 
     const handleTitleRegisterForm = () => {
-        setleTitleForm('register')
+        setTitleForm('register')
     }
 
     // Modal Child
     const handleChildModalOpen = () => setOpenChildModal(true)
     const handleChildModalClose = () => setOpenChildModal(false)
 
+    // ChildModalLoginProcessing
+    const handleChildModalLoginProcessingOpen = () => setChildModalLoginProcessing(true)
+    const handleChildModalLoginProcessingClose = () => setChildModalLoginProcessing(false)
     return (
         <Box>
             <Tooltip title="Account settings">
@@ -446,15 +453,63 @@ export default function Profiles() {
                                                 left: '50%',
                                                 transform: 'translate(-50%, -50%)',
                                                 width: 400,
-                                                bgcolor: 'background.paper',
-                                                border: '2px solid #000',
-                                                boxShadow: 24,
-                                                p: 4
+                                                bgcolor: (theme) => theme.palette.mode === 'dark' ? '#080808' : 'white',
+                                                border: '2px solid',
+                                                borderRadius: '20px',
+                                                borderColor: '#ff9a9cc4',
+                                                boxShadow: 12,
+                                                p: 1,
+                                                textAlign: 'center'
                                             }}
                                         >
-                                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                                <SentimentDissatisfied/>Tài khoản hoặc mật khẩu không chính xác nhé bae 
+                                            <SentimentDissatisfied fontSize='large' sx={{ color: '#ff9a9cc4' }}/>
+                                            <Typography 
+                                                id="modal-modal-description" 
+                                                sx={{
+                                                    textAlign: 'center', 
+                                                    m: '0 12px 12px', 
+                                                    fontFamily: 'El Messiri', 
+                                                    fontSize: '1.8rem', 
+                                                    color: '#ff9a9cc4',
+                                                    fontWeight: { sm: 700, md: 800 },
+                                                    '&.MuiTypography-body1': { fontSize: { sm: '1.8rem', md: '2.4rem' } }
+                                                }}>
+                                                Tài khoản hoặc mật khẩu không chính xác nhé bae 
                                             </Typography>
+                                        </Box>
+                                    </Modal>
+                                    <Modal 
+                                        open={childModalLoginProcessing}
+                                        onClose={handleChildModalLoginProcessingClose}
+                                        aria-labelledby="child-modal-title"
+                                        aria-describedby="child-modal-description">
+                                        <Box 
+                                            sx={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                width: 400,
+                                                bgcolor: (theme) => theme.palette.mode === 'dark' ? '#080808' : 'white',
+                                                border: '2px solid',
+                                                borderRadius: '20px',
+                                                borderColor: '#ff9a9cc4',
+                                                boxShadow: 12,
+                                                p: 1, 
+                                                textAlign:'center'
+                                            }}
+                                        >   
+                                            <Typography 
+                                                sx={{ 
+                                                    m: '0 12px 12px', 
+                                                    fontFamily: 'El Messiri', 
+                                                    fontSize: '1.8rem', 
+                                                    color: '#ff9a9cc4',
+                                                    fontWeight: { sm: 700, md: 800 },
+                                                    '&.MuiTypography-body1': { fontSize: { sm: '1.8rem', md: '2.4rem' } }
+                                                }}
+                                            >Đang đăng nhập</Typography>
+                                            <CircularProgress sx={{ color: '#ff9a9cc4' }}/>
                                         </Box>
                                     </Modal>
                                 </Box>
