@@ -1,12 +1,11 @@
-import { Avatar, Badge, Box, Divider, FormControlLabel, IconButton, ListItemIcon, Menu, MenuItem, SvgIcon, Switch, Tooltip, Typography, useColorScheme } from '@mui/material'
+import { Avatar, Box, Divider, FormControlLabel, IconButton, ListItemIcon, Menu, MenuItem, SvgIcon, Switch, Tooltip, Typography, useColorScheme } from '@mui/material'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
 import MyTabs from '~/components/Tabs/store/MyTabs'
 
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
-import { ModeSelect } from '~/components/ModeSelect'
-import { HelpOutline, Logout, NotificationsNone } from '@mui/icons-material'
+import { HelpOutline, Logout } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { getInforUserApi } from '~/apis'
 import { Link } from 'react-router-dom'
@@ -22,9 +21,10 @@ export function Profile() {
         role: 'admin',
         userName: 'rookie'
     }
+    const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [anchorEl, setAnchorEl] = useState(null)
     const [user, setUser] = useState(data)
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(isDarkMode)
     const { setMode } = useColorScheme()
 
     // useEffect(() => {
@@ -61,7 +61,7 @@ export function Profile() {
                     p: '0 12px', 
                     backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white' 
                 }}>
-                <Link sx={{ display: 'flex', alignItems: 'center', gap: 0.5, cursor: 'pointer', textDecoration: 'none' }} to='/'>
+                <Link style={{ display: 'flex', alignItems: 'center', gap: 0.5, cursor: 'pointer', textDecoration: 'none' }} to='/'>
                     <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color:  '#ff9a9cc4' }}/>
                     <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color:  '#ff9a9cc4' }}>Trello</Typography>
                 </Link>
@@ -76,8 +76,8 @@ export function Profile() {
                             p: '6px'
                         }}  
                         myStyleChild={{
-                            color: '#ff9a9cc4',
-                            '&.MuiTypography-body1': { fontSize: '1rem' }
+                            color: '#ff9a9cc4'
+                            
                         }}
                         value={0} active='true'>Thông tin tài khoản</MyTabItem>
                     <MyTabItem 
@@ -87,8 +87,8 @@ export function Profile() {
                             p: '6px'
                         }}  
                         myStyleChild={{ 
-                            color: '#ff9a9cc4',
-                            '&.MuiTypography-body1': { fontSize: '1rem' }
+                            color: '#ff9a9cc4'
+                            
                         }}
                         value={1}>Email</MyTabItem>
                     <MyTabItem 
@@ -98,8 +98,8 @@ export function Profile() {
                             p: '6px'
                         }}  
                         myStyleChild={{ 
-                            color: '#ff9a9cc4',
-                            '&.MuiTypography-body1': { fontSize: '1rem' }
+                            color: '#ff9a9cc4'
+                            
                         }}value={2}>Bảo mật</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
@@ -108,8 +108,8 @@ export function Profile() {
                             p: '6px'
                         }}  
                         myStyleChild={{ 
-                            color: '#ff9a9cc4',
-                            '&.MuiTypography-body1': { fontSize: '1rem' }
+                            color: '#ff9a9cc4'
+                            
                         }}value={3}>Quyền riêng tư</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
@@ -118,8 +118,8 @@ export function Profile() {
                             p: '6px'
                         }}  
                         myStyleChild={{ 
-                            color: '#ff9a9cc4',
-                            '&.MuiTypography-body1': { fontSize: '1rem' }
+                            color: '#ff9a9cc4'
+                            
                         }}value={4}>Tùy chọn tài khoản</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
@@ -128,8 +128,8 @@ export function Profile() {
                             p: '6px'
                         }}  
                         myStyleChild={{ 
-                            color: '#ff9a9cc4',
-                            '&.MuiTypography-body1': { fontSize: '1rem' }
+                            color: '#ff9a9cc4'
+                            
                         }}value={5}>Xem thêm</MyTabItem>
                 </MyTabList>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, float: 'right' }}>
@@ -295,19 +295,24 @@ export function Profile() {
 
                             <Divider />
                             
-                            <Link sx={{ textDecoration: 'none' }} onClick={handleLogOut} to='/'>
+                            <Link style={{ textDecoration: 'none' }} onClick={handleLogOut} to='/'>
                                 <MenuItem >
                                     <ListItemIcon>
                                         <Logout fontSize="medium" />
                                     </ListItemIcon>
-                                    Logout
+                                    <Typography sx={{ color: theme => theme.palette.text.primary }}>Logout</Typography>
                                 </MenuItem>
                             </Link>
                         </Menu>
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white' }}>
+            <Box 
+                sx={{ 
+                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white',
+                    height: '100vh',
+                    textAlign: 'center' 
+                }}>
                 <MyTabPanel value={0}>Thông tin tài khoản</MyTabPanel>
                 <MyTabPanel value={1}>Email</MyTabPanel>
                 <MyTabPanel value={2}>Bảo mật</MyTabPanel>

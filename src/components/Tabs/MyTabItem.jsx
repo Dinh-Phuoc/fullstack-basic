@@ -5,8 +5,11 @@ import { useContext } from 'react'
 import Context from './store/Context'
 
 const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitleLoginForm, handleTitleRegisterForm }) => {
-    const [, dispatch] = useContext(Context)
+    const [state, dispatch] = useContext(Context)
+    const { elementActive } = state
     const myTabItemRef = useRef()
+    const childActive = elementActive.length > 0 || elementActive instanceof Node && 
+                        value === Number(elementActive.getAttribute('data-value'))
 
     const handleSwithTab = () => {
         dispatch({ type: 'SET_ACTIVE_TAB', payload: myTabItemRef.current })
@@ -31,10 +34,9 @@ const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitle
                 padding: '6px 20px 6px',
                 fontSize: '1.6rem',
                 textAlign: 'center',
-                color: theme => theme.palette.primary.main,
                 borderBottom: '5px solid transparent',
                 cursor: 'pointer',
-                transition: 'all 0.5s ease',
+                transition: 'all 0.7s ease',
                 '&:hover': {
                     backgroundColor: theme => theme.palette.mode === 'dark' ? '#302c2c' : 'rgba(194, 53, 100, 0.05)',
                     borderColor: 'rgba(194, 53, 100, 0.1)'
@@ -43,7 +45,14 @@ const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitle
             }}
             onClick={setActive}
         >
-            <Typography sx={{ width: '100%', ...myStyleChild }}>{ children }</Typography>
+            <Typography sx={{
+                width: '100%',
+                transition: 'all 0.5s ease',
+                '&.MuiTypography-body1': { 
+                    fontSize: '1rem'
+                }, 
+                ...myStyleChild 
+            }}>{ children }</Typography>
         </Box>
     )
 }

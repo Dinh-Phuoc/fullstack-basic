@@ -34,7 +34,8 @@ export default function Profiles() {
     const [user, setUser] = useState(null)
     const [token, setToken] = useState(localStorage.getItem('token'))
     const [titleForm, setTitleForm] = useState('login')
-    const [checked, setChecked] = useState(false)
+    const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
+    const [checked, setChecked] = useState(isDarkMode)
     const { setMode } = useColorScheme()
 
     useEffect(() => {
