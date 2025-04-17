@@ -9,6 +9,7 @@ import { HelpOutline, Logout } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { getInforUserApi } from '~/apis'
 import { Link } from 'react-router-dom'
+import DocumentPage from './DocumentPage'
 
 export function Profile() {
     const data = {
@@ -58,7 +59,8 @@ export function Profile() {
                     justifyContent: 'space-between',
                     alignContent: 'center',
                     height: '56px',
-                    p: '0 12px', 
+                    p: '0 12px',
+                    borderBlockEnd: '1px solid #091E4240', 
                     backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white' 
                 }}>
                 <Link style={{ display: 'flex', alignItems: 'center', gap: 0.5, cursor: 'pointer', textDecoration: 'none' }} to='/'>
@@ -309,11 +311,9 @@ export function Profile() {
             </Box>
             <Box 
                 sx={{ 
-                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white',
-                    height: '100vh',
-                    textAlign: 'center' 
+                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white'
                 }}>
-                <MyTabPanel value={0}>Thông tin tài khoản</MyTabPanel>
+                <MyTabPanel value={0}><DocumentPage/></MyTabPanel>
                 <MyTabPanel value={1}>Email</MyTabPanel>
                 <MyTabPanel value={2}>Bảo mật</MyTabPanel>
                 <MyTabPanel value={3}>Quyền riêng tư</MyTabPanel>

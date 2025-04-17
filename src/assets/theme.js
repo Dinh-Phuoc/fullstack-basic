@@ -26,7 +26,8 @@ const theme = extendTheme({
                 MuiTooltip: {
                     styleOverrides: {
                         tooltip: {
-                            backgroundColor: '#ffffffc4',
+                            backgroundColor: 'white',
+                            boxShadow: '0px 1px 1px  #091E4240',
                             color: '#ff9a9cc4'
                         }
                     }
