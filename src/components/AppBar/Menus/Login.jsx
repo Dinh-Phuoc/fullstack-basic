@@ -1,19 +1,23 @@
 import { Facebook, Google } from '@mui/icons-material'
 import { Button, FormControl, Stack, TextField, Typography } from '@mui/material'
-import { useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
-export default function Login({ handleLogin }) {
+const Login = forwardRef(({ onClick, ...props }, ref ) => {
     const userNameRef = useRef()
     const passwordRef = useRef()
 
-    const login = () => {
-        const infoAccount = {
-            userName: userNameRef.current.value,
-            password: passwordRef.current.value
-        }
+    const passProps = {
+        onClick,
+        ...props
+    }
 
-        handleLogin(infoAccount)
-    } 
+    useImperativeHandle(ref, () => ({
+        getChildrenRef: () => ({
+            userName: userNameRef.current?.value,
+            password: passwordRef.current?.value
+        })
+    }))
+    
     return (
         <form>
             <Stack spacing={2}>
@@ -45,11 +49,13 @@ export default function Login({ handleLogin }) {
                         label='Mật khẩu' type='password' id="passwordlogin" aria-describedby="my-helper-text" />
                 </FormControl>
 
-                <Button variant='outlined' onClick={login}>Đăng nhập</Button>
+                <Button variant='outlined' onClick={passProps.onClick}>Đăng nhập</Button>
                 <Typography sx={{ textAlign: 'center' }} variant='body1'> Hoặc </Typography>
                 <Button variant='outlined'>Đăng nhập bằng Facebook <Facebook /></Button>
                 <Button variant='outlined'>Đăng nhập bằng Google <Google/></Button>
             </Stack>
         </form>
     )
-} 
+}) 
+
+export default Login

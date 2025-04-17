@@ -5,7 +5,7 @@ import Context from './store/Context'
 export default function MyTabList ({ myStyle, children }) {
     const [state] = useContext(Context)
     const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
-    const { activeStore, elementActive } = state
+    const { elementActive } = state
     useEffect(() => {
         const el = elementActive.length > 0 || elementActive instanceof Node ? elementActive : null
         if (!el) return
@@ -33,7 +33,7 @@ export default function MyTabList ({ myStyle, children }) {
         <Box sx={{
             display: 'flex',
             position: 'relative',
-            marginBottom: '16px',
+            marginBottom: '24px',
             ...myStyle
         }}>
             { children }
@@ -46,19 +46,7 @@ export default function MyTabList ({ myStyle, children }) {
                     height: '5px',
                     borderRadius: '5px',
                     backgroundColor: '#ff9a9cc4',
-                    transition: 'all 0.5s ease',
-                    '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        bottom: '5px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: 0,
-                        height: 0,
-                        borderLeft: '10px solid transparent',
-                        borderRight: '10px solid transparent',
-                        borderBottom: '10px solid #ff9a9cc4'
-                    }
+                    transition: 'all 0.5s ease'
                 }}
             ></Box>
         </Box>

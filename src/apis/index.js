@@ -48,6 +48,12 @@ export const loginApi = async (infoAccount) => {
     return response.data
 }
 
+// Call Api for Login
+export const registerApi = async (infoAccount) => {
+    const response = await axios.post(`${API_ROOT}/v1/register`, infoAccount)
+    return response.data
+}
+
 // Call the Api to get the User's information
 export const getInforUserApi = async () => {
     const response = await axios.get(`${API_ROOT}/v1/profile`, {

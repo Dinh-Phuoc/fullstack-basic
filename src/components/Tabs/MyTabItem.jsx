@@ -47,7 +47,6 @@ const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitle
         >
             <Typography sx={{
                 width: '100%',
-                transition: 'all 0.5s ease',
                 '&.MuiTypography-body1': { 
                     fontSize: '1rem'
                 }, 
