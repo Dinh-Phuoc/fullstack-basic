@@ -5,7 +5,7 @@ if (process.env.BUILD_MODE === 'dev') {
 }
 
 if (process.env.BUILD_MODE === 'prod') {
-    apiRoot = 'https://fullstack-basic-api.onrender.com'
+    apiRoot = 'http://rookie.io.vn'
 }
 
 export const API_ROOT = apiRoot

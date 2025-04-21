@@ -1,11 +1,12 @@
-import { Avatar, Box, Divider, FormControlLabel, IconButton, ListItemIcon, Menu, MenuItem, SvgIcon, Switch, Tooltip, Typography, useColorScheme } from '@mui/material'
+import { Avatar, Box, Button, Divider, FormControlLabel, IconButton, ListItemIcon, Menu, MenuItem, SvgIcon, Switch, Tooltip, Typography, useColorScheme } from '@mui/material'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
 import MyTabs from '~/components/Tabs/store/MyTabs'
+import MenuIcon from '@mui/icons-material/Menu'
 
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
-import { HelpOutline, Logout } from '@mui/icons-material'
+import { HelpOutline, KeyboardArrowDown, Logout } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { getInforUserApi } from '~/apis'
 import { Link } from 'react-router-dom'
@@ -24,6 +25,8 @@ export function Profile() {
     }
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorElSeemore, setAnchorElSeemore] = useState(null)
+
     const [user, setUser] = useState(data)
     const [checked, setChecked] = useState(isDarkMode)
     const { setMode } = useColorScheme()
@@ -38,6 +41,7 @@ export function Profile() {
     }
     
     const open = Boolean(anchorEl)
+    const openSeemore = Boolean(anchorElSeemore)
 
     const handleChange = (event) => {
         setChecked(event.target.checked)
@@ -51,6 +55,13 @@ export function Profile() {
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    const handleSeeMore = (event) => {
+        setAnchorElSeemore(event.currentTarget)
+    }
+    const handleSeeMoreClose = () => {
+        setAnchorElSeemore(null)
+    }
     return (
         <MyTabs>
             <Box 
@@ -60,12 +71,18 @@ export function Profile() {
                     alignContent: 'center',
                     height: '56px',
                     p: '0 12px',
-                    borderBlockEnd: '1px solid #091E4240', 
+                    borderBlockEnd: theme => theme.palette.mode === 'dark' ? `1px solid ${theme.palette.primary.light}` : '1px solid #091E4240', 
                     backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white' 
                 }}>
                 <Link style={{ display: 'flex', alignItems: 'center', gap: 0.5, cursor: 'pointer', textDecoration: 'none' }} to='/'>
                     <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color:  '#ff9a9cc4' }}/>
-                    <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color:  '#ff9a9cc4' }}>Trello</Typography>
+                    <Typography variant='span' 
+                        sx={{ ml: '4px', 
+                            fontSize: '1rem', 
+                            fontWeight: 'bold', 
+                            color:  '#ff9a9cc4',
+                            display: { xs: 'none', sm: 'block' } 
+                        }}>Sariii nè!</Typography>
                 </Link>
                 <MyTabList 
                     myStyle={{
@@ -73,7 +90,7 @@ export function Profile() {
                     }}>
                     <MyTabItem 
                         myStyle={{ 
-                            display: 'flex',
+                            display: { xs: 'none', sm: 'flex' },
                             alignItems: 'center',
                             p: '6px'
                         }}  
@@ -84,7 +101,7 @@ export function Profile() {
                         value={0} active='true'>Thông tin tài khoản</MyTabItem>
                     <MyTabItem 
                         myStyle={{
-                            display: 'flex',
+                            display: { xs: 'none', sm: 'flex' },
                             alignItems: 'center',
                             p: '6px'
                         }}  
@@ -95,7 +112,7 @@ export function Profile() {
                         value={1}>Email</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
-                            display: 'flex',
+                            display: { xs: 'none', sm: 'flex' },
                             alignItems: 'center',
                             p: '6px'
                         }}  
@@ -105,7 +122,7 @@ export function Profile() {
                         }}value={2}>Bảo mật</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
-                            display: 'flex',
+                            display: { xs: 'none', md: 'flex' },
                             alignItems: 'center',
                             p: '6px'
                         }}  
@@ -115,7 +132,7 @@ export function Profile() {
                         }}value={3}>Quyền riêng tư</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
-                            display: 'flex',
+                            display: { xs: 'none', md: 'flex' },
                             alignItems: 'center',
                             p: '6px'
                         }}  
@@ -125,14 +142,53 @@ export function Profile() {
                         }}value={4}>Tùy chọn tài khoản</MyTabItem>
                     <MyTabItem 
                         myStyle={{ 
-                            display: 'flex',
+                            display: { xs: 'none', lg: 'flex' },
                             alignItems: 'center',
                             p: '6px'
                         }}  
                         myStyleChild={{ 
                             color: '#ff9a9cc4'
-                            
-                        }}value={5}>Xem thêm</MyTabItem>
+                        }}value={5}>Các ứng dụng được kết nối</MyTabItem>
+                    <MyTabItem 
+                        myStyle={{ 
+                            display: { xs: 'none', lg: 'flex' },
+                            alignItems: 'center',
+                            p: '6px'
+                        }}  
+                        myStyleChild={{ 
+                            color: '#ff9a9cc4'
+                        }}value={6}>Tùy chọn liên kết</MyTabItem>
+                    <Button
+                        sx={{ p: '6px' }}
+                        onClick={handleSeeMore}>
+                        <Typography 
+                            sx={{ display: { xs: 'none', sm: 'flex' }, alignContent: 'center', 
+                                '& MuiTypography-body1': { fontSize: '0.875rem' } 
+                            }}> Xem thêm <KeyboardArrowDown/> 
+                        </Typography>
+                        <MenuIcon
+                            sx={{ display: { xs: 'flex', sm: 'none', float: 'left' }, alignContent: 'center', 
+                                '& MuiTypography-body1': { fontSize: '0.875rem' } 
+                            }}> Xem thêm <KeyboardArrowDown/> 
+                        </MenuIcon>
+                    </Button>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorElSeemore}
+                        open={openSeemore}
+                        onClose={handleSeeMoreClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button'
+                        }}
+                    >
+                        <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Thông tin tài khoản</MenuItem>
+                        <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Email</MenuItem>
+                        <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Bảo mật</MenuItem>
+                        <MenuItem sx={{ display: { sm: 'flex', md: 'none' } }}>Quyền riêng tư</MenuItem>
+                        <MenuItem sx={{ display: { sm: 'flex', md: 'none' } }}>Tùy chọn tài khoản</MenuItem>
+                        <MenuItem sx={{ display: { lg: 'none' } }}>Các ứng dụng được kết nối</MenuItem>
+                        <MenuItem sx={{ display: { lg: 'none' } }}>Tùy chọn liên kết</MenuItem>
+                    </Menu>
                 </MyTabList>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, float: 'right' }}>
                     <Tooltip title='Help' sx={{ cursor: 'pointer' }}>
@@ -318,7 +374,9 @@ export function Profile() {
                 <MyTabPanel value={2}>Bảo mật</MyTabPanel>
                 <MyTabPanel value={3}>Quyền riêng tư</MyTabPanel>
                 <MyTabPanel value={4}>Tùy chọn tài khoản</MyTabPanel>
-                <MyTabPanel value={5}>Xem thêm</MyTabPanel>
+                <MyTabPanel value={5}>Các ứng dụng được kết nối</MyTabPanel>
+                <MyTabPanel value={6}>Tùy chọn liên kết</MyTabPanel>
+                <MyTabPanel value={7}>Xem thêm</MyTabPanel>
             </Box>
         </MyTabs>
     )

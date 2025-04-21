@@ -43,7 +43,7 @@ export default function MyTabList ({ myStyle, children }) {
                     left: `${indicatorStyle.left}px`,
                     bottom: 0,
                     width: `${indicatorStyle.width}px`,
-                    height: '5px',
+                    height: '4px',
                     borderRadius: '5px',
                     backgroundColor: '#ff9a9cc4',
                     transition: 'all 0.5s ease'

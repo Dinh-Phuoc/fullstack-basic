@@ -21,7 +21,7 @@ import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import Workspaces from './Menus/Workpages'
 import Recent from './Menus/Recent'
 import Templates from './Menus/Templates'
-import Profiles from './Menus/Profiles'
+import Profiles from './Menus/ProfilesMenu'
 
 export default function AppBar() {
     const [searchValue, setSearchValue] = useState('')

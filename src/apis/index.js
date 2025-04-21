@@ -63,3 +63,13 @@ export const getInforUserApi = async () => {
     })
     return response.data
 }
+// Call Api for upload Image Header
+export const uploadImageHeaderApi = async (file, userId) => {
+    const response = await axios.post(`${API_ROOT}/v1/profile/upload/image-header/${userId}`, file)
+    return response.data
+}
+
+export const uploadAvatarApi = async (file, userId) => {
+    const response = await axios.post(`${API_ROOT}/v1/profile/upload/avatar/${userId}`, file)
+    return response.data
+}

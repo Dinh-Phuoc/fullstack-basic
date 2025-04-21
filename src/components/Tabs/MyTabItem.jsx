@@ -4,15 +4,16 @@ import { useEffect, useRef, useState } from 'react'
 import { useContext } from 'react'
 import Context from './store/Context'
 
-const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitleLoginForm, handleTitleRegisterForm }) => {
-    const [state, dispatch] = useContext(Context)
-    const { elementActive } = state
+const MyTabItem = ({ myStyle, myStyleChild, active, value, children, onClick, ...props }) => {
+    const [, dispatch] = useContext(Context)
     const myTabItemRef = useRef()
-    const childActive = elementActive.length > 0 || elementActive instanceof Node && 
-                        value === Number(elementActive.getAttribute('data-value'))
-
     const handleSwithTab = () => {
         dispatch({ type: 'SET_ACTIVE_TAB', payload: myTabItemRef.current })
+    }
+
+    const passProps = {
+        onClick,
+        ...props
     }
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitle
 
     const setActive = () => {
         handleSwithTab()
-        handleTitleLoginForm ? handleTitleLoginForm() : handleTitleRegisterForm()
+        passProps?.onClick?.()
     }
 
     return (
@@ -47,9 +48,6 @@ const MyTabItem = ({ myStyle, myStyleChild, active, value, children, handleTitle
         >
             <Typography sx={{
                 width: '100%',
-                '&.MuiTypography-body1': { 
-                    fontSize: '1rem'
-                }, 
                 ...myStyleChild 
             }}>{ children }</Typography>
         </Box>

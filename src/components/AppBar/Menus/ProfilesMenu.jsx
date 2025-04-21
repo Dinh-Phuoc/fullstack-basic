@@ -103,6 +103,10 @@ export default function Profiles() {
         setAnchorModal(null)
     }
 
+    const handleSetTitle = () => {
+        handleTitleLoginForm ? handleTitleLoginForm() : handleTitleRegisterForm()
+    }
+
     const handleTitleLoginForm = () => {
         setTitleForm('login')
     }
@@ -451,6 +455,7 @@ export default function Profiles() {
                                     <MyTabs>
                                         <MyTabList>
                                             <MyTabItem
+                                                onClick={handleSetTitle}
                                                 myStyleChild={{ textTransform: 'upperCase' }} 
                                                 handleTitleLoginForm={handleTitleLoginForm} 
                                                 value={0} 
@@ -459,6 +464,7 @@ export default function Profiles() {
                                             </MyTabItem>
 
                                             <MyTabItem
+                                                onClick={handleSetTitle}
                                                 myStyleChild={{ textTransform: 'upperCase' }} 
                                                 handleTitleRegisterForm={handleTitleRegisterForm} 
                                                 value={1}>

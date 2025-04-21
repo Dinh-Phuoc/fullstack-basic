@@ -14,7 +14,11 @@ const theme = extendTheme({
         columnHeaderHeight: COLUMN_HEADER_HEIGHT,
         columnFooterHeight: COLUMN_FOOTER_HEIGHT
     },
-
+    palette: {
+        primary: {
+            main: '#ff9a9cc4'
+        }
+    },
     colorSchemes: {
         light: {
             palette: {
@@ -31,31 +35,14 @@ const theme = extendTheme({
                             color: '#ff9a9cc4'
                         }
                     }
-                },
-                MuiCssBaseline: {
-                    styleOverrides: {
-                        '*': {
-                            '&::-webkit-scrollbar': {
-                                borderRadius: 0,
-                                height: '6px'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                borderRadius: '6px',
-                                backgroundColor: 'rgba(0, 0, 0, 0.15)'
-                            },
-                            '&::-webkit-scrollbar-track': {
-                                borderRadius: 0,
-                                backgroundColor: 'rgba(0, 0, 0, 0)'
-                            }
-                        }
-                    }
                 }
             }
         },
         dark: {
             palette: {
                 primary: {
-                    main: '#121212'
+                    main: '#121212',
+                    light:'#ff9a9cc4'
                 },
                 background: {
                     default: '#ff9a9cc4'
@@ -69,35 +56,31 @@ const theme = extendTheme({
                             color: '#ff9a9cc4'
                         }
                     }
-                },
-                MuiCssBaseline: {
-                    styleOverrides: {
-                        '*': {
-                            '&::-webkit-scrollbar': {
-                                borderRadius: 0,
-                                height: '6px',
-                                width: '6px'
-                            },
-                            '&::-webkit-scrollbar:horizontal': {
-                                borderRadius: 0,
-                                width: '6px'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                borderRadius: '6px',
-                                backgroundColor: '#ff9a9cc4'
-                            },
-                            '&::-webkit-scrollbar-track': {
-                                borderRadius: 0,
-                                backgroundColor: 'rgba(248, 248, 248, 0)'
-                            }
-                        }
-                    }
                 }
             }
         }
     },
 
     components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                '*': {
+                    '&::-webkit-scrollbar': {
+                        borderRadius: 0,
+                        height: '6px',
+                        width: '6px'
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        borderRadius: '6px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.15)'
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        borderRadius: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0)'
+                    }
+                }
+            }
+        },
         MuiButton: {
             styleOverrides: {
                 root: {

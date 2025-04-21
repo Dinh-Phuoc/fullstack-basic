@@ -1,19 +1,3 @@
 :root {
   font-family: 'Roboto', sans-serif;
 }
-
-/* body *::-webkit-scrollbar {
-  border-radius: 0;
-  height: 6px;
-}
-
-body *::-webkit-scrollbar-thumb {
-  border-radius: 6px;
-  background-color: rgba(0, 0, 0, 0.15);
-}
-
-body *::-webkit-scrollbar-track {
-  border-radius: 0;
-  background-color: rgba(0, 0, 0, 0);
-} */
-
