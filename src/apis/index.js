@@ -63,13 +63,24 @@ export const getInforUserApi = async () => {
     })
     return response.data
 }
-// Call Api for upload Image Header
+// Call Api for upload Image
 export const uploadImageHeaderApi = async (file, userId) => {
-    const response = await axios.post(`${API_ROOT}/v1/profile/upload/image-header/${userId}`, file)
+    const response = await axios.patch(`${API_ROOT}/v1/profile/upload/image-header/${userId}`, file)
     return response.data
 }
 
 export const uploadAvatarApi = async (file, userId) => {
-    const response = await axios.post(`${API_ROOT}/v1/profile/upload/avatar/${userId}`, file)
+    const response = await axios.patch(`${API_ROOT}/v1/profile/upload/avatar/${userId}`, file)
+    return response.data
+}
+
+// Call Api for get Image
+export const getImageHeaderApi = async (userId) => {
+    const response = await axios.get(`${API_ROOT}/v1/profile/getImage/image-header/${userId}`)
+    return response.data
+}
+
+export const getAvatarApi = async (userId) => {
+    const response = await axios.get(`${API_ROOT}/v1/profile/getImage/avatar/${userId}`)
     return response.data
 }

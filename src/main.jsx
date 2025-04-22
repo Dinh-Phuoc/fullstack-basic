@@ -9,6 +9,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import theme from './assets/theme.js'
+import UserProvider from './contexts/User/UserProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     // <React.StrictMode>
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <CssVarsProvider theme={theme}>
             <ConfirmProvider>
                 <CssBaseline enableColorScheme />
-                <App />
+                <UserProvider>
+                    <App />
+                </UserProvider>
                 <ToastContainer/>
             </ConfirmProvider>
         </CssVarsProvider>

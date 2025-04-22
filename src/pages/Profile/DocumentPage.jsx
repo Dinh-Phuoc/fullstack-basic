@@ -1,33 +1,58 @@
 import { CameraAltOutlined, Check, Close, Image, InfoOutlined, Public } from '@mui/icons-material'
 
-import { Box, Typography, Link, Tooltip, Avatar, Menu, MenuItem, Input, Paper, TextField, Button, InputLabel, FormControl } from '@mui/material'
-import { useRef, useState } from 'react'
-import { uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import { Box, Typography, Link, Tooltip, Avatar, Menu, MenuItem, Input, Paper, TextField, Button, CircularProgress } from '@mui/material'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { getInforUserApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import UserContext from '~/contexts/User/UserContext'
 import { API_ROOT } from '~/utils/constant'
 
-const DocumentPage = () => {
-    const data = {
-        _id:  '67ec88f63bb057c82de3e0f7',
-        password: '123456',
-        gmail: 'rookie@gmail.com',
-        fullName: 'Rookie',
-        phone: '0000110101',
-        imageHeader: '',
-        avatar: 'https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/481672559_1890220561782995_8376855731310234495_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGQnHVCqT8BaZbG28o0IHU-ruDQw8iioI-u4NDDyKKgj_AQzr-33zBwiSgHbvNRTV_ettm4D6Qtz3tSfUQ9OiSx&_nc_ohc=BpANafhv5W4Q7kNvwG_VRcq&_nc_oc=AdmRqfs13imavm_l0Om407de1WxhARPjSbK2vwxfUpaCW5qlmZSKrsrGjQsSQ69q1Eg&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=v_aT3DdfuMPbib8uCNBkXw&oh=00_AfFdaMs3hBWEmV-KW2XutYWEl9vcRoGAReg6KMlEoY7JMA&oe=67FAC251',
-        role: 'admin',
-        userName: 'rookie'
-    }
+const DocumentPage = ({ handleUpdate }) => {
+    const [, dispatch] = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
     const imageRef = useRef()
     const open = Boolean(anchorEl)
+    const [user, setUser] = useState(null)
+    const [token] = useState(localStorage.getItem('token'))
 
     const uploadAvatarRef = useRef()
     const cameraIconRef = useRef()
 
-    const [prevValue, setPreValue] = useState(null)
+    const [prevValue, setPreValue] = useState('Prev')
     const [fullNameFocus, setFullNameFocus] = useState(false)
-    const [fullName, setFullName] = useState(data.fullName)
+    const [jobTitleFocus, setJobTitleFocus] = useState(false)
+    const [departmentFocus, setDepartmentFocus] = useState(false)
+    const [addressFocus, setAddressFocus] = useState(false)
+
+    const [avatarURL, setAvatarURL] = useState(null)
+    const [imageHeaderURL, setImageHeaderURL] = useState(null)
+
+    useEffect(() => {
+        token && getInforUserApi().then((userInfo) => {
+            const newUser = {
+                ...userInfo,
+                avatar: `${API_ROOT}/v1/profile/getImage/avatar/${userInfo._id}/?t=${Date.now()}`,
+                imageHeader: `${API_ROOT}/v1/profile/getImage/image-header/${userInfo._id}/?t=${Date.now()}`
+            }
+
+            dispatch({ type: 'SET_USER_INFO', payload: newUser })
+            setUser(newUser)
+        })
+    }, [])
+
+    
+    if (!user) {
+        return (<Box sx={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            width: '100vw',
+            gap: 2
+        }}>
+            <CircularProgress/>
+        </Box>)
+    }
 
     //Handle Image Header Change group
     const handleImageHeaderChange = async (e) => {
@@ -39,8 +64,9 @@ const DocumentPage = () => {
         const formData = new FormData()
         formData.append('image-header', imageHeader)
 
-        const imageHeaderPath = await uploadImageHeaderApi(formData, data._id)
-        if (imageHeaderPath) data.imageHeader = imageHeaderPath.file
+        const isUploadImageHeaderSuccess = await uploadImageHeaderApi(formData, user._id)
+        if (isUploadImageHeaderSuccess) setImageHeaderURL(`${API_ROOT}/v1/profile/getImage/image-header/${user._id}/?t=${Date.now()}`)
+        handleUpdate()
     }
 
     const handleClickUploadHeaderImage = () => {
@@ -51,7 +77,7 @@ const DocumentPage = () => {
         setAnchorEl(imageRef.current)
     }
 
-    //Hande Image Header Change group
+    //Hande Avatar Change group
     const handleAvatarChange = async (e) => {
         const avatar = e.target.files[0]
         if (!avatar) {
@@ -61,8 +87,9 @@ const DocumentPage = () => {
         const formData = new FormData()
         formData.append('avatar', avatar)
 
-        const avatarPath = await uploadAvatarApi(formData, data._id)
-        if (avatarPath) data.avatar = <avatarPath className="file"></avatarPath>
+        const isUploadAvatarSuccess = await uploadAvatarApi(formData, user._id)
+        if (isUploadAvatarSuccess) setAvatarURL(`${API_ROOT}/v1/profile/getImage/avatar/${user._id}/?t=${Date.now()}`)
+        handleUpdate()
     }
 
     const handleUploadAvatarThroughCameraIcon = () => {
@@ -77,6 +104,18 @@ const DocumentPage = () => {
             setFullNameFocus(true)
             e.target.select()
             return
+        case 'jobTitle':
+            setJobTitleFocus(true)
+            e.target.select()
+            return
+        case 'department':
+            setDepartmentFocus(true)
+            e.target.select()
+            return
+        case 'address':
+            addressFocus(true)
+            e.target.select()
+            return
         default:
             return
         }
@@ -85,7 +124,16 @@ const DocumentPage = () => {
     const handleChangeValue = (e, textFieldName) => {
         switch (textFieldName) {
         case 'fullName':
-            setFullName(e.target.value)
+            console.log('handleChangeValue fullName')
+            return
+        case 'jobTitle':
+            console.log('handleChangeValue jobTitle')
+            return
+        case 'department':
+            console.log('handleChangeValue department')
+            return
+        case 'address':
+            console.log('handleChangeValue address')
             return
         default:
             return
@@ -96,11 +144,38 @@ const DocumentPage = () => {
         switch (textFieldName) {
         case 'fullName':
             if (e.target.value !== prevValue) {
-                console.log('confirm-confirm')
+                console.log('fullName-confirm')
                 setFullNameFocus(false)
                 return
             }
-            console.log('confirm-cancel')
+            console.log('fullName-cancel')
+            setFullNameFocus(false)
+            return
+        case 'jobTitle':
+            if (e.target.value !== prevValue) {
+                console.log('jobTitle-confirm')
+                setFullNameFocus(false)
+                return
+            }
+            console.log('jobTitle-cancel')
+            setFullNameFocus(false)
+            return
+        case 'department':
+            if (e.target.value !== prevValue) {
+                console.log('department-confirm')
+                setFullNameFocus(false)
+                return
+            }
+            console.log('department-cancel')
+            setFullNameFocus(false)
+            return
+        case 'address':
+            if (e.target.value !== prevValue) {
+                console.log('address-confirm')
+                setFullNameFocus(false)
+                return
+            }
+            console.log('address-cancel')
             setFullNameFocus(false)
             return
         default:
@@ -113,6 +188,18 @@ const DocumentPage = () => {
         case 'fullName':
             console.log('cancel')
             setFullNameFocus(false)
+            return
+        case 'jobTitle':
+            console.log('cancel jobTitle')
+            setJobTitleFocus(false)
+            return
+        case 'department':
+            console.log('cancel department')
+            setDepartmentFocus(false)
+            return
+        case 'address':
+            console.log('cancel address')
+            addressFocus(false)
             return
         default:
             return
@@ -127,6 +214,7 @@ const DocumentPage = () => {
     const handleClose = () => {
         setAnchorEl(null)
     }
+
     return (
         <Box 
             sx={{
@@ -195,7 +283,7 @@ const DocumentPage = () => {
                                 height: '100%'
                             }}
                         >
-                            { data.imageHeader !== '' ? 
+                            { user ? 
                                 <Box>
                                     <img style={{ 
                                         width: '100%',
@@ -204,7 +292,7 @@ const DocumentPage = () => {
                                         objectFit: 'cover',
                                         verticalAlign: 'top'
                                     }}
-                                    src={`${API_ROOT}${data.imageHeader}`}
+                                    src={ imageHeaderURL || user.imageHeader }
                                     ></img>
                                 </Box> 
                                 : 
@@ -269,7 +357,7 @@ const DocumentPage = () => {
                                     transformOrigin={{ horizontal: 'center', vertical: 'top' }}
                                 >
                                     <MenuItem onClick={handleClickUploadHeaderImage}>Tải ảnh lên</MenuItem>
-                                    <MenuItem disabled={ data.imageHeader ? false : true }>Xóa ảnh</MenuItem>
+                                    <MenuItem disabled={ imageHeaderURL ||user.imageHeader ? false : true }>Xóa ảnh</MenuItem>
                                 </Menu>
                             </Box>
                         </Box>
@@ -297,16 +385,17 @@ const DocumentPage = () => {
                                 }
                             }}
                         >
-                            { data.avatar === '' ? 
+                            { user ? 
                                 <Box>
                                     <img style={{ 
                                         height: '96px',
                                         width: '96px',
+                                        borderRadius: '50%',
                                         position: 'absolute',
                                         objectFit: 'cover',
                                         verticalAlign: 'top'
                                     }}
-                                    src={`${API_ROOT}${data.imageHeader}`}
+                                    src={avatarURL || user.avatar}
                                     ></img>
                                 </Box> 
                                 : 
@@ -345,21 +434,21 @@ const DocumentPage = () => {
                 {/* Who? */}
                 <Box sx={{     
                     marginTop: '38px',
-                    marginLeft: '48px',
+                    marginLeft: { xs: 0, sm: '48px' },
                     height: '66px',
                     width: '240px',
                     p: '0 16px 16px',
-                    mt: '112px'
+                    mt: '116px'
                 }}>
-                    <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                        <Typography sx={{ ml: '3px', '&.MuiTypography-body1': { fontSize: '0.7rem' } }}>Ai có thể xem ảnh hồ sơ của bạn?</Typography>
+                    <Box sx={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                        <Typography sx={{ mr: '4px', lineHeight: 1.2, '&.MuiTypography-body1': { fontSize: '0.7rem' } }}>Ai có thể xem ảnh hồ sơ của bạn?</Typography>
                         <Tooltip title='Mục cài đặt chế độ hiển thị chỉ áp dụng cho ảnh hồ sơ của bạn. Mọi người luôn có thể xem hình ảnh tiêu đề của bạn.'>
                             <InfoOutlined fontSize='small'/>
                         </Tooltip>
                     </Box>
                     <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
-                        <Box sx={{ display: 'flex', width: '100%', height: '40px', gap: 1, alignItems: 'center' }}>
-                            <Public/><Typography sx={{ cursor: 'not-allowed' }}>Bất kỳ ai</Typography>
+                        <Box sx={{ display: 'flex', width: '100%', height: '30px', gap: 1, alignItems: 'center' }}>
+                            <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }} fontSize='small'/><Typography sx={{ cursor: 'not-allowed', '&.MuiTypography-body1': { fontSize: '0.7rem' }, color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                         </Box>
                     </Tooltip>
                 </Box>
@@ -369,21 +458,23 @@ const DocumentPage = () => {
             <Typography sx={{ m: '32px 0 12px' }} variant='subtitle2'>Giới thiệu về bạn</Typography>
 
             <Paper sx={{ padding: '12px' }}>
-                <Box sx={{ m: '12px', float: 'right' }}><Typography>Ai có thể thấy được nội dung này?</Typography></Box>
+                <Box sx={{ m: '12px 0px 18px 12px', float: 'right' }}><Typography>Ai có thể thấy được nội dung này?</Typography></Box>
+
+                {/* Full Name */}
                 <Box 
                     sx={{ 
                         display: 'flex', 
                         justifyContent: 'space-between', 
                         alignContent: 'center',
                         width: '100%',
-                        height: '70px', 
+                        height: '40px', 
                         m: '0 0 12px' 
                     }}
                 >
-                    <Box sx={{ position: 'relative', height: '70px' }}>
+                    <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
                             label='Họ tên'
-                            value={fullName}
+                            value={ user ? user.fullName : ''}
                             onFocus={e => handleFocus(e, 'fullName')}
                             onChange={e => handleChangeValue(e, 'fullName')}
                             onBlur={(e) => {
@@ -398,7 +489,7 @@ const DocumentPage = () => {
                                     
                                     '& .MuiOutlinedInput-input':{
                                         width: '180px',
-                                        p: '23.5px 0 23.5px 12px'
+                                        p: '9.5px 12px'
                                     },
                                     '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
                                         border: 'none'
@@ -439,7 +530,263 @@ const DocumentPage = () => {
                     <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
                         <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
                             <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                                <Public/><Typography sx={{ cursor: 'not-allowed' }}>Bất kỳ ai</Typography>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                            </Box>
+                        </Tooltip>
+                    </Box>
+                </Box>
+                
+                {/* jobTitle */}
+                <Box 
+                    sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignContent: 'center',
+                        width: '100%',
+                        height: '40px', 
+                        m: '0 0 12px' 
+                    }}
+                >
+                    <Box sx={{ position: 'relative', height: '40px' }}>
+                        <TextField
+                            label='Chức danh'
+                            value={ user ? user.jobTitle : ''}
+                            onFocus={e => handleFocus(e, 'jobTitle')}
+                            onChange={e => handleChangeValue(e, 'jobTitle')}
+                            onBlur={(e) => {
+                                const focusedElement = e.relatedTarget
+                                focusedElement?.dataset?.action === 'confirmJobTitle' ? 
+                                    handleEditTextField(e, 'jobTitle') :
+                                    handleCancelEditTextField('jobTitle')
+                            }}
+                            sx={{ 
+                                '& .MuiOutlinedInput-root': {
+                                    height: '100%',
+                                    
+                                    '& .MuiOutlinedInput-input':{
+                                        width: '180px',
+                                        p: '9.5px 12px'
+                                    },
+                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
+                                        border: 'none'
+                                    }
+                                }
+                            }}
+                        >
+                        </TextField>
+
+                        <Box
+                            sx={{ 
+                                display: jobTitleFocus ? 'flex' : 'none',
+                                position: 'absolute',
+                                top: '50%',
+                                left: '200px',
+                                transform: 'translateY(-50%)' 
+                            }}>
+                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                                <Button
+                                    data-action='confirmJobTitle'
+                                    onClick={() => handleEditTextField('jobTitle')} 
+                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                >
+                                    <Check/>
+                                </Button>
+                            </Paper>
+                            <Paper sx={{ height: '32px', width: '32px' }}>
+                                <Button
+                                    onClick={() => handleCancelEditTextField('jobTitle')} 
+                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                >
+                                    <Close/>
+                                </Button>
+                            </Paper>
+                        </Box>
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                        <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
+                            <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                            </Box>
+                        </Tooltip>
+                    </Box>
+                </Box>
+
+                {/* Department */}
+                <Box 
+                    sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignContent: 'center',
+                        width: '100%',
+                        height: '40px', 
+                        m: '0 0 12px' 
+                    }}
+                >
+                    <Box sx={{ position: 'relative', height: '40px' }}>
+                        <TextField
+                            label='Phòng ban'
+                            value={ user ? user.department : ''}
+                            onFocus={e => handleFocus(e, 'department')}
+                            onChange={e => handleChangeValue(e, 'department')}
+                            onBlur={(e) => {
+                                const focusedElement = e.relatedTarget
+                                focusedElement?.dataset?.action === 'confirmDepartment' ? 
+                                    handleEditTextField(e, 'department') :
+                                    handleCancelEditTextField('department')
+                            }}
+                            sx={{ 
+                                '& .MuiOutlinedInput-root': {
+                                    height: '100%',
+                                    
+                                    '& .MuiOutlinedInput-input':{
+                                        width: '180px',
+                                        p: '9.5px 12px'
+                                    },
+                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
+                                        border: 'none'
+                                    }
+                                }
+                            }}
+                        >
+                        </TextField>
+
+                        <Box
+                            sx={{ 
+                                display: departmentFocus ? 'flex' : 'none',
+                                position: 'absolute',
+                                top: '50%',
+                                left: '200px',
+                                transform: 'translateY(-50%)' 
+                            }}>
+                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                                <Button
+                                    data-action='confirmdeDartment'
+                                    onClick={() => handleEditTextField('department')} 
+                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                >
+                                    <Check/>
+                                </Button>
+                            </Paper>
+                            <Paper sx={{ height: '32px', width: '32px' }}>
+                                <Button
+                                    onClick={() => handleCancelEditTextField('department')} 
+                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                >
+                                    <Close/>
+                                </Button>
+                            </Paper>
+                        </Box>
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                        <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
+                            <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                            </Box>
+                        </Tooltip>
+                    </Box>
+                </Box>
+
+                {/* Adress */}
+                <Box 
+                    sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignContent: 'center',
+                        width: '100%',
+                        height: '40px', 
+                        m: '0 0 12px' 
+                    }}
+                >
+                    <Box sx={{ position: 'relative', height: '40px' }}>
+                        <TextField
+                            label='Địa chỉ'
+                            value={ user ? user.address : ''}
+                            onFocus={e => handleFocus(e, 'address')}
+                            onChange={e => handleChangeValue(e, 'address')}
+                            onBlur={(e) => {
+                                const focusedElement = e.relatedTarget
+                                focusedElement?.dataset?.action === 'confirmAddress' ? 
+                                    handleEditTextField(e, 'address') :
+                                    handleCancelEditTextField('address')
+                            }}
+                            sx={{ 
+                                '& .MuiOutlinedInput-root': {
+                                    height: '100%',
+                                    
+                                    '& .MuiOutlinedInput-input':{
+                                        width: '180px',
+                                        p: '9.5px 12px'
+                                    },
+                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
+                                        border: 'none'
+                                    }
+                                }
+                            }}
+                        >
+                        </TextField>
+
+                        <Box
+                            sx={{ 
+                                display: addressFocus ? 'flex' : 'none',
+                                position: 'absolute',
+                                top: '50%',
+                                left: '200px',
+                                transform: 'translateY(-50%)' 
+                            }}>
+                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                                <Button
+                                    data-action='confirmAddress'
+                                    onClick={() => handleEditTextField('address')} 
+                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                >
+                                    <Check/>
+                                </Button>
+                            </Paper>
+                            <Paper sx={{ height: '32px', width: '32px' }}>
+                                <Button
+                                    onClick={() => handleCancelEditTextField('address')} 
+                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                >
+                                    <Close/>
+                                </Button>
+                            </Paper>
+                        </Box>
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                        <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
+                            <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                            </Box>
+                        </Tooltip>
+                    </Box>
+                </Box>
+            </Paper>
+
+            <Typography sx={{ m: '32px 0 12px' }} variant='subtitle2'>Liên hệ</Typography>
+            <Paper sx={{ padding: '12px' }}>
+                <Box sx={{ m: '12px 0px 18px 12px', float: 'right' }}><Typography>Ai có thể thấy được nội dung này?</Typography></Box>
+                <Box 
+                    sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignContent: 'center',
+                        width: '100%',
+                        height: '40px', 
+                        m: '0 0 12px' 
+                    }}
+                >
+                    <Box sx={{ height: '40px', pl: '24px', cursor: 'not-allowed' }}>
+                        <Typography sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099', '& .MuiTypography-body1': { fontSize: '0.7px' } }}> Địa chỉ email</Typography>
+                        <Typography>{user.address}</Typography>
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                        <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
+                            <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                             </Box>
                         </Tooltip>
                     </Box>

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, FormControlLabel, IconButton, ListItemIcon, Menu, MenuItem, SvgIcon, Switch, Tooltip, Typography, useColorScheme } from '@mui/material'
+import { Avatar, Box, Button, CircularProgress, Divider, FormControlLabel, IconButton, ListItemIcon, Menu, MenuItem, SvgIcon, Switch, Tooltip, Typography, useColorScheme } from '@mui/material'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
@@ -7,33 +7,42 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import { HelpOutline, KeyboardArrowDown, Logout } from '@mui/icons-material'
-import { useEffect, useState } from 'react'
-import { getInforUserApi } from '~/apis'
+import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import DocumentPage from './DocumentPage'
+import UserContext from '~/contexts/User/UserContext'
+import { getInforUserApi } from '~/apis'
+import { API_ROOT } from '~/utils/constant'
 
 export function Profile() {
-    const data = {
-        _id:  '67ec88f63bb057c82de3e0f7',
-        password: '123456',
-        gmail: 'rookie@gmail.com',
-        fullName: 'Rookie',
-        phone: '0000110101',
-        avatar: 'https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/481672559_1890220561782995_8376855731310234495_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGQnHVCqT8BaZbG28o0IHU-ruDQw8iioI-u4NDDyKKgj_AQzr-33zBwiSgHbvNRTV_ettm4D6Qtz3tSfUQ9OiSx&_nc_ohc=BpANafhv5W4Q7kNvwG_VRcq&_nc_oc=AdmRqfs13imavm_l0Om407de1WxhARPjSbK2vwxfUpaCW5qlmZSKrsrGjQsSQ69q1Eg&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=v_aT3DdfuMPbib8uCNBkXw&oh=00_AfFdaMs3hBWEmV-KW2XutYWEl9vcRoGAReg6KMlEoY7JMA&oe=67FAC251',
-        role: 'admin',
-        userName: 'rookie'
-    }
+    const [state, dispatch] = useContext(UserContext)
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorElSeemore, setAnchorElSeemore] = useState(null)
-
-    const [user, setUser] = useState(data)
+    const [token] = useState(localStorage.getItem('token'))
+    const [user, setUser] = useState(state)
     const [checked, setChecked] = useState(isDarkMode)
     const { setMode } = useColorScheme()
+    const [update, setUpdate] = useState(false)
 
-    // useEffect(() => {
-    //     localStorage.getItem('token') && getInforUserApi().then((data) => setUser(data))
-    // }, [localStorage.getItem('token')])
+    useEffect(() => {
+        if (token || update) {
+            getInforUserApi().then((userInfo) => {
+                const newUser = {
+                    ...userInfo,
+                    avatar: `${API_ROOT}/v1/profile/getImage/avatar/${userInfo._id}/?t=${Date.now()}`,
+                    imageHeader: `${API_ROOT}/v1/profile/getImage/image-header/${userInfo._id}/?t=${Date.now()}`
+                }
+
+                dispatch({ type: 'SET_USER_INFO', payload: newUser })
+                setUser(newUser)
+            })
+        }
+    }, [update])
+
+    const handleUpdate = () => {
+        setUpdate(prev => !prev)
+    }
 
     const handleLogOut = () => {
         localStorage.removeItem('token')
@@ -61,6 +70,19 @@ export function Profile() {
     }
     const handleSeeMoreClose = () => {
         setAnchorElSeemore(null)
+    }
+
+    if (!user) {
+        return (<Box sx={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            width: '100vw',
+            gap: 2
+        }}>
+            <CircularProgress/>
+        </Box>)
     }
     return (
         <MyTabs>
@@ -159,17 +181,21 @@ export function Profile() {
                             color: '#ff9a9cc4'
                         }}value={6}>Tùy chọn liên kết</MyTabItem>
                     <Button
-                        sx={{ p: '6px' }}
+                        sx={{ p: '6px', display: { xs: 'none', sm: 'flex', lg: 'none' } }}
                         onClick={handleSeeMore}>
                         <Typography 
-                            sx={{ display: { xs: 'none', sm: 'flex' }, alignContent: 'center', 
+                            sx={{ display: { xs: 'none', sm: 'flex', lg: 'none' }, alignContent: 'center', 
                                 '& MuiTypography-body1': { fontSize: '0.875rem' } 
                             }}> Xem thêm <KeyboardArrowDown/> 
                         </Typography>
+                    </Button>
+                    <Button
+                        sx={{ p: '6px', display: { xs: 'flex', sm: 'none' } }}
+                        onClick={handleSeeMore}>
                         <MenuIcon
-                            sx={{ display: { xs: 'flex', sm: 'none', float: 'left' }, alignContent: 'center', 
+                            sx={{ alignContent: 'center', 
                                 '& MuiTypography-body1': { fontSize: '0.875rem' } 
-                            }}> Xem thêm <KeyboardArrowDown/> 
+                            }}>
                         </MenuIcon>
                     </Button>
                     <Menu
@@ -369,7 +395,7 @@ export function Profile() {
                 sx={{ 
                     backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white'
                 }}>
-                <MyTabPanel value={0}><DocumentPage/></MyTabPanel>
+                <MyTabPanel value={0}><DocumentPage handleUpdate={handleUpdate} user={user}/></MyTabPanel>
                 <MyTabPanel value={1}>Email</MyTabPanel>
                 <MyTabPanel value={2}>Bảo mật</MyTabPanel>
                 <MyTabPanel value={3}>Quyền riêng tư</MyTabPanel>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import IconButton from '@mui/material/IconButton'
@@ -24,7 +24,8 @@ import { CircularProgress, FormControlLabel, Switch, Typography, useColorScheme 
 import { Face2Outlined, HelpOutline, NotificationsNone, PersonOutlineOutlined, SentimentDissatisfied } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { getInforUserApi, loginApi, registerApi } from '~/apis'
-
+import UserContext from '~/contexts/User/UserContext'
+import { API_ROOT } from '~/utils/constant'
 
 export default function Profiles() {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -34,7 +35,6 @@ export default function Profiles() {
     const [messageRigister, setMessageRegister] = useState('')
     const [openChildModalRegistering, setOpenChildModalRegistering] = useState(false)
     const [childModalRegisterProcessing, setChildModalRegisterProcessing] = useState(false)
-    const [user, setUser] = useState(null)
     const [token, setToken] = useState(localStorage.getItem('token'))
     const [titleForm, setTitleForm] = useState('login')
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
@@ -42,10 +42,20 @@ export default function Profiles() {
     const { setMode } = useColorScheme()
     const childrenLoginRef = useRef()
     const childrenRegisterRef = useRef()
-
+    const [state, dispatch] = useContext(UserContext)
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
-        token && getInforUserApi().then((data) => setUser(data))
+        token && getInforUserApi().then((userInfo) => {
+            const newUser = {
+                ...userInfo,
+                avatar: `${API_ROOT}/v1/profile/getImage/avatar/${userInfo._id}/?t=${Date.now()}`,
+                imageHeader: `${API_ROOT}/v1/profile/getImage/image-header/${userInfo._id}/?t=${Date.now()}`
+            }
+
+            dispatch({ type: 'SET_USER_INFO', payload: newUser })
+            setUser(newUser)
+        })
     }, [token])
 
     const handleLogin = async() => {
@@ -59,8 +69,8 @@ export default function Profiles() {
             return
         }
         setToken(token)
-        handleClose()
         localStorage.setItem('token', token)
+        handleClose()
     }
 
     const handleRegister = async() => {
@@ -74,8 +84,8 @@ export default function Profiles() {
 
     const handleLogOut = () => {
         localStorage.removeItem('token')
+        dispatch({ type: 'SET_USER_INFO', payload: null })
         setUser(null)
-        handleModalOpen()
     }
     
     const open = Boolean(anchorEl)
@@ -155,7 +165,7 @@ export default function Profiles() {
                 onClose={handleClose}
                 slotProps={{
                     paper: {
-                        elevation: 0,
+                        elevation: 2,
                         sx: {
                             overflow: 'visible',
                             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
@@ -174,7 +184,7 @@ export default function Profiles() {
                                 right: 14,
                                 width: 10,
                                 height: 10,
-                                bgcolor: 'background.paper',
+                                bgcolor: theme => theme.palette.mode === 'dark' ? '#232323' : 'background.paper',
                                 transform: 'translateY(-50%) rotate(45deg)',
                                 zIndex: 0
                             }
@@ -273,8 +283,7 @@ export default function Profiles() {
                             </MenuItem>
                         </Link>
 
-                        <MenuItem sx={{ height: '32px' }}
-                        >
+                        <MenuItem sx={{ height: '32px' }}>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -347,7 +356,8 @@ export default function Profiles() {
                             </ListItemIcon>
                             Logout
                         </MenuItem>
-                    </> : <>
+                    </> :
+                    <>
                         <MenuItem>
                             <ListItemIcon>
                                 <Settings fontSize="medium" />
