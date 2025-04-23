@@ -8,13 +8,15 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import { HelpOutline, KeyboardArrowDown, Logout } from '@mui/icons-material'
 import { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DocumentPage from './DocumentPage'
 import UserContext from '~/contexts/User/UserContext'
 import { getInforUserApi } from '~/apis'
 import { API_ROOT } from '~/utils/constant'
 
 export function Profile() {
+    const navigate = useNavigate()
+
     const [state, dispatch] = useContext(UserContext)
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [anchorEl, setAnchorEl] = useState(null)
@@ -26,19 +28,20 @@ export function Profile() {
     const [update, setUpdate] = useState(false)
 
     useEffect(() => {
+        if (!token) navigate('/')
         if (token || update) {
             getInforUserApi().then((userInfo) => {
                 const newUser = {
                     ...userInfo,
-                    avatar: `${API_ROOT}/v1/profile/getImage/avatar/${userInfo._id}/?t=${Date.now()}`,
-                    imageHeader: `${API_ROOT}/v1/profile/getImage/image-header/${userInfo._id}/?t=${Date.now()}`
+                    avatar: userInfo.avatar !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}` : '',
+                    imageHeader: userInfo.imageHeader !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}` : ''
                 }
 
                 dispatch({ type: 'SET_USER_INFO', payload: newUser })
                 setUser(newUser)
             })
         }
-    }, [update])
+    }, [update, token])
 
     const handleUpdate = () => {
         setUpdate(prev => !prev)
@@ -245,7 +248,7 @@ export function Profile() {
                             onClose={handleClose}
                             slotProps={{
                                 paper: {
-                                    elevation: 0,
+                                    elevation: 2,
                                     sx: {
                                         overflow: 'visible',
                                         filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
@@ -261,10 +264,10 @@ export function Profile() {
                                             display: 'block',
                                             position: 'absolute',
                                             top: 0,
-                                            right: 14,
+                                            right: 8,
                                             width: 10,
                                             height: 10,
-                                            bgcolor: 'background.paper',
+                                            bgcolor: theme => theme.palette.mode === 'dark' ? '#232323' : 'background.paper',
                                             transform: 'translateY(-50%) rotate(45deg)',
                                             zIndex: 0
                                         }

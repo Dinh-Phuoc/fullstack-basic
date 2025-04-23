@@ -1,12 +1,36 @@
-import { CameraAltOutlined, Check, Close, Image, InfoOutlined, Public } from '@mui/icons-material'
+// MUI Component
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Link from '@mui/material/Link'
+import Tooltip from '@mui/material/Tooltip'
+import Avatar from '@mui/material/Avatar'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Input from '@mui/material/Input'
+import Paper from '@mui/material/Paper'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import { Box, Typography, Link, Tooltip, Avatar, Menu, MenuItem, Input, Paper, TextField, Button, CircularProgress } from '@mui/material'
+// MUI Icon
+import CameraAltOutlined from '@mui/icons-material/CameraAltOutlined'
+import Check from '@mui/icons-material/Check'
+import Close from '@mui/icons-material/Close'
+import Image from '@mui/icons-material/Image'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
+import Public from '@mui/icons-material/Public'
+
+// React
 import { useContext, useEffect, useRef, useState } from 'react'
-import { getInforUserApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import { useNavigate } from 'react-router-dom'
+
+// My import
+import { getInforUserApi, updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
 import UserContext from '~/contexts/User/UserContext'
 import { API_ROOT } from '~/utils/constant'
 
 const DocumentPage = ({ handleUpdate }) => {
+    const negative = useNavigate()
     const [, dispatch] = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
@@ -14,6 +38,12 @@ const DocumentPage = ({ handleUpdate }) => {
     const open = Boolean(anchorEl)
     const [user, setUser] = useState(null)
     const [token] = useState(localStorage.getItem('token'))
+
+    // States of personal information
+    const [fullName, setFullName] = useState(null)
+    const [jobTitle, setJobTitle] = useState(null)
+    const [address, setAddress] = useState(null)
+    const [department, setDepartment] = useState(null)
 
     const uploadAvatarRef = useRef()
     const cameraIconRef = useRef()
@@ -27,19 +57,48 @@ const DocumentPage = ({ handleUpdate }) => {
     const [avatarURL, setAvatarURL] = useState(null)
     const [imageHeaderURL, setImageHeaderURL] = useState(null)
 
+    const styleInput = { 
+        '& .MuiOutlinedInput-root': {
+            height: '100%',
+            
+            '& .MuiOutlinedInput-input':{
+                width: '200px',
+                p: '9.5px 12px',
+                textOverflow: 'ellipsis'
+            },
+            '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
+                border: 'none'
+            },
+            '& .MuiOutlinedInput-input:focus + .MuiOutlinedInput-notchedOutline':{
+                borderColor: theme => theme.palette.mode === 'dark' ?
+                    theme.palette.primary.light :
+                    theme.palette.primary.main
+            }
+        },
+        '& .MuiInputLabel-root.Mui-focused': {
+            color: theme => theme.palette.mode === 'dark' ?
+                theme.palette.primary.light :
+                theme.palette.primary.main
+        }
+    }
+
     useEffect(() => {
+        // if (!token) return negative('/')
         token && getInforUserApi().then((userInfo) => {
             const newUser = {
                 ...userInfo,
-                avatar: `${API_ROOT}/v1/profile/getImage/avatar/${userInfo._id}/?t=${Date.now()}`,
-                imageHeader: `${API_ROOT}/v1/profile/getImage/image-header/${userInfo._id}/?t=${Date.now()}`
+                avatar: userInfo.avatar !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}` : '',
+                imageHeader: userInfo.imageHeader !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}` : ''
             }
 
             dispatch({ type: 'SET_USER_INFO', payload: newUser })
+            setFullName(newUser.fullName)
+            setJobTitle(newUser.jobTitle)
+            setDepartment(newUser.department)
+            setAddress(newUser.address)
             setUser(newUser)
         })
-    }, [])
-
+    }, [token])
     
     if (!user) {
         return (<Box sx={{ 
@@ -65,7 +124,7 @@ const DocumentPage = ({ handleUpdate }) => {
         formData.append('image-header', imageHeader)
 
         const isUploadImageHeaderSuccess = await uploadImageHeaderApi(formData, user._id)
-        if (isUploadImageHeaderSuccess) setImageHeaderURL(`${API_ROOT}/v1/profile/getImage/image-header/${user._id}/?t=${Date.now()}`)
+        if (isUploadImageHeaderSuccess) setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}`)
         handleUpdate()
     }
 
@@ -88,7 +147,7 @@ const DocumentPage = ({ handleUpdate }) => {
         formData.append('avatar', avatar)
 
         const isUploadAvatarSuccess = await uploadAvatarApi(formData, user._id)
-        if (isUploadAvatarSuccess) setAvatarURL(`${API_ROOT}/v1/profile/getImage/avatar/${user._id}/?t=${Date.now()}`)
+        if (isUploadAvatarSuccess) setAvatarURL(`${API_ROOT}/v1/manage/users/profile/get-image/avatar/${user._id}/?t=${Date.now()}`)
         handleUpdate()
     }
 
@@ -113,7 +172,7 @@ const DocumentPage = ({ handleUpdate }) => {
             e.target.select()
             return
         case 'address':
-            addressFocus(true)
+            setAddressFocus(true)
             e.target.select()
             return
         default:
@@ -124,60 +183,64 @@ const DocumentPage = ({ handleUpdate }) => {
     const handleChangeValue = (e, textFieldName) => {
         switch (textFieldName) {
         case 'fullName':
-            console.log('handleChangeValue fullName')
+            setFullName(e.target.value)
             return
         case 'jobTitle':
-            console.log('handleChangeValue jobTitle')
+            setJobTitle(e.target.value)
             return
         case 'department':
-            console.log('handleChangeValue department')
+            setDepartment(e.target.value)
             return
         case 'address':
-            console.log('handleChangeValue address')
+            setAddress(e.target.value)
             return
         default:
             return
         }
     }
 
-    const handleEditTextField = (e, textFieldName) => {
+    const handleEditTextField = async (e, textFieldName) => {
         switch (textFieldName) {
         case 'fullName':
             if (e.target.value !== prevValue) {
-                console.log('fullName-confirm')
+                await updateProfileApi(user._id, textFieldName, e.target.value)
+                setFullName(e.target.value)
                 setFullNameFocus(false)
                 return
             }
-            console.log('fullName-cancel')
             setFullNameFocus(false)
             return
+
         case 'jobTitle':
             if (e.target.value !== prevValue) {
-                console.log('jobTitle-confirm')
-                setFullNameFocus(false)
+                await updateProfileApi(user._id, textFieldName, e.target.value)
+                setJobTitle(e.target.value)
+                setJobTitleFocus(false)
                 return
             }
-            console.log('jobTitle-cancel')
-            setFullNameFocus(false)
+            setJobTitleFocus(false)
             return
+
         case 'department':
             if (e.target.value !== prevValue) {
-                console.log('department-confirm')
-                setFullNameFocus(false)
+                await updateProfileApi(user._id, textFieldName, e.target.value)
+                setDepartment(e.target.value)
+                setDepartmentFocus(false)
                 return
             }
-            console.log('department-cancel')
-            setFullNameFocus(false)
+            setDepartmentFocus(false)
             return
+
         case 'address':
             if (e.target.value !== prevValue) {
-                console.log('address-confirm')
-                setFullNameFocus(false)
+                await updateProfileApi(user._id, textFieldName, e.target.value)
+                setAddress(e.target.value)
+                setAddressFocus(false)
                 return
             }
-            console.log('address-cancel')
-            setFullNameFocus(false)
+            setAddressFocus(false)
             return
+
         default:
             return
         }
@@ -186,20 +249,16 @@ const DocumentPage = ({ handleUpdate }) => {
     const handleCancelEditTextField = (textFieldName) => {
         switch (textFieldName) {
         case 'fullName':
-            console.log('cancel')
             setFullNameFocus(false)
             return
         case 'jobTitle':
-            console.log('cancel jobTitle')
             setJobTitleFocus(false)
             return
         case 'department':
-            console.log('cancel department')
             setDepartmentFocus(false)
             return
         case 'address':
-            console.log('cancel address')
-            addressFocus(false)
+            setAddressFocus(false)
             return
         default:
             return
@@ -283,7 +342,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 height: '100%'
                             }}
                         >
-                            { user ? 
+                            { imageHeaderURL || user.imageHeader ? 
                                 <Box>
                                     <img style={{ 
                                         width: '100%',
@@ -385,7 +444,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 }
                             }}
                         >
-                            { user ? 
+                            { avatarURL || user.avatar ? 
                                 <Box>
                                     <img style={{ 
                                         height: '96px',
@@ -420,7 +479,8 @@ const DocumentPage = ({ handleUpdate }) => {
                                     transform: 'translate(-50%, -50%)'
                                 }}
                             >
-                                <CameraAltOutlined 
+                                <CameraAltOutlined
+                                    aria-hidden="false"
                                     role="button"
                                     tabIndex={0}
                                     onClick={handleUploadAvatarThroughCameraIcon} ref={cameraIconRef}
@@ -474,7 +534,7 @@ const DocumentPage = ({ handleUpdate }) => {
                     <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
                             label='Họ tên'
-                            value={ user ? user.fullName : ''}
+                            value={ fullName ? fullName : ''}
                             onFocus={e => handleFocus(e, 'fullName')}
                             onChange={e => handleChangeValue(e, 'fullName')}
                             onBlur={(e) => {
@@ -483,19 +543,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                     handleEditTextField(e, 'fullName') :
                                     handleCancelEditTextField('fullName')
                             }}
-                            sx={{ 
-                                '& .MuiOutlinedInput-root': {
-                                    height: '100%',
-                                    
-                                    '& .MuiOutlinedInput-input':{
-                                        width: '180px',
-                                        p: '9.5px 12px'
-                                    },
-                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
-                                        border: 'none'
-                                    }
-                                }
-                            }}
+                            sx={styleInput}
                         >
                         </TextField>
 
@@ -507,19 +555,19 @@ const DocumentPage = ({ handleUpdate }) => {
                                 left: '200px',
                                 transform: 'translateY(-50%)' 
                             }}>
-                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
                                     data-action='confirm'
                                     onClick={() => handleEditTextField('fullName')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
-                            <Paper sx={{ height: '32px', width: '32px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
                                 <Button
                                     onClick={() => handleCancelEditTextField('fullName')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
                                 </Button>
@@ -527,10 +575,11 @@ const DocumentPage = ({ handleUpdate }) => {
                         </Box>
                     </Box>
                     
-                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: { xs: '24px', sm: '200px' } }}>
                         <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
                             <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/>
+                                <Typography sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                             </Box>
                         </Tooltip>
                     </Box>
@@ -550,7 +599,7 @@ const DocumentPage = ({ handleUpdate }) => {
                     <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
                             label='Chức danh'
-                            value={ user ? user.jobTitle : ''}
+                            value={ jobTitle ? jobTitle : 'hello'}
                             onFocus={e => handleFocus(e, 'jobTitle')}
                             onChange={e => handleChangeValue(e, 'jobTitle')}
                             onBlur={(e) => {
@@ -559,19 +608,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                     handleEditTextField(e, 'jobTitle') :
                                     handleCancelEditTextField('jobTitle')
                             }}
-                            sx={{ 
-                                '& .MuiOutlinedInput-root': {
-                                    height: '100%',
-                                    
-                                    '& .MuiOutlinedInput-input':{
-                                        width: '180px',
-                                        p: '9.5px 12px'
-                                    },
-                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
-                                        border: 'none'
-                                    }
-                                }
-                            }}
+                            sx={styleInput}
                         >
                         </TextField>
 
@@ -583,19 +620,19 @@ const DocumentPage = ({ handleUpdate }) => {
                                 left: '200px',
                                 transform: 'translateY(-50%)' 
                             }}>
-                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
                                     data-action='confirmJobTitle'
                                     onClick={() => handleEditTextField('jobTitle')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
-                            <Paper sx={{ height: '32px', width: '32px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
                                 <Button
                                     onClick={() => handleCancelEditTextField('jobTitle')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
                                 </Button>
@@ -603,10 +640,10 @@ const DocumentPage = ({ handleUpdate }) => {
                         </Box>
                     </Box>
                     
-                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: { xs: '24px', sm: '200px' } }}>
                         <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
                             <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                             </Box>
                         </Tooltip>
                     </Box>
@@ -626,7 +663,7 @@ const DocumentPage = ({ handleUpdate }) => {
                     <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
                             label='Phòng ban'
-                            value={ user ? user.department : ''}
+                            value={ department ? department : ''}
                             onFocus={e => handleFocus(e, 'department')}
                             onChange={e => handleChangeValue(e, 'department')}
                             onBlur={(e) => {
@@ -635,19 +672,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                     handleEditTextField(e, 'department') :
                                     handleCancelEditTextField('department')
                             }}
-                            sx={{ 
-                                '& .MuiOutlinedInput-root': {
-                                    height: '100%',
-                                    
-                                    '& .MuiOutlinedInput-input':{
-                                        width: '180px',
-                                        p: '9.5px 12px'
-                                    },
-                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
-                                        border: 'none'
-                                    }
-                                }
-                            }}
+                            sx={styleInput}
                         >
                         </TextField>
 
@@ -659,19 +684,19 @@ const DocumentPage = ({ handleUpdate }) => {
                                 left: '200px',
                                 transform: 'translateY(-50%)' 
                             }}>
-                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
                                     data-action='confirmdeDartment'
                                     onClick={() => handleEditTextField('department')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
-                            <Paper sx={{ height: '32px', width: '32px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
                                 <Button
                                     onClick={() => handleCancelEditTextField('department')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
                                 </Button>
@@ -679,10 +704,10 @@ const DocumentPage = ({ handleUpdate }) => {
                         </Box>
                     </Box>
                     
-                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: { xs: '24px', sm: '200px' } }}>
                         <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
                             <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                             </Box>
                         </Tooltip>
                     </Box>
@@ -702,7 +727,7 @@ const DocumentPage = ({ handleUpdate }) => {
                     <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
                             label='Địa chỉ'
-                            value={ user ? user.address : ''}
+                            value={ address ? address : ''}
                             onFocus={e => handleFocus(e, 'address')}
                             onChange={e => handleChangeValue(e, 'address')}
                             onBlur={(e) => {
@@ -711,19 +736,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                     handleEditTextField(e, 'address') :
                                     handleCancelEditTextField('address')
                             }}
-                            sx={{ 
-                                '& .MuiOutlinedInput-root': {
-                                    height: '100%',
-                                    
-                                    '& .MuiOutlinedInput-input':{
-                                        width: '180px',
-                                        p: '9.5px 12px'
-                                    },
-                                    '& .MuiOutlinedInput-input:not(:focus) + .MuiOutlinedInput-notchedOutline':{
-                                        border: 'none'
-                                    }
-                                }
-                            }}
+                            sx={styleInput}
                         >
                         </TextField>
 
@@ -735,19 +748,19 @@ const DocumentPage = ({ handleUpdate }) => {
                                 left: '200px',
                                 transform: 'translateY(-50%)' 
                             }}>
-                            <Paper sx={{ height: '32px', width: '32px', mr: '4px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
                                     data-action='confirmAddress'
                                     onClick={() => handleEditTextField('address')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
-                            <Paper sx={{ height: '32px', width: '32px' }}>
+                            <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
                                 <Button
                                     onClick={() => handleCancelEditTextField('address')} 
-                                    sx={{ height: '32px', width: '32px', p: 0, minWidth: '32px' }}
+                                    sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
                                 </Button>
@@ -755,10 +768,10 @@ const DocumentPage = ({ handleUpdate }) => {
                         </Box>
                     </Box>
                     
-                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: { xs: '24px', sm: '200px' } }}>
                         <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
                             <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                             </Box>
                         </Tooltip>
                     </Box>
@@ -780,13 +793,13 @@ const DocumentPage = ({ handleUpdate }) => {
                 >
                     <Box sx={{ height: '40px', pl: '24px', cursor: 'not-allowed' }}>
                         <Typography sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099', '& .MuiTypography-body1': { fontSize: '0.7px' } }}> Địa chỉ email</Typography>
-                        <Typography>{user.address}</Typography>
+                        <Typography>{user.email}</Typography>
                     </Box>
                     
-                    <Box sx={{ display: 'flex', alignContent: 'center', width: '200px' }}>
+                    <Box sx={{ display: 'flex', alignContent: 'center', width: { xs: '24px', sm: '200px' } }}>
                         <Tooltip title='Nếu bạn tải lên một ảnh hồ sơ, bạn sẽ có thể chọn người xem ảnh hồ sơ đó.'>
                             <Box sx={{ display: 'flex', width: '100%', gap: 1, alignItems: 'center' }}>
-                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
+                                <Public sx={{ color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}/><Typography sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'not-allowed', color: theme => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#00000099' }}>Bất kỳ ai</Typography>
                             </Box>
                         </Tooltip>
                     </Box>

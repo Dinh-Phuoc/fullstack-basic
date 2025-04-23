@@ -41,7 +41,7 @@ export default function AppBar() {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
-                    <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}>Trello</Typography>
+                    <Typography variant='span' sx={{ fontSize: '1.1rem', fontWeight: 'bold', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}>Sariii nè!</Typography>
                 </Box>
 
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>

@@ -21,7 +21,7 @@ import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
 import { CircularProgress, FormControlLabel, Switch, Typography, useColorScheme } from '@mui/material'
-import { Face2Outlined, HelpOutline, NotificationsNone, PersonOutlineOutlined, SentimentDissatisfied } from '@mui/icons-material'
+import { Face2Outlined, HelpOutline, LoginOutlined, NotificationsNone, PersonOutlineOutlined, SentimentDissatisfied } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { getInforUserApi, loginApi, registerApi } from '~/apis'
 import UserContext from '~/contexts/User/UserContext'
@@ -42,15 +42,15 @@ export default function Profiles() {
     const { setMode } = useColorScheme()
     const childrenLoginRef = useRef()
     const childrenRegisterRef = useRef()
-    const [state, dispatch] = useContext(UserContext)
+    const [, dispatch] = useContext(UserContext)
     const [user, setUser] = useState(null)
 
     useEffect(() => {
         token && getInforUserApi().then((userInfo) => {
             const newUser = {
                 ...userInfo,
-                avatar: `${API_ROOT}/v1/profile/getImage/avatar/${userInfo._id}/?t=${Date.now()}`,
-                imageHeader: `${API_ROOT}/v1/profile/getImage/image-header/${userInfo._id}/?t=${Date.now()}`
+                avatar: `${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}`,
+                imageHeader: `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`
             }
 
             dispatch({ type: 'SET_USER_INFO', payload: newUser })
@@ -70,7 +70,6 @@ export default function Profiles() {
         }
         setToken(token)
         localStorage.setItem('token', token)
-        handleClose()
     }
 
     const handleRegister = async() => {
@@ -419,7 +418,7 @@ export default function Profiles() {
 
                         <MenuItem onClick={ handleModalOpen }>
                             <ListItemIcon>
-                                <Logout fontSize="medium" />
+                                <LoginOutlined fontSize="medium" />
                             </ListItemIcon>
                             Login
                         </MenuItem>
@@ -440,7 +439,8 @@ export default function Profiles() {
                                     minWidth: { xs: '300px', sm: '580px', md: '844px' },
                                     maxWidth: { xs: '300px', sm: '890px', md: '844px' },
                                     width: { xs: '95%', sm: '80%' },
-                                    height: '520px',
+                                    height: '610px',
+                                    maxHeight: '610px',
                                     backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#111111' : '#ffeef8',
                                     backgroundImage: (theme) => 
                                         theme.palette.mode === 'dark' ? 
@@ -456,7 +456,8 @@ export default function Profiles() {
                                         position: 'absolute',
                                         bgcolor: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.default : 'white',
                                         width: { xs:'100%', sm: '324px', md: '424px' }, 
-                                        height: { xs:'100%', sm: '497px', md: '497px' },
+                                        height: { xs:'100%', sm: '96%', md: '96%' },
+                                        maxHeight: '610px',
                                         borderRadius: '6px',
                                         m: { xs:'0', sm: '12px' },
                                         p: '16px 24px 24px'
@@ -633,10 +634,10 @@ export default function Profiles() {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         position: 'absolute',
-                                        top: { sm: '65px', md: '12px' },
+                                        top: { sm: '12px', md: '12px' },
                                         right: { sm: '22px', md: '22px' },
-                                        width: { sm: '200px', md: '255px' },
-                                        height: { sm: '135px', md: '180px' },
+                                        width: { sm: '210px', md: '255px' },
+                                        height: '240px',
                                         backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                                         border: '2px solid',
                                         borderColor: (theme) => theme.palette.primary.main,
@@ -661,11 +662,11 @@ export default function Profiles() {
                                     <Typography 
                                         sx={{ 
                                             fontFamily: 'El Messiri', 
-                                            fontWeight: { sm: 700, md: 800 }, 
+                                            fontWeight: 800, 
                                             color: (theme) => theme.palette.mode === 'dark' ? 'black' : '#ff9a9cc4',
                                             textAlign: 'center',
-                                            lineHeight: { sm: '2rem', md: '2.6rem' },
-                                            '&.MuiTypography-body1': { fontSize: { sm: '1.8rem', md: '2.4rem' } }
+                                            lineHeight: { sm: '2.8rem', md: '2.6rem' },
+                                            '&.MuiTypography-body1': { fontSize: { sm: '2.5rem', md: '2.4rem' } }
                                         }}
                                         variant='body1'
                                     >

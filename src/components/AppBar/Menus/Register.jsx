@@ -4,10 +4,11 @@ import { forwardRef, useImperativeHandle, useState } from 'react'
 
 const Register = forwardRef(( { onClick, ...props }, ref ) => { 
     const [userNameValue, setUserNameValue] = useState('')
+    const [emailValue, setEmailValue] = useState('')
     const [passwordValue, setPasswordValue] = useState('')
     const [retypePasswordValue, setRetypePasswordValue] = useState('')
-    const [messageError, setMessageError] = useState({ user: '', password: '', retype: '' })
-    const [required, setRequired] = useState({ user: true, password: true, retype: true })
+    const [messageError, setMessageError] = useState({ user: '', password: '', retype: '', email: '' })
+    const [required, setRequired] = useState({ user: true, password: true, retype: true, email: true })
 
     const passProps = {
         onClick,
@@ -16,12 +17,17 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
     useImperativeHandle(ref, () => ({
         getChildrenValue: () => ({
             userName: userNameValue,
-            password: passwordValue
+            password: passwordValue,
+            email: emailValue
         })
     }))
     const validate = {
         minLength: (length) => {
             return length < 6 && length >=1
+        },
+        isEmail: (email) => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(email)
         },
         isEmptyValue: (value) => {
             return value === ''
@@ -29,6 +35,27 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
         isSamePassword: (password, retypePassword) => {
             return password === retypePassword
         }
+    }
+
+    const handleEmailValidator = () => {
+        if (validate.minLength(emailValue.length)) {
+            setRequired(prev => ({ ...prev, email: true }))
+            return setMessageError(prev => ({ ...prev, email: 'Tối thiểu 6 kí tự' }))
+        }
+        if (validate.isEmptyValue(emailValue)) {
+            setRequired(prev => ({ ...prev, email: true }))
+            return setMessageError(prev => ({ ...prev, email: 'Không để trống' }))
+        }
+        if (!validate.isEmail(emailValue)) {
+            return setMessageError(prev => ({ ...prev, email: 'Vui lòng nhập đúng email' }))
+        }
+        if (validate.isEmptyValue(emailValue)) {
+            setRequired(prev => ({ ...prev, email: true }))
+            return setMessageError(prev => ({ ...prev, email: 'Không để trống' }))
+        }
+        setRequired(prev => ({ ...prev, email: false }))
+        setMessageError(prev => ({ ...prev, email: '' }))
+        return true
     }
 
     const handleUserValidator = () => {
@@ -78,6 +105,11 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
     const handleUserNameValue = (e) => {
         setUserNameValue(e.target.value)
     }
+
+    const handleEmailValue = (e) => {
+        setEmailValue(e.target.value)
+    }
+
     const handlePasswordValue = (e) => {
         setPasswordValue(e.target.value)
     }
@@ -89,8 +121,13 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
         const isValidUser = handleUserValidator()
         const isValidPassword = handlePassWordValidator()
         const isValidRetype = handleReTypePassWordValidator()
+        const isEmail = handleEmailValidator()
       
-        if (isValidUser && isValidPassword && isValidRetype) {
+        if (isValidUser && isValidPassword && isValidRetype && isEmail) {
+            setPasswordValue('')
+            setEmailValue('')
+            setUserNameValue('')
+            setRetypePasswordValue('')
             passProps.onClick?.()
         }
     }
@@ -123,7 +160,36 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                         id="username" 
                         aria-describedby="my-helper-text" 
                     />
-                </FormControl> 
+                </FormControl>
+
+                <FormControl>
+                    <TextField
+                        value={emailValue}
+                        onChange={handleEmailValue}
+                        sx={{ 
+                            '& input': {
+                                p: '8px'
+                            },
+                            '& .MuiInputLabel-root': {
+                                top: '-6px'
+                            },
+                            '& .MuiFormLabel-asterisk': {
+                                color: 'red'
+                            },
+                            '& .MuiFormHelperText-root': {
+                                color: 'red'
+                            } 
+                        }}
+                        spellCheck="false"
+                        label='Email'
+                        helperText={messageError.email}
+                        onBlur={handleEmailValidator}
+                        required={required.email}  
+                        id="email" 
+                        aria-describedby="my-helper-text" 
+                    />
+                </FormControl>  
+
                 <FormControl>
                     <TextField
                         value={passwordValue}
@@ -152,6 +218,7 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                         id="password" 
                         aria-describedby="my-helper-text" />
                 </FormControl>
+
                 <FormControl>
                     <TextField
                         value={retypePasswordValue}
@@ -180,6 +247,7 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                         type='password' 
                         aria-describedby="my-helper-text" />
                 </FormControl>
+
                 <Button variant='outlined' onClick={handleValidator}>Đăng ký</Button>
                 <Typography sx={{ textAlign: 'center' }} variant='body1'> Hoặc </Typography>
                 <Button variant='outlined'>Đăng nhập bằng Facebook <Facebook /></Button>
