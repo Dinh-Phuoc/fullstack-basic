@@ -165,7 +165,10 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                 <FormControl>
                     <TextField
                         value={emailValue}
+                        helperText={messageError.email}
                         onChange={handleEmailValue}
+                        onBlur={handleEmailValidator}
+                        required={required.email} 
                         sx={{ 
                             '& input': {
                                 p: '8px'
@@ -182,9 +185,7 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                         }}
                         spellCheck="false"
                         label='Email'
-                        helperText={messageError.email}
-                        onBlur={handleEmailValidator}
-                        required={required.email}  
+                         
                         id="email" 
                         aria-describedby="my-helper-text" 
                     />

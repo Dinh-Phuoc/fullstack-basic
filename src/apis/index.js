@@ -58,14 +58,21 @@ export const registerApi = async (infoAccount) => {
 export const getInforUserApi = async () => {
     const response = await axios.get(`${API_ROOT}/v1/manage/users/profile`, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            withCredentials: true
         }
     })
     return response.data
 }
 // Call Api for upload Image
 export const uploadImageHeaderApi = async (file, userId) => {
-    const response = await axios.patch(`${API_ROOT}/v1/manage/users/profile/upload/image-header/${userId}`, file)
+    const response = await axios.patch(`${API_ROOT}/v1/manage/users/profile/upload/image-header/${userId}`, file, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'multipart/form-data',
+            withCredentials: true
+        }
+    })
     return response.data
 }
 
@@ -73,7 +80,8 @@ export const uploadAvatarApi = async (file, userId) => {
     const response = await axios.patch(`${API_ROOT}/v1/manage/users/profile/upload/avatar/${userId}`, file, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            withCredentials: true
         }
     })
     return response.data
@@ -94,8 +102,20 @@ export const getAvatarApi = async (userId) => {
 export const updateProfileApi = async (userId, fieldName, data) => {
     const response = await axios.patch(`${API_ROOT}/v1/manage/users/profile/update/${userId}/${fieldName}`, { data }, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            withCredentials: true
         }
     })
-    return response
+    return response.data
 }
+
+export const updatePasswordApi = async (userId, fieldName, data) => {
+    const response = await axios.patch(`${API_ROOT}/v1/manage/users/profile/update/${userId}/${fieldName}`, data, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            withCredentials: true
+        }
+    })
+    return response.data
+}
+

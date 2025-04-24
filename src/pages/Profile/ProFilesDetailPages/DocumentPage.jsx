@@ -21,17 +21,16 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import Public from '@mui/icons-material/Public'
 
 // React
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 
 // My import
 import { getInforUserApi, updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
-import UserContext from '~/contexts/User/UserContext'
 import { API_ROOT } from '~/utils/constant'
+import { toast } from 'react-toastify'
 
 const DocumentPage = ({ handleUpdate }) => {
-    const negative = useNavigate()
-    const [, dispatch] = useContext(UserContext)
+    // const negative = useNavigate()
+    // const [, dispatch] = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
     const imageRef = useRef()
@@ -56,6 +55,7 @@ const DocumentPage = ({ handleUpdate }) => {
 
     const [avatarURL, setAvatarURL] = useState(null)
     const [imageHeaderURL, setImageHeaderURL] = useState(null)
+    
 
     const styleInput = { 
         '& .MuiOutlinedInput-root': {
@@ -83,23 +83,17 @@ const DocumentPage = ({ handleUpdate }) => {
     }
 
     useEffect(() => {
-        // if (!token) return negative('/')
         token && getInforUserApi().then((userInfo) => {
-            const newUser = {
-                ...userInfo,
-                avatar: userInfo.avatar !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}` : '',
-                imageHeader: userInfo.imageHeader !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}` : ''
-            }
-
-            dispatch({ type: 'SET_USER_INFO', payload: newUser })
-            setFullName(newUser.fullName)
-            setJobTitle(newUser.jobTitle)
-            setDepartment(newUser.department)
-            setAddress(newUser.address)
-            setUser(newUser)
+            setFullName(userInfo.fullName)
+            setJobTitle(userInfo.jobTitle)
+            setDepartment(userInfo.department)
+            setAddress(userInfo.address)
+            if (userInfo.avatar !== '') setAvatarURL(`${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}`)
+            if (userInfo.imageHeader !== '') setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`)
+            setUser(userInfo)
         })
     }, [token])
-    
+
     if (!user) {
         return (<Box sx={{ 
             display: 'flex',
@@ -203,9 +197,10 @@ const DocumentPage = ({ handleUpdate }) => {
         switch (textFieldName) {
         case 'fullName':
             if (e.target.value !== prevValue) {
-                await updateProfileApi(user._id, textFieldName, e.target.value)
+                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
                 setFullName(e.target.value)
                 setFullNameFocus(false)
+                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
                 return
             }
             setFullNameFocus(false)
@@ -213,9 +208,10 @@ const DocumentPage = ({ handleUpdate }) => {
 
         case 'jobTitle':
             if (e.target.value !== prevValue) {
-                await updateProfileApi(user._id, textFieldName, e.target.value)
+                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
                 setJobTitle(e.target.value)
                 setJobTitleFocus(false)
+                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
                 return
             }
             setJobTitleFocus(false)
@@ -223,9 +219,10 @@ const DocumentPage = ({ handleUpdate }) => {
 
         case 'department':
             if (e.target.value !== prevValue) {
-                await updateProfileApi(user._id, textFieldName, e.target.value)
+                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
                 setDepartment(e.target.value)
                 setDepartmentFocus(false)
+                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
                 return
             }
             setDepartmentFocus(false)
@@ -233,9 +230,10 @@ const DocumentPage = ({ handleUpdate }) => {
 
         case 'address':
             if (e.target.value !== prevValue) {
-                await updateProfileApi(user._id, textFieldName, e.target.value)
+                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
                 setAddress(e.target.value)
                 setAddressFocus(false)
+                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
                 return
             }
             setAddressFocus(false)
@@ -280,7 +278,7 @@ const DocumentPage = ({ handleUpdate }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
-                minHeight: '100%',
+                minHeight: '100vh',
                 maxWidth: '780px',
                 margin: '0px auto',
                 paddingTop: '0px',
@@ -444,7 +442,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 }
                             }}
                         >
-                            { avatarURL || user.avatar ? 
+                            { avatarURL || user.avatar !== '' ? 
                                 <Box>
                                     <img style={{ 
                                         height: '96px',
@@ -480,6 +478,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 }}
                             >
                                 <CameraAltOutlined
+                                    sx={{ color: 'white' }}
                                     aria-hidden="false"
                                     role="button"
                                     tabIndex={0}
@@ -552,7 +551,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 display: fullNameFocus ? 'flex' : 'none',
                                 position: 'absolute',
                                 top: '50%',
-                                left: '200px',
+                                left: '225px',
                                 transform: 'translateY(-50%)' 
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
@@ -599,7 +598,7 @@ const DocumentPage = ({ handleUpdate }) => {
                     <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
                             label='Chức danh'
-                            value={ jobTitle ? jobTitle : 'hello'}
+                            value={ jobTitle ? jobTitle : ''}
                             onFocus={e => handleFocus(e, 'jobTitle')}
                             onChange={e => handleChangeValue(e, 'jobTitle')}
                             onBlur={(e) => {
@@ -617,7 +616,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 display: jobTitleFocus ? 'flex' : 'none',
                                 position: 'absolute',
                                 top: '50%',
-                                left: '200px',
+                                left: '225px',
                                 transform: 'translateY(-50%)' 
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
@@ -681,12 +680,12 @@ const DocumentPage = ({ handleUpdate }) => {
                                 display: departmentFocus ? 'flex' : 'none',
                                 position: 'absolute',
                                 top: '50%',
-                                left: '200px',
+                                left: '225px',
                                 transform: 'translateY(-50%)' 
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
-                                    data-action='confirmdeDartment'
+                                    data-action='confirmDepartment'
                                     onClick={() => handleEditTextField('department')} 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
@@ -745,7 +744,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                 display: addressFocus ? 'flex' : 'none',
                                 position: 'absolute',
                                 top: '50%',
-                                left: '200px',
+                                left: '225px',
                                 transform: 'translateY(-50%)' 
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
