@@ -87,13 +87,13 @@ export default function CardItem({ card }) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: { xs: '90%', sm: '700px' },
+        width: { xs: '90%', sm: '580px', md: '700px' },
         border: '2px solid #ffb1b3',
         boxShadow: 24,
         minHeight: '600px',
         borderRadius: '12px',
-        backgroundColor:  'white',
-        mt: 2
+        backgroundColor:  theme => theme.palette.mode === 'dark' ? '#333643' : 'white',
+        mt: 10
     }
 
     const dndKitCardStyle = {
@@ -223,9 +223,28 @@ export default function CardItem({ card }) {
                                         </Box>
                                     }
                                 </Box>
-                                <Box variant='outlined' onClick={handleClickUploadHeaderImage} sx={{ color: theme => theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main, pl: '12px', position: 'absolute', bottom: '12px', right: '24px' }}>
+                                <Box onClick={handleClickUploadHeaderImage} 
+                                    sx={{ 
+                                        color: theme => theme.palette.mode === 'dark' ? 
+                                            theme.palette.primary.light : theme.palette.primary.main, 
+                                        position: 'absolute', 
+                                        bottom: '10px', 
+                                        right: { xs: '18px', sm: '22px' },
+                                        display: 'flex',
+                                        width: { xs: '33px', sm: '110px' },
+                                        height: '32px',
+                                        alignContent: 'center',
+                                        cursor: 'pointer',
+                                        p: '4px 4px 12px',
+                                        '&:hover': {
+                                            border: '1px solid',
+                                            borderColor: theme => theme.trelloCustom.myColor,
+                                            borderRadius: '4px',
+                                            color: '#bc696bc4'
+                                        }
+                                    }}>
                                     <Image />
-                                    <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>Tải ảnh lên</Typography>
+                                    <Typography sx={{ display: { xs: 'none', sm: 'block' }, alignContent: 'center', ml: '4px' }}>Tải ảnh lên</Typography>
                                 </Box>
                                 <Input inputRef={uploadHeaderImageRef} onChange={handleImageHeaderChange} sx={{ display: 'none' }} type='file'/>
                             </Box>
@@ -233,19 +252,19 @@ export default function CardItem({ card }) {
                     </Box>
 
                     <Box sx={{ display:'flex', mt: '12px' }}>
-                        <Checkbox></Checkbox>
+                        <Checkbox sx={{color: theme => theme.trelloCustom.myColor, '&.Mui-checked': { color: theme => theme.trelloCustom.myColor } }}></Checkbox>
                         <Box sx={{ display:'flex', flexDirection: 'column' }}>
-                            <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: '#172b4d', fontSize: '1rem', fontWeight: 700 } }}>{card.title}</Typography>
-                            <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: '#44546f' } }}>trong danh sách {card.columnId}</Typography>
+                            <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#172b4d', fontSize: '1rem', fontWeight: 700 } }}>{card.title}</Typography>
+                            <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#44546f' } }}>trong danh sách {card.columnId}</Typography>
                         </Box>
                     </Box>
 
-                    <Box sx={{ width: { xs: '90%', sm: '100%' }, display: 'flex', justifyContent:'space-between', flexDirection: { xs: 'column', sm: 'row' } }}>
+                    <Box sx={{ width: { xs: '100%', sm: '100%' }, display: 'flex', justifyContent:'space-between', flexDirection: { xs: 'column', sm: 'row' } }}>
                         <Box sx={{ mt: '24px', width: { xs: '100%', sm: '70%' } }}>
                             <Box sx={{ ml: '42px', display: 'flex' }}>
                                 <Box>
                                     <Typography>Thông báo</Typography>
-                                    <Button variant='outlined' sx={{ p: '4px' }} ><RemoveRedEyeOutlined/>Theo dõi</Button>
+                                    <Button variant='outlined' sx={{ p: '4px', color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor }} ><RemoveRedEyeOutlined/>Theo dõi</Button>
                                 </Box>
                                 <Box sx={{ ml: '12px' }}>
                                     <Typography>Ngày hết hạn</Typography>
@@ -259,7 +278,8 @@ export default function CardItem({ card }) {
                                     <Subject fontSize='medium' ></Subject>
                                     <Box sx={{ ml: '8px', width: '100%' }}>
                                         <Typography sx={{ mb: '12px' }}>Mô tả</Typography>
-                                        <TextField sx={{ width: '90%' }} label='Thêm mô tả'></TextField>
+                                        <TextField sx={{ width: '96%', '& .Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: theme => theme.trelloCustom.myColor },
+                                            '& .MuiInputLabel-root.Mui-focused': { color: theme => theme.trelloCustom.myColor }  }} label='Thêm mô tả'></TextField>
                                     </Box>
                                 </Box>
         
@@ -269,29 +289,48 @@ export default function CardItem({ card }) {
                                             <CommentOutlined fontSize='medium' ></CommentOutlined>
                                             <Typography variant='outlined' sx={{ ml: '8px' }}>Hoạt động</Typography>
                                         </Box>
-                                        <Button variant='outlined' sx={{ mr: '8px' }}>Hiện chi tiết</Button>
+                                        <Button variant='outlined' sx={{ mr: '8px', color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor }}>Hiện chi tiết</Button>
                                     </Box>
-                                    <TextField sx={{ width: '90%', ml: '42px' }} label='Viết bình luận'></TextField>
+                                    <TextField 
+                                        sx={{ 
+                                            width: { sm: '87%', md: '90%' }, 
+                                            ml: '42px', 
+                                            mr: '10px', 
+                                            '& .Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: theme => theme.trelloCustom.myColor },
+                                            '& .MuiInputLabel-root.Mui-focused': { color: theme => theme.trelloCustom.myColor } 
+                                        }} 
+                                        label='Viết bình luận'>
+                                        
+                                    </TextField>
                                 </Box>
                             </Box>
                         </Box>
                         
-                        <Box sx={{ width:{ xs: '100%', md: '30%' }, display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '24px', alignContent: 'center' }}>
-                            <Button variant='outlined' sx={{ width:'170px', mb: '12px', ml: '12px' }}>
+                        <Box 
+                            sx={{ 
+                                width:{ xs: '100%', sm: '30%' }, 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                alignItems: 'center', 
+                                mt: '24px', 
+                                alignContent: 'center',
+                                flexWrap: 'wrap'
+                            }}>
+                            <Button variant='outlined' sx={{ color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor, width:{ xs: '50%', sm: '150px', md: '170px' }, mb: '12px', ml: '10px' }}>
                                 <PersonAddAlt1Outlined/>
-                                <Typography>Thêm thành viên</Typography>
+                                <Typography sx={{ ml: '6px' }}>Thêm thành viên</Typography>
                             </Button>
-                            <Button variant='outlined' sx={{ width:'170px', mb: '12px', ml: '12px' }}>
+                            <Button variant='outlined' sx={{ color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor, width:{ xs: '50%', sm: '150px', md: '170px' }, mb: '12px', ml: '10px' }}>
                                 <Person2Outlined/>
-                                <Typography>Thành viên</Typography>
+                                <Typography sx={{ ml: '6px' }}>Thành viên</Typography>
                             </Button>
-                            <Button variant='outlined' sx={{ width:'170px', mb: '12px', ml: '12px' }}>
+                            <Button variant='outlined' sx={{ color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor, width:{ xs: '50%', sm: '150px', md: '170px' }, mb: '12px', ml: '10px' }}>
                                 <DomainVerificationOutlined/>
-                                <Typography>Việc cần làm</Typography>
+                                <Typography sx={{ ml: '6px' }}>Việc cần làm</Typography>
                             </Button>
-                            <Button variant='outlined' sx={{ width:'170px', mb: '12px', ml: '12px' }}>
+                            <Button variant='outlined' sx={{ color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor, width:{ xs: '50%', sm: '150px', md: '170px' }, mb: '12px', ml: '10px' }}>
                                 <AttachmentOutlined/>
-                                <Typography>Đính kèm</Typography>
+                                <Typography sx={{ ml: '6px' }}>Đính kèm</Typography>
                             </Button>
                         </Box>
                     </Box>

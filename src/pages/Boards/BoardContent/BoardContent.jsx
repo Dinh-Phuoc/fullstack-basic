@@ -37,7 +37,7 @@ export default function BoardContent({
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
-    const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 250 } })
+    const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 400, tolerance: 250 } })
 
     const sensors = useSensors(pointerSensor, mouseSensor, touchSensor)
     const [orderedColumns, setOrderedColumns] = useState([])
