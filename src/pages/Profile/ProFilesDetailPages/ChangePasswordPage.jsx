@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 // My import
-import { getInforUserApi, updatePasswordApi, updateProfileApi } from '~/apis'
+import { getInforUserApi, updatePasswordApi } from '~/apis'
 const ChangePasswordPage = () => {
     const [user, setUser] = useState(null)
     const [token] = useState(localStorage.getItem('token'))
@@ -22,13 +22,13 @@ const ChangePasswordPage = () => {
     
     const [messageError, setMessageError] = useState({ presentPassword: '', newPassword: '', retype: '' })
     const [required, setRequired] = useState({ presentPassword: true, newPassword: true, retype: true })
-
+    
     const styleInput = { 
+        width: '350px',
         '& .MuiOutlinedInput-root': {
             height: '100%',
-            
             '& .MuiOutlinedInput-input':{
-                width: '200px',
+                width: '100%',
                 p: '9.5px 12px',
                 textOverflow: 'ellipsis'
             },
@@ -106,6 +106,10 @@ const ChangePasswordPage = () => {
             setRequired(prev => ({ ...prev, newPassword: true }))
             return setMessageError(prev => ({ ...prev, newPassword: 'Không để trống' }))
         }
+        if (validate.isSamePassword(newPassword, presentPassword)) {
+            setRequired(prev => ({ ...prev, newPassword: true }))
+            return setMessageError(prev => ({ ...prev, newPassword: 'Mật khẩu mới không được trùng với mật khẩu cũ' }))
+        }
         setRequired(prev => ({ ...prev, newPassword: false }))
         setMessageError(prev => ({ ...prev, newPassword: '' }))
         return true
@@ -142,6 +146,7 @@ const ChangePasswordPage = () => {
     }
     const handleChangeValue = (e, textFieldName) => {
         switch (textFieldName) {
+            
         case 'presentPassword':
             setPresentPassword(e.target.value)
             return
@@ -190,6 +195,7 @@ const ChangePasswordPage = () => {
                 >
                     <Box sx={{ position: 'relative', height: '40px' }}>
                         <TextField
+                            autoComplete="new-password"
                             helperText={messageError.presentPassword}
                             onBlur={handlePresentPasswordValidator}
                             onChange={e => handleChangeValue(e, 'presentPassword')}
@@ -258,7 +264,7 @@ const ChangePasswordPage = () => {
                         color: theme => theme.palette.mode === 'dark' ? 
                             theme.palette.primary.light : 
                             theme.palette.primary.main,
-                        width: '224px',
+                        width: '350px',
                         borderColor: theme => theme.palette.mode === 'dark' ? 
                             theme.palette.primary.light : 
                             theme.palette.primary.main

@@ -247,15 +247,19 @@ const DocumentPage = ({ handleUpdate }) => {
     const handleCancelEditTextField = (textFieldName) => {
         switch (textFieldName) {
         case 'fullName':
+            setFullName(prevValue)
             setFullNameFocus(false)
             return
         case 'jobTitle':
+            setJobTitle(prevValue)
             setJobTitleFocus(false)
             return
         case 'department':
+            setDepartment(prevValue)
             setDepartmentFocus(false)
             return
         case 'address':
+            setAddress(prevValue)
             setAddressFocus(false)
             return
         default:

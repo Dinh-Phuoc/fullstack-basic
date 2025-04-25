@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <UserProvider>
                     <App />
                 </UserProvider>
-                <ToastContainer/>
+                <ToastContainer autoClose={2000}/>
             </ConfirmProvider>
         </CssVarsProvider>
     </BrowserRouter>

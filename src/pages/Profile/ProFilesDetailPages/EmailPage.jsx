@@ -24,7 +24,7 @@ const EmailPage = () => {
     const [email, setEmail] = useState(null)
     const [prevValue, setPreValue] = useState('Prev')
     const [emailFocus, setEmailFocus] = useState(false)
-    
+    const [invalidMessage, setInvalidMessage] = useState('')
 
     const styleInput = { 
         '& .MuiOutlinedInput-root': {
@@ -44,6 +44,9 @@ const EmailPage = () => {
                     theme.palette.primary.main
             }
         },
+        '& .MuiFormHelperText-root': {
+            color: 'red'
+        }, 
         '& .MuiInputLabel-root.Mui-focused': {
             color: theme => theme.palette.mode === 'dark' ?
                 theme.palette.primary.light :
@@ -99,11 +102,18 @@ const EmailPage = () => {
         switch (textFieldName) {
         case 'email':
             if (e.target.value !== prevValue) {
-                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
-                setEmail(e.target.value)
+                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                const isValid = pattern.test(e.target.value)
+                if (isValid) {
+                    setInvalidMessage('')
+                    const result = await updateProfileApi(user._id, textFieldName, e.target.value)
+                    setEmail(e.target.value)
+                    setEmailFocus(false)
+                    result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
+                    return
+                }
+                setInvalidMessage('Vui lòng nhập đúng Email!!!')
                 setEmailFocus(false)
-                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
-                return
             }
             setEmailFocus(false)
             return
@@ -115,6 +125,7 @@ const EmailPage = () => {
     const handleCancelEditTextField = (textFieldName) => {
         switch (textFieldName) {
         case 'email':
+            setEmail(prevValue)
             setEmailFocus(false)
             return
         default:
@@ -161,6 +172,7 @@ const EmailPage = () => {
                         <TextField
                             label='Email'
                             value={ email }
+                            helperText={invalidMessage}
                             onFocus={e => handleFocus(e, 'email')}
                             onChange={e => handleChangeValue(e, 'email')}
                             onBlur={(e) => {
@@ -192,7 +204,6 @@ const EmailPage = () => {
                             </Paper>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
                                 <Button
-                                    onClick={() => handleCancelEditTextField('email')} 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>

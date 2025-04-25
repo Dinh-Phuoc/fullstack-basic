@@ -15,6 +15,8 @@ import { API_ROOT } from '~/utils/constant'
 import DocumentPage from './ProFilesDetailPages/DocumentPage'
 import EmailPage from './ProFilesDetailPages/EmailPage'
 import ChangePasswordPage from './ProFilesDetailPages/ChangePasswordPage'
+import PrivatePage from './ProFilesDetailPages/PrivatePage'
+import AccountOptionPage from './ProFilesDetailPages/AccountOptionPage'
 
 export function Profile() {
     const navigate = useNavigate()
@@ -28,6 +30,19 @@ export function Profile() {
     const [checked, setChecked] = useState(isDarkMode)
     const { setMode } = useColorScheme()
     const [update, setUpdate] = useState(false)
+
+    const style = {
+        width: '100%', 
+        height: '100%',
+        textAlign: 'center',
+        p: 0,
+        color: theme => theme.palette.mode === 'dark' ? 
+            theme.palette.primary.light : theme.palette.primary.main,
+        lineHeight: '36px',
+        '&:hover': {
+            background: 'none'
+        } 
+    }
 
     useEffect(() => {
         if (!token) navigate('/')
@@ -43,6 +58,7 @@ export function Profile() {
                 setUser(newUser)
             })
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [update, token])
 
     const handleUpdate = () => {
@@ -168,26 +184,8 @@ export function Profile() {
                                 color: '#ff9a9cc4'
                                 
                             }}value={4}>Tùy chọn tài khoản</MyTabItem>
-                        <MyTabItem 
-                            myStyle={{ 
-                                display: { xs: 'none', lg: 'flex' },
-                                alignItems: 'center',
-                                p: '6px'
-                            }}  
-                            myStyleChild={{ 
-                                color: '#ff9a9cc4'
-                            }}value={5}>Các ứng dụng được kết nối</MyTabItem>
-                        <MyTabItem 
-                            myStyle={{ 
-                                display: { xs: 'none', lg: 'flex' },
-                                alignItems: 'center',
-                                p: '6px'
-                            }}  
-                            myStyleChild={{ 
-                                color: '#ff9a9cc4'
-                            }}value={6}>Tùy chọn liên kết</MyTabItem>
                         <Button
-                            sx={{ p: '6px', display: { xs: 'none', sm: 'flex', lg: 'none' } }}
+                            sx={{ p: '6px', display: { xs: 'none', sm: 'flex', md: 'none' } }}
                             onClick={handleSeeMore}>
                             <Typography 
                                 sx={{ 
@@ -220,13 +218,61 @@ export function Profile() {
                                 'aria-labelledby': 'basic-button'
                             }}
                         >
-                            <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Hồ sơ và chế độ hiển thị</MenuItem>
-                            <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Email</MenuItem>
-                            <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Bảo mật</MenuItem>
-                            <MenuItem sx={{ display: { sm: 'flex', md: 'none' } }}>Quyền riêng tư</MenuItem>
-                            <MenuItem sx={{ display: { sm: 'flex', md: 'none' } }}>Tùy chọn tài khoản</MenuItem>
-                            <MenuItem sx={{ display: { lg: 'none' } }}>Các ứng dụng được kết nối</MenuItem>
-                            <MenuItem sx={{ display: { lg: 'none' } }}>Tùy chọn liên kết</MenuItem>
+                            <MenuItem sx={{ alignItems: 'center', '& .MuiMenuItem-root': { p: 0 }, display: { xs: 'flex', sm: 'none' } }}>
+                                <MyTabItem 
+                                    notLine={true}
+                                    value={0} 
+                                    typeWrapper='Button'
+                                    myStyle={style}
+                                    onClick={handleSeeMoreClose}
+                                >
+                                        Hồ sơ và chế độ hiển thị
+                                </MyTabItem>
+                            </MenuItem>
+
+                            <MenuItem sx={{ alignItems: 'center', '& .MuiMenuItem-root': { p: 0 }, display: { xs: 'flex', sm: 'none' } }}>
+                                <MyTabItem 
+                                    notLine={true}
+                                    value={1} 
+                                    typeWrapper='Button'
+                                    myStyle={style}
+                                    onClick={handleSeeMoreClose}
+                                >
+                                    Email
+                                </MyTabItem>
+                            </MenuItem>
+
+                            <MenuItem sx={{ alignItems: 'center', '& .MuiMenuItem-root': { p: 0 }, display: { xs: 'flex', sm: 'none' } }}>
+                                <MyTabItem
+                                    notLine={true}
+                                    value={2} 
+                                    typeWrapper='Button'
+                                    myStyle={style}
+                                    onClick={handleSeeMoreClose}
+                                >
+                                    Bảo mật
+                                </MyTabItem>
+                            </MenuItem>
+                            <MenuItem sx={{ alignItems: 'center', '& .MuiMenuItem-root': { p: 0 }, display: { sm: 'flex', md: 'none' } }}>
+                                <MyTabItem 
+                                    value={3} typeWrapper='Button'
+                                    myStyle={style}
+                                    notLine={true}
+                                    onClick={handleSeeMoreClose}
+                                >
+                                    Quyền riêng tư
+                                </MyTabItem>
+                            </MenuItem>
+                            <MenuItem sx={{ alignItems: 'center', '& .MuiMenuItem-root': { p: 0 }, display: { sm: 'flex', md: 'none' } }}>
+                                <MyTabItem 
+                                    value={4} typeWrapper='Button'
+                                    myStyle={style}
+                                    notLine={true}
+                                    onClick={handleSeeMoreClose}
+                                >
+                                    Tùy chọn tài khoản
+                                </MyTabItem>
+                            </MenuItem>
                         </Menu>
                     </MyTabList>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, float: 'right' }}>
@@ -411,11 +457,11 @@ export function Profile() {
                     <MyTabPanel value={0}><DocumentPage handleUpdate={handleUpdate}/></MyTabPanel>
                     <MyTabPanel value={1}><EmailPage/></MyTabPanel>
                     <MyTabPanel value={2}><ChangePasswordPage/></MyTabPanel>
-                    <MyTabPanel value={3}>Quyền riêng tư</MyTabPanel>
-                    <MyTabPanel value={4}>Tùy chọn tài khoản</MyTabPanel>
-                    <MyTabPanel value={5}>Các ứng dụng được kết nối</MyTabPanel>
+                    <MyTabPanel value={3}><PrivatePage/></MyTabPanel>
+                    <MyTabPanel value={4}><AccountOptionPage/></MyTabPanel>
+                    {/* <MyTabPanel value={5}>Các ứng dụng được kết nối</MyTabPanel>
                     <MyTabPanel value={6}>Tùy chọn liên kết</MyTabPanel>
-                    <MyTabPanel value={7}>Xem thêm</MyTabPanel>
+                    <MyTabPanel value={7}>Xem thêm</MyTabPanel> */}
                 </Box>
             </MyTabs>
         </Box>

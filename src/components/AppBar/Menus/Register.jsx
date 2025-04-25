@@ -1,5 +1,5 @@
 import { Facebook, Google } from '@mui/icons-material'
-import { Button, FormControl, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { forwardRef, useImperativeHandle, useState } from 'react'
 
 const Register = forwardRef(( { onClick, ...props }, ref ) => { 
@@ -132,129 +132,141 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
         }
     }
     return (
-        <form>
+        <Box>
             <Stack spacing={2}>
-                <FormControl>
-                    <TextField
-                        value={userNameValue}
-                        onChange={handleUserNameValue}
-                        sx={{ 
-                            '& input': {
-                                p: '8px'
-                            },
-                            '& .MuiInputLabel-root': {
-                                top: '-6px'
-                            },
-                            '& .MuiFormLabel-asterisk': {
-                                color: 'red'
-                            },
-                            '& .MuiFormHelperText-root': {
-                                color: 'red'
-                            } 
-                        }}
-                        spellCheck="false"
-                        label='Tài khoản'
-                        helperText={messageError.user}
-                        onBlur={handleUserValidator}
-                        required={required.user}  
-                        id="username" 
-                        aria-describedby="my-helper-text" 
-                    />
-                </FormControl>
+                <TextField
+                    value={userNameValue}
+                    onChange={handleUserNameValue}
+                    sx={{ 
+                        '& input': {
+                            p: '8px'
+                        },
+                        '& .MuiInputLabel-root': {
+                            top: '-6px'
+                        },
+                        '& .MuiFormLabel-asterisk': {
+                            color: 'red'
+                        },
+                        '& .MuiFormHelperText-root': {
+                            color: 'red'
+                        } 
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key.toLowerCase() === 'l') {
+                            e.stopPropagation()
+                        }
+                    }}
+                    spellCheck="false"
+                    label='Tài khoản'
+                    helperText={messageError.user}
+                    onBlur={handleUserValidator}
+                    required={required.user}  
+                    id="username" 
+                    aria-describedby="my-helper-text" 
+                />
 
-                <FormControl>
-                    <TextField
-                        value={emailValue}
-                        helperText={messageError.email}
-                        onChange={handleEmailValue}
-                        onBlur={handleEmailValidator}
-                        required={required.email} 
-                        sx={{ 
-                            '& input': {
-                                p: '8px'
-                            },
-                            '& .MuiInputLabel-root': {
-                                top: '-6px'
-                            },
-                            '& .MuiFormLabel-asterisk': {
-                                color: 'red'
-                            },
-                            '& .MuiFormHelperText-root': {
-                                color: 'red'
-                            } 
-                        }}
-                        spellCheck="false"
-                        label='Email'
-                         
-                        id="email" 
-                        aria-describedby="my-helper-text" 
-                    />
-                </FormControl>  
+                <TextField
+                    value={emailValue}
+                    helperText={messageError.email}
+                    onChange={handleEmailValue}
+                    onBlur={handleEmailValidator}
+                    required={required.email}
+                    onKeyDown={(e) => {
+                        if (e.key.toLowerCase() === 'l') {
+                            e.stopPropagation()
+                        }
+                    }} 
+                    sx={{ 
+                        '& input': {
+                            p: '8px'
+                        },
+                        '& .MuiInputLabel-root': {
+                            top: '-6px'
+                        },
+                        '& .MuiFormLabel-asterisk': {
+                            color: 'red'
+                        },
+                        '& .MuiFormHelperText-root': {
+                            color: 'red'
+                        } 
+                    }}
+                    spellCheck="false"
+                    label='Email'
+                        
+                    id="email" 
+                    aria-describedby="my-helper-text" 
+                />
 
-                <FormControl>
-                    <TextField
-                        value={passwordValue}
-                        onChange={handlePasswordValue}
-                        helperText={messageError.password}
-                        required={required.password}
-                        onBlur={handlePassWordValidator}
-                        sx={{ 
-                            '& input': {
-                                p: '8px'
-                            },
-                            '& .MuiInputLabel-root': {
-                                top: '-6px'
-                                
-                            },
-                            '& .MuiFormLabel-asterisk': {
-                                color: 'red'
-                            },
-                            '& .MuiFormHelperText-root': {
-                                color: 'red'
-                            } 
-                        }} 
-                        spellCheck="false"
-                        label='Mật khẩu'
-                        type='password' 
-                        id="password" 
-                        aria-describedby="my-helper-text" />
-                </FormControl>
+                <TextField
+                    value={passwordValue}
+                    onChange={handlePasswordValue}
+                    helperText={messageError.password}
+                    required={required.password}
+                    onBlur={handlePassWordValidator}
+                    onKeyDown={(e) => {
+                        if (e.key.toLowerCase() === 'l') {
+                            e.stopPropagation()
+                        }
+                    }}
+                    sx={{ 
+                        '& input': {
+                            p: '8px'
+                        },
+                        '& .MuiInputLabel-root': {
+                            top: '-6px'
+                            
+                        },
+                        '& .MuiFormLabel-asterisk': {
+                            color: 'red'
+                        },
+                        '& .MuiFormHelperText-root': {
+                            color: 'red'
+                        } 
+                    }} 
+                    spellCheck="false"
+                    label='Mật khẩu'
+                    type='password' 
+                    id="password" 
+                    aria-describedby="my-helper-text" />
+                
+                <TextField
+                    onKeyDown={(e) => {
+                        if (e.key.toLowerCase() === 'l') {
+                            e.stopPropagation()
+                        }
+                    }}
+                    value={retypePasswordValue}
+                    onChange={handleRetypePasswordValue}
+                    required={required.retype} 
+                    helperText={messageError.retype}
+                    onBlur={handleReTypePassWordValidator}
+                    sx={{ 
+                        '& input': {
+                            p: '8px'
+                        },
+                        '& .MuiInputLabel-root': {
+                            top: '-6px'
 
-                <FormControl>
-                    <TextField
-                        value={retypePasswordValue}
-                        onChange={handleRetypePasswordValue}
-                        required={required.retype} 
-                        helperText={messageError.retype}
-                        onBlur={handleReTypePassWordValidator}
-                        sx={{ 
-                            '& input': {
-                                p: '8px'
-                            },
-                            '& .MuiInputLabel-root': {
-                                top: '-6px'
-
-                            },
-                            '& .MuiFormLabel-asterisk': {
-                                color: 'red'
-                            },
-                            '& .MuiFormHelperText-root': {
-                                color: 'red'
-                            } 
-                        }}
-                        spellCheck="false"
-                        label='Nhập lại mật khẩu'  
-                        id="repassword" 
-                        type='password' 
-                        aria-describedby="my-helper-text" />
-                </FormControl>
+                        },
+                        '& .MuiFormLabel-asterisk': {
+                            color: 'red'
+                        },
+                        '& .MuiFormHelperText-root': {
+                            color: 'red'
+                        } 
+                    }}
+                    spellCheck="false"
+                    label='Nhập lại mật khẩu'  
+                    id="repassword" 
+                    type='password' 
+                    aria-describedby="my-helper-text" />
 
                 <Button variant='outlined' onClick={handleValidator}>Đăng ký</Button>
                 <Typography sx={{ textAlign: 'center' }} variant='body1'> Hoặc </Typography>
                 <Button variant='outlined'>Đăng nhập bằng Facebook <Facebook /></Button>
                 <Button variant='outlined'>Đăng nhập bằng Google <Google/></Button>
             </Stack>
-        </form>
+        </Box>
     )
 }) 
 

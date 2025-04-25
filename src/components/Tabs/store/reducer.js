@@ -1,5 +1,6 @@
 
 const initState = {
+    notLine: false,
     activeStore: false,
     elementActive: []
 }
@@ -9,7 +10,8 @@ function reducer(state, action) {
     case 'SET_ACTIVE_TAB':
         return {
             ...state,
-            elementActive: action.payload
+            elementActive: action.payload.elementActive,
+            notLine: action.payload.notLine
         }
         
     default: 

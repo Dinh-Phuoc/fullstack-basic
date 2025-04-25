@@ -18,20 +18,9 @@ export default function ModeSelect() {
 
     return (
         <FormControl sx={{ minWidth: '120px', display: { xs: 'none', sm: 'block', md: 'block' } }} size="small">
-            <InputLabel 
-                id="label-select-dark-light-mode"
-                sx={{
-                    color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
-                    '&.Mui-focused': { color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }
-                }}
-            >
-                Mode
-            </InputLabel>
             <Select
-                labelId="label-select-dark-light-mode"
                 id="select-dark-light-mode"
                 value={mode}
-                label="Mode"
                 onChange={handleChange}
                 sx={{
                     color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
@@ -57,7 +46,7 @@ export default function ModeSelect() {
                         alignItems: 'center',
                         gap: 1
                     }}>
-                        <LightModeOutlinedIcon fontSize='small'/>Light
+                        <LightModeOutlinedIcon fontSize='small'/>Sáng
                     </Box>
                 </MenuItem>
 
@@ -67,7 +56,7 @@ export default function ModeSelect() {
                         alignItems: 'center',
                         gap: 1
                     }}>
-                        <DarkModeOutlinedIcon fontSize='small'/>Dark
+                        <DarkModeOutlinedIcon fontSize='small'/>Tối
                     </Box>
                 </MenuItem>
 
@@ -77,7 +66,7 @@ export default function ModeSelect() {
                         alignItems: 'center',
                         gap: 1
                     }}>                   
-                        <SettingsBrightness fontSize='small'/>System
+                        <SettingsBrightness fontSize='small'/>Hệ thống
                     </Box>
                 </MenuItem>
             </Select>

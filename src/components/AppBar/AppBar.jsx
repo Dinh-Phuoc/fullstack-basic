@@ -20,7 +20,6 @@ import { ModeSelect } from '~/components/ModeSelect'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import Workspaces from './Menus/Workpages'
 import Recent from './Menus/Recent'
-import Templates from './Menus/Templates'
 import Profiles from './Menus/ProfilesMenu'
 
 export default function AppBar() {
@@ -40,7 +39,7 @@ export default function AppBar() {
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                    <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
+                    <SvgIcon component={TrelloIcon} fontSize='large' inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                     <Typography variant='span' sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '1.1rem', fontWeight: 'bold', minWidth: '80px', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}>Sariii nè!</Typography>
                 </Box>
 
@@ -57,7 +56,7 @@ export default function AppBar() {
                             p: '8px 10px'
                         }}
                     >
-                        Create
+                        Tạo mới
                     </Button>
                 </Box>
             </Box>
@@ -66,7 +65,7 @@ export default function AppBar() {
                 <TextField 
                     id='outlined-search' 
                     type='text' 
-                    label='Search...' 
+                    label='Tìm kiếm' 
                     size='small'
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
@@ -103,13 +102,13 @@ export default function AppBar() {
 
                 <ModeSelect /> 
 
-                <Tooltip title='Notification' sx={{ cursor: 'pointer', display: { xs: 'none', sm: 'block', md: 'block' } }}>
+                <Tooltip title='Thông báo' sx={{ cursor: 'pointer', display: { xs: 'none', sm: 'block', md: 'block' } }}>
                     <Badge color="error" variant="dot">
                         <NotificationsNoneIcon sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                     </Badge>
                 </Tooltip>
 
-                <Tooltip title='Help' sx={{ cursor: 'pointer' }}>
+                <Tooltip title='Trợ giúp' sx={{ cursor: 'pointer' }}>
                     <HelpOutlineIcon sx={{ display: { xs: 'none', sm: 'block', md: 'block' }, color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                 </Tooltip>
 

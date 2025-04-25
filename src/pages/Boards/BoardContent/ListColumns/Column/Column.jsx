@@ -100,11 +100,10 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                     maxWidth: '300px',
                     bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ffffffc4'),
                     ml : 2,
-                    overflowX: 'auto',
-                    overflowY: 'auto',
+                    overflow: 'hidden',
                     borderRadius: 2,
                     height: 'fit-content',
-                    maxHeight: (theme) => `calc(${theme.trelloCustom.boardContentHeight} - ${theme.spacing(5)})`
+                    maxHeight: '500px'
                 }}>
                 {/* Box Header  */}
                 <Box sx={{
@@ -191,7 +190,15 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                 </Box>
     
                 {/* Box List Of Card  */}
-                <ListCards cards={orderCard}/>
+                <Box 
+                    sx={{ 
+                        maxHeight: '400px', 
+                        overflowY: 'auto', 
+                        overflowX: 'hidden', 
+                        width: '100%'
+                    }}>
+                    <ListCards cards={orderCard}/>
+                </Box>
     
                 {/* Box Footer  */}
                 <Box sx={{

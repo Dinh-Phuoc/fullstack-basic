@@ -30,7 +30,7 @@ export default function Recent() {
                 onClick={handleClick}
                 endIcon={<ExpandMore />}
             >
-            Recent
+            Gần đây
             </Button>
 
             <Menu
