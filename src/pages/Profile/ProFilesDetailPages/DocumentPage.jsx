@@ -353,7 +353,7 @@ const DocumentPage = ({ handleUpdate }) => {
                                         objectFit: 'cover',
                                         verticalAlign: 'top'
                                     }}
-                                    src={ imageHeaderURL || user.imageHeader }
+                                    src={ `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}` }
                                     ></img>
                                 </Box> 
                                 : 

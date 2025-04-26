@@ -18,7 +18,7 @@ import { Box } from '@mui/joy'
 import { useEffect, useRef, useState } from 'react'
 import { getInforUserApi, uploadImageHeaderApi } from '~/apis'
 import { API_ROOT } from '~/utils/constant'
-import { AttachmentOutlined, Camera, CommentOutlined, DomainVerificationOutlined, Image, Person2Outlined, PersonAddAlt1Outlined, RemoveRedEyeOutlined, Subject } from '@mui/icons-material'
+import { AttachmentOutlined, CommentOutlined, DomainVerificationOutlined, Image, Person2Outlined, PersonAddAlt1Outlined, RemoveRedEyeOutlined, Subject } from '@mui/icons-material'
 
 
 export default function CardItem({ card }) {
@@ -48,6 +48,7 @@ export default function CardItem({ card }) {
             if (userInfo.imageHeader !== '') setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`)
             setUser(userInfo)
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token])
 
 
@@ -252,7 +253,7 @@ export default function CardItem({ card }) {
                     </Box>
 
                     <Box sx={{ display:'flex', mt: '12px' }}>
-                        <Checkbox sx={{color: theme => theme.trelloCustom.myColor, '&.Mui-checked': { color: theme => theme.trelloCustom.myColor } }}></Checkbox>
+                        <Checkbox sx={{ color: theme => theme.trelloCustom.myColor, '&.Mui-checked': { color: theme => theme.trelloCustom.myColor } }}></Checkbox>
                         <Box sx={{ display:'flex', flexDirection: 'column' }}>
                             <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#172b4d', fontSize: '1rem', fontWeight: 700 } }}>{card.title}</Typography>
                             <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#44546f' } }}>trong danh sách {card.columnId}</Typography>
@@ -279,7 +280,7 @@ export default function CardItem({ card }) {
                                     <Box sx={{ ml: '8px', width: '100%' }}>
                                         <Typography sx={{ mb: '12px' }}>Mô tả</Typography>
                                         <TextField sx={{ width: '96%', '& .Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: theme => theme.trelloCustom.myColor },
-                                            '& .MuiInputLabel-root.Mui-focused': { color: theme => theme.trelloCustom.myColor }  }} label='Thêm mô tả'></TextField>
+                                            '& .MuiInputLabel-root.Mui-focused': { color: theme => theme.trelloCustom.myColor } }} label='Thêm mô tả'></TextField>
                                     </Box>
                                 </Box>
         
