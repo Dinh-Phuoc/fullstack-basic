@@ -62,7 +62,12 @@ export default function ListColomn({ columns, createNewColumn, createNewCard, de
                                 width: '100%',
                                 justifyContent: 'flex-start',
                                 pl: 2.5,
-                                py: 1
+                                py: 1,
+                                '&:hover': {
+                                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#333643' : '#ffffffc4',
+                                    border: '1px solid',
+                                    borderColor: theme => theme.trelloCustom.myColor
+                                }
                             }}
                         > 
                             Thêm danh sách khác

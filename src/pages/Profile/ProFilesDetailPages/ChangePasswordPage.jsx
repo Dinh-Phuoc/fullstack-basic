@@ -24,7 +24,8 @@ const ChangePasswordPage = () => {
     const [required, setRequired] = useState({ presentPassword: true, newPassword: true, retype: true })
     
     const styleInput = { 
-        width: '350px',
+        width: { xs: '280px', sm: '350px' },
+        mb: '12px',
         '& .MuiOutlinedInput-root': {
             height: '100%',
             '& .MuiOutlinedInput-input':{
@@ -186,91 +187,63 @@ const ChangePasswordPage = () => {
                 <Box 
                     sx={{ 
                         display: 'flex', 
-                        justifyContent: 'space-between', 
+                        flexDirection: 'column',
                         alignContent: 'center',
-                        width: '100%',
-                        height: '40px', 
-                        mb: '32px' 
+                        width: '100%'
                     }}
                 >
-                    <Box sx={{ position: 'relative', height: '40px' }}>
-                        <TextField
-                            autoComplete="new-password"
-                            helperText={messageError.presentPassword}
-                            onBlur={handlePresentPasswordValidator}
-                            onChange={e => handleChangeValue(e, 'presentPassword')}
-                            required={required.presentPassword} 
-                            type='password'
-                            label='Mật khẩu hiện tại'
-                            value={ presentPassword }
-                            sx={styleInput}
-                        >
-                        </TextField>
-                    </Box>
-                </Box>
+                    <TextField
+                        autoComplete="new-password"
+                        helperText={messageError.presentPassword}
+                        onBlur={handlePresentPasswordValidator}
+                        onChange={e => handleChangeValue(e, 'presentPassword')}
+                        required={required.presentPassword} 
+                        type='password'
+                        label='Mật khẩu hiện tại'
+                        value={ presentPassword }
+                        sx={styleInput}
+                    >
+                    </TextField>
 
-                <Box 
-                    sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignContent: 'center',
-                        width: '100%',
-                        height: '40px', 
-                        mb: '32px' 
-                    }}
-                >
-                    <Box sx={{ position: 'relative', height: '40px' }}>
-                        <TextField
-                            onBlur={handleNewPassWordValidator}
-                            onChange={e => handleChangeValue(e, 'newPassword')}
-                            required={required.newPassword}
-                            helperText={messageError.newPassword}  
-                            type='password'
-                            label='Mật khẩu mới'
-                            value={ newPassword }
-                            sx={styleInput}
-                        >
-                        </TextField>
-                    </Box>
-                </Box>
+                    <TextField
+                        onBlur={handleNewPassWordValidator}
+                        onChange={e => handleChangeValue(e, 'newPassword')}
+                        required={required.newPassword}
+                        helperText={messageError.newPassword}  
+                        type='password'
+                        label='Mật khẩu mới'
+                        value={ newPassword }
+                        sx={styleInput}
+                    >
+                    </TextField>
 
-                <Box 
-                    sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignContent: 'center',
-                        width: '100%',
-                        height: '40px', 
-                        mb: '32px' 
-                    }}
-                >
-                    <Box sx={{ position: 'relative', height: '40px' }}>
-                        <TextField
-                            onBlur={handleReTypePassWordValidator}
-                            onChange={e => handleChangeValue(e, 'retypeNewPassword')}
-                            required={required.retype}
-                            helperText={messageError.retype}  
-                            type='password'
-                            label='Nhập lại mật khẩu mới'
-                            value={ retypeNewPassword }
-                            sx={styleInput}
-                        >
-                        </TextField>
-                    </Box>
+                    <TextField
+                        onBlur={handleReTypePassWordValidator}
+                        onChange={e => handleChangeValue(e, 'retypeNewPassword')}
+                        required={required.retype}
+                        helperText={messageError.retype}  
+                        type='password'
+                        label='Nhập lại mật khẩu mới'
+                        value={ retypeNewPassword }
+                        sx={styleInput}
+                    >
+                    </TextField>
+
+                    <Button 
+                        onClick={handleValidator}
+                        sx={{ 
+                            color: theme => theme.palette.mode === 'dark' ? 
+                                theme.palette.primary.light : 
+                                theme.palette.primary.main,
+                            width: { xs: '280px', sm: '350px' },
+                            borderColor: theme => theme.palette.mode === 'dark' ? 
+                                theme.palette.primary.light : 
+                                theme.palette.primary.main
+                        }} 
+                        variant='outlined' 
+                    >Xác nhận đổi mật khẩu
+                    </Button>
                 </Box>
-                <Button 
-                    onClick={handleValidator}
-                    sx={{ 
-                        color: theme => theme.palette.mode === 'dark' ? 
-                            theme.palette.primary.light : 
-                            theme.palette.primary.main,
-                        width: '350px',
-                        borderColor: theme => theme.palette.mode === 'dark' ? 
-                            theme.palette.primary.light : 
-                            theme.palette.primary.main
-                    }} 
-                    variant='outlined' 
-                >Xác nhận đổi mật khẩu</Button>
             </Paper>
         </Box>
     )

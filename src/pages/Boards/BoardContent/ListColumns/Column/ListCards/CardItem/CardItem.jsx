@@ -28,9 +28,9 @@ export default function CardItem({ card }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
     const [user, setUser] = useState(null)
-    const [token] = useState(localStorage.getItem('token'))
+    const token =localStorage.getItem('token')
 
-    const [setImageHeaderURL] = useState(null)
+    const [imageHeaderURL, setImageHeaderURL] = useState(null)
     const shouldShowCardAction = () => {
         return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
     }
@@ -43,13 +43,13 @@ export default function CardItem({ card }) {
         isDragging
     } = useSortable({ id: card?._id, data: { ...card } })
 
-    useEffect(() => {
-        token && getInforUserApi().then((userInfo) => {
-            if (userInfo.imageHeader !== '') setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`)
-            setUser(userInfo)
-        })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token])
+    // useEffect(() => {
+    //     token && getInforUserApi().then((userInfo) => {
+    //         if (userInfo.imageHeader !== '') setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`)
+    //         setUser(userInfo)
+    //     })
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [token])
 
 
     // if (!user) {
@@ -57,8 +57,6 @@ export default function CardItem({ card }) {
     //         display: 'flex',
     //         alignItems: 'center',
     //         justifyContent: 'center',
-    //         height: '100vh',
-    //         width: '100vw',
     //         gap: 2
     //     }}>
     //         <CircularProgress/>
@@ -122,7 +120,7 @@ export default function CardItem({ card }) {
                     <Typography 
                         sx={{
                             display: '-webkit-box',
-                            WebkitLineClamp: '2',
+                            WebkitLineClamp: '1',
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis'

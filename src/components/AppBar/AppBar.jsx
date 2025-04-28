@@ -21,9 +21,20 @@ import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import Workspaces from './Menus/Workpages'
 import Recent from './Menus/Recent'
 import Profiles from './Menus/ProfilesMenu'
+import { MenuRounded } from '@mui/icons-material'
+import { Menu, MenuItem } from '@mui/material'
 
 export default function AppBar() {
     const [searchValue, setSearchValue] = useState('')
+
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl)
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
 
     return ( 
         <Box sx={{
@@ -37,26 +48,62 @@ export default function AppBar() {
             overflowX: 'auto',
             bgcolor: (theme) => (theme.palette.primary.main) 
         }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignContent: 'center', gap: 1 }}>
+                <MenuRounded 
+                    onClick={handleClick} 
+                    fontSize='large' 
+                    sx={{ 
+                        color: theme => theme.palette.mode === 'dark' ? theme.trelloCustom.myColor : 'white', 
+                        display: { xs: 'block', md: 'none' } 
+                    }}
+                />
+                <Menu
+                    id="basic-menu-workspaces"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button-workspaces'
+                    }}
+                >
+                    <MenuItem>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            Workspace
+                        </Typography>
+                    </MenuItem>
+    
+                    <MenuItem>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            Gần đây
+                        </Typography>
+                    </MenuItem>
+                </Menu>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <SvgIcon component={TrelloIcon} fontSize='large' inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}/>
                     <Typography variant='span' sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '1.1rem', fontWeight: 'bold', minWidth: '80px', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}>Sariii nè!</Typography>
                 </Box>
 
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+                <Box sx={{ display: 'flex', gap: 1, height: '100%', alignContent:'center' }}>
                     <Workspaces />
                     <Recent />
                     <Button 
                         variant='outlined' 
                         startIcon={<LibraryAddIcon/>} 
                         sx={{ 
+                            dislay: 'flex', 
+                            alignContent: 'center',
                             color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
                             border: '1px solid',
                             borderColor: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white',
-                            p: '8px 10px'
+                            p: '6px 0 6px 3px',
+                            height: '100%',
+                            '& .MuiButton-startIcon': {
+                                ml: 0,
+                                mr: '3px'
+                            }
                         }}
                     >
-                        Tạo mới
+                        <Typography sx={{ mr: '4px', height: '100%' }}>Tạo mới</Typography>
                     </Button>
                 </Box>
             </Box>
@@ -87,6 +134,7 @@ export default function AppBar() {
                         ) : null
                     }} 
                     sx={{ 
+                        display: { xs: 'none', md: 'flex' },
                         minWidth: '120px',
                         maxWidth: '180px',
                         '& label': { color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }, 
@@ -99,6 +147,12 @@ export default function AppBar() {
                         } 
                     }}
                 />
+
+                <SearchIcon 
+                    sx={{ 
+                        display: { xs: 'block', md: 'none' }, 
+                        color: theme => theme.palette.mode === 'dark' ? theme.trelloCustom.myColor : 'white' 
+                    }}/>
 
                 <ModeSelect /> 
 

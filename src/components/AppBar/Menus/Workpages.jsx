@@ -24,9 +24,9 @@ export default function Workspaces() {
     }
 
     return (
-        <Box>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center' }}>
             <Button
-                sx={{ p: '8px 0', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}
+                sx={{ p: 0, color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}
                 id="basic-button-workspaces"
                 aria-controls={open ? 'basic-menu-workspaces' : undefined}
                 aria-haspopup="true"
@@ -34,7 +34,7 @@ export default function Workspaces() {
                 onClick={handleClick}
                 endIcon={<ExpandMore />}
             >
-            Workspaces
+                <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>Workspaces</Typography>
             </Button>
 
             <Menu

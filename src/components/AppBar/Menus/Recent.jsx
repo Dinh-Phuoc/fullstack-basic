@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Check from '@mui/icons-material/Check'
 import ExpandMore from '@mui/icons-material/ExpandMore'
+import { Typography } from '@mui/material'
 
 export default function Recent() {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -20,9 +21,14 @@ export default function Recent() {
     }
 
     return (
-        <Box>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center' }}>
             <Button
-                sx={{ p: '8px 0', color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' }}
+                sx={{ 
+                    p: 0,
+                    dislay: 'flex', 
+                    alignContent: 'center', 
+                    color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white' 
+                }}
                 id="basic-button-recent"
                 aria-controls={open ? 'basic-menu-recent' : undefined}
                 aria-haspopup="true"
@@ -30,7 +36,7 @@ export default function Recent() {
                 onClick={handleClick}
                 endIcon={<ExpandMore />}
             >
-            Gần đây
+                <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', minWidth: '26px' }}>Gần đây</Typography>
             </Button>
 
             <Menu

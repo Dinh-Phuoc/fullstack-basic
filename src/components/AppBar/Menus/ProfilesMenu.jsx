@@ -283,7 +283,7 @@ export default function Profiles() {
                             </MenuItem>
                         </Link>
 
-                        <MenuItem sx={{ height: '32px' }}>
+                        <MenuItem sx={{ height: '32px', display: { xs: 'block', sm: 'none' } }}>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -342,19 +342,19 @@ export default function Profiles() {
                             <ListItemIcon>
                                 <PersonAdd fontSize="medium" />
                             </ListItemIcon>
-                                Add another account
+                                Thêm tài khoản
                         </MenuItem>
                         <MenuItem>
                             <ListItemIcon>
                                 <Settings fontSize="medium" />
                             </ListItemIcon>
-                            Settings
+                            Cái đặt
                         </MenuItem>
                         <MenuItem onClick={handleLogOut}>
                             <ListItemIcon>
                                 <Logout fontSize="medium" />
                             </ListItemIcon>
-                            Logout
+                            Đăng xuất
                         </MenuItem>
                     </> :
                     <>
@@ -362,7 +362,7 @@ export default function Profiles() {
                             <ListItemIcon>
                                 <Settings fontSize="medium" />
                             </ListItemIcon>
-                            Settings
+                            Cái đặt
                         </MenuItem>
 
                         <MenuItem>
@@ -421,7 +421,7 @@ export default function Profiles() {
                             <ListItemIcon>
                                 <LoginOutlined fontSize="medium" />
                             </ListItemIcon>
-                            Login
+                            Đăng nhập
                         </MenuItem>
 
                         <Modal disableAutoFocus 

@@ -17,10 +17,14 @@ import { useState } from 'react'
 const MENU_STYLES = { 
     color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white', 
     bgcolor: 'transparent', 
-    border: 'none', 
+    border: 'none',
+    width: '85px',
     borderRadius: '4px',
     '.MuiSvgIcon-root': {
         color: (theme) => theme.palette.mode === 'dark' ? '#ff9a9cc4' : 'white'
+    },
+    '&.MuiChip-label': {
+        textOverflow: 'ellipsis'
     }
 }
 

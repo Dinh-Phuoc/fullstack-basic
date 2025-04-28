@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import ContentCut from '@mui/icons-material/ContentCut'
 import Cloud from '@mui/icons-material/Cloud'
@@ -26,12 +26,22 @@ import { CSS } from '@dnd-kit/utilities'
 
 import ListCards from './ListCards/ListCards'
 import { Close } from '@mui/icons-material'
-import { TextField } from '@mui/material'
+import { Modal, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 
 export default function Column({ column, createNewCard, deleteColumnDetails }) {
+    const columnRef = useRef()
+    const [openPermissionDenyModal, setOpenPermissionDenyModal] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
+
+    const handleOpenPermissionDenyModal = () => {
+        setOpenPermissionDenyModal(true)
+    }
+    const handleClosePermissionDenyModal = () => {
+        setOpenPermissionDenyModal(false)
+    }
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -47,14 +57,19 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
     const [newCardTitle, setNewCardTitle] = useState('')
 
     const confirmDeleteColumn = useConfirm()
+
     const handleDeleteColumn = () => {
         confirmDeleteColumn({
-            description: 'Are you sure you want to delete this column?',
-            confirmationText: 'Delete',
+            title: 'Bạn chắc chắn mình muốn xóa cột này?',
+            confirmationText: 'Xóa',
             confirmationButtonProps: { color: 'error' },
             cancellationButtonProps: { color: 'inherit', variant: 'outlined' },
             buttonOrder: ['confirm', 'cancel']
         }).then(() => {
+            if (columnRef.current.getAttribute('data-role') === 'admin') {
+                handleOpenPermissionDenyModal()
+                return
+            } 
             deleteColumnDetails(column._id)
         }).catch(() => {})
     }
@@ -92,9 +107,23 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
         opacity: isDragging ? 0.5 : undefined,
         border: isDragging ? '1px solid primary.main' : undefined
     }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4
+    }
     return (
         <div ref={setNodeRef} style={dndKitColumnStyle} {...attributes} >
             <Box {...listeners}
+                ref={columnRef}
+                data-role={column?.role}
                 sx={{
                     minWidth: '300px',
                     maxWidth: '300px',
@@ -103,7 +132,7 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                     overflow: 'hidden',
                     borderRadius: 2,
                     height: 'fit-content',
-                    maxHeight: '500px'
+                    maxHeight: '512px'
                 }}>
                 {/* Box Header  */}
                 <Box sx={{
@@ -119,7 +148,7 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                         {column?.title}
                     </Typography>
                     <Box>
-                        <Tooltip title='More Options'>
+                        <Tooltip title='Tùy chọn'>
                             <ExpandMore  
                                 sx={{ color: 'text.primary', cursor: 'pointer' }}
                                 id="basic-column-dropdown"
@@ -153,22 +182,22 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                             </MenuItem>
                             <MenuItem>
                                 <ListItemIcon> <ContentCut fontSize="small" /></ListItemIcon>
-                                <ListItemText>Cut</ListItemText>
+                                <ListItemText>Cắt</ListItemText>
                             </MenuItem>
                             <MenuItem>
                                 <ListItemIcon> <ContentCopy fontSize="small" /></ListItemIcon>
-                                <ListItemText>Copy</ListItemText>
+                                <ListItemText>Sao chép</ListItemText>
                             </MenuItem>
                             <MenuItem>
                                 <ListItemIcon> <ContentPaste fontSize="small" /></ListItemIcon>
-                                <ListItemText>Paste</ListItemText>
+                                <ListItemText>Dán</ListItemText>
                             </MenuItem>
 
                             <Divider />
 
                             <MenuItem>
                                 <ListItemIcon> <Cloud fontSize="small" /></ListItemIcon>
-                                <ListItemText>Archive this column</ListItemText>
+                                <ListItemText>Lưu trữ</ListItemText>
                             </MenuItem>
     
                             <MenuItem 
@@ -183,10 +212,22 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                                 <ListItemIcon>
                                     <DeleteForever className='delete-icon' fontSize="small" />
                                 </ListItemIcon>
-                                <ListItemText >Remove this column</ListItemText>
+                                <ListItemText >Xóa cột</ListItemText>
                             </MenuItem>
                         </Menu>
                     </Box>
+                    <Modal
+                        open={openPermissionDenyModal}
+                        onClose={handleClosePermissionDenyModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Bạn không có quyền xóa cột này, vui lòng thêm cột khác và thử lại tính năng này tại cột vừa tạo
+                            </Typography>
+                        </Box>
+                    </Modal>
                 </Box>
     
                 {/* Box List Of Card  */}

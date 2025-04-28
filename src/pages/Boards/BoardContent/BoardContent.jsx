@@ -37,7 +37,7 @@ export default function BoardContent({
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
-    const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 400, tolerance: 250 } })
+    const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 1000, tolerance: 250 } })
 
     const sensors = useSensors(pointerSensor, mouseSensor, touchSensor)
     const [orderedColumns, setOrderedColumns] = useState([])
@@ -259,6 +259,7 @@ export default function BoardContent({
             <Box sx={{
                 bgcolor: (theme) => (theme.palette.primary.main), 
                 width: '100%',
+                pr: '16px',
                 height: (theme) => theme.trelloCustom.boardContentHeight,
                 display: 'flex'
             }}> 
