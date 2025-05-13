@@ -1,4 +1,3 @@
-import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
@@ -17,7 +16,7 @@ export default function ModeSelect() {
     }
 
     return (
-        <FormControl sx={{ minWidth: '120px', display: { xs: 'none', sm: 'block', md: 'block' } }} size="small">
+        <FormControl sx={{ minWidth: '120px', display: { xs: 'none', sm: 'block' } }} size="small">
             <Select
                 id="select-dark-light-mode"
                 value={mode}

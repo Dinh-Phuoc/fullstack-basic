@@ -28,12 +28,19 @@ import ListCards from './ListCards/ListCards'
 import { Close } from '@mui/icons-material'
 import { Modal, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { addNewCards, deleteColumn } from '~/redux/slice/boardSlice'
 
-export default function Column({ column, createNewCard, deleteColumnDetails }) {
+export default function Column({ column }) {
     const columnRef = useRef()
     const [openPermissionDenyModal, setOpenPermissionDenyModal] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
+    const dispatch = useDispatch()
+    const [openNewCardForm, setOpenNewCardForm] = useState(false)
+    const [newCardTitle, setNewCardTitle] = useState('')
+    const confirmDeleteColumn = useConfirm()
+    const orderCard = column.cards
 
     const handleOpenPermissionDenyModal = () => {
         setOpenPermissionDenyModal(true)
@@ -49,16 +56,10 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
         setAnchorEl(null)
     }
 
-    const orderCard = column.cards
-
-    const [openNewCardForm, setOpenNewCardForm] = useState(false)
     const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
-    const [newCardTitle, setNewCardTitle] = useState('')
-
-    const confirmDeleteColumn = useConfirm()
-
     const handleDeleteColumn = () => {
+        handleClose()
         confirmDeleteColumn({
             title: 'Bạn chắc chắn mình muốn xóa cột này?',
             confirmationText: 'Xóa',
@@ -69,23 +70,31 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
             if (columnRef.current.getAttribute('data-role') === 'admin') {
                 handleOpenPermissionDenyModal()
                 return
-            } 
-            deleteColumnDetails(column._id)
+            }
+            dispatch(deleteColumn(column.uuid))
+                .unwrap()
+                .then(() => {
+                    toast.success('Xóa cột thành công')
+                })
+                .catch(() => {
+                    toast.success('Thao tác thất bại')
+                }) 
         }).catch(() => {})
     }
 
     const addNewCard = () => {
         if (!newCardTitle) {
-            toast.error('Please provide a new title')
+            toast.error('Vui lòng nhập tiêu đề')
             return
         }
 
         const newCardData = {
             title: newCardTitle,
-            columnId: column._id
+            columnUuid: column.uuid,
+            boardUuid: column.boardUuid
         }
 
-        createNewCard(newCardData)
+        dispatch(addNewCards(newCardData))
         
         toggleOpenNewCardForm()
         setNewCardTitle('')
@@ -98,7 +107,7 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
         transform,
         transition,
         isDragging
-    } = useSortable({ id: column?._id, data: { ...column } })
+    } = useSortable({ id: column?.uuid, data: { ...column } })
 
     const dndKitColumnStyle = {
         transform: CSS.Translate.toString(transform),
@@ -120,8 +129,8 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
         p: 4
     }
     return (
-        <div ref={setNodeRef} style={dndKitColumnStyle} {...attributes} >
-            <Box {...listeners}
+        <div ref={setNodeRef} style={dndKitColumnStyle} {...attributes} {...listeners}>
+            <Box 
                 ref={columnRef}
                 data-role={column?.role}
                 sx={{
@@ -163,7 +172,6 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                             anchorEl={anchorEl}
                             open={open}
                             onClose={handleClose}
-                            onClick={handleClose}
                             MenuListProps={{
                                 'aria-labelledby': 'basic-column-dropdown'
                             }}
@@ -216,18 +224,6 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                             </MenuItem>
                         </Menu>
                     </Box>
-                    <Modal
-                        open={openPermissionDenyModal}
-                        onClose={handleClosePermissionDenyModal}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={style}>
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Bạn không có quyền xóa cột này, vui lòng thêm cột khác và thử lại tính năng này tại cột vừa tạo
-                            </Typography>
-                        </Box>
-                    </Modal>
                 </Box>
     
                 {/* Box List Of Card  */}
@@ -291,13 +287,13 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                                     '& label': { color: 'text.primary' },
                                     '&::placeholder': { color: 'text.primary' },
                                     '& input': { 
-                                        color: theme => theme.palette.primary.main
+                                        color: theme => theme.palette.mode === 'dark' ? theme.trelloCustom.myColor : 'black'
                                     },
-                                    '& label.Mui-focused': { color: theme => theme.palette.primary.main },
+                                    '& .label.Mui-focused': { color: theme => theme.trelloCustom.myColor },
                                     '& .MuiOutlinedInput-root': {
-                                        '& fieldset': { borderColor: (theme) => theme.palette.primary.main },
-                                        '&:hover fieldset': { borderColor: (theme) => theme.palette.primary.main },
-                                        '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.primary.main }
+                                        '& fieldset': { borderColor: (theme) => theme.trelloCustom.myColor },
+                                        '&:hover fieldset': { borderColor: (theme) => theme.trelloCustom.myColor },
+                                        '&.Mui-focused fieldset': { borderColor: (theme) => theme.trelloCustom.myColor }
                                     },
                                     '&.MuiOutlinedInput-input': {
                                         borderRadius: 1
@@ -333,6 +329,18 @@ export default function Column({ column, createNewCard, deleteColumnDetails }) {
                     }
                 </Box>
             </Box>
+            <Modal
+                open={openPermissionDenyModal}
+                onClose={handleClosePermissionDenyModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        Bạn không có quyền xóa cột này, vui lòng thêm cột khác và thử lại tính năng này tại cột vừa tạo
+                    </Typography>
+                </Box>
+            </Modal>
         </div>
     )
 }

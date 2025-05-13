@@ -5,11 +5,12 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ToastContainer } from 'react-toastify'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
+import { store } from '~/redux/store.js'
 import App from './App.jsx'
 import './index.css'
 import theme from './assets/theme.js'
-import UserProvider from './contexts/User/UserProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     // <React.StrictMode>
@@ -17,9 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <CssVarsProvider theme={theme}>
             <ConfirmProvider>
                 <CssBaseline enableColorScheme />
-                <UserProvider>
+                <Provider store={store}>
                     <App />
-                </UserProvider>
+                </Provider>
                 <ToastContainer autoClose={2000}/>
             </ConfirmProvider>
         </CssVarsProvider>

@@ -9,8 +9,15 @@ import NoteAdd from '@mui/icons-material/NoteAdd'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import { TextField } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { boardSelector } from '~/redux/selector'
+import { addNewColumns } from '~/redux/slice/boardSlice'
 
-export default function ListColomn({ columns, createNewColumn, createNewCard, deleteColumnDetails }) {
+export default function ListColomn() {
+    const { data } = useSelector(boardSelector)
+    const dispatch = useDispatch()
+    const columns = data[0].columns
+
     const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
     const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
@@ -18,33 +25,31 @@ export default function ListColomn({ columns, createNewColumn, createNewCard, de
 
     const addNewColumn = () => {
         if (!newColumnTitle) {
-            toast.error('Please provide a new title')
+            toast.error('Vui lòng nhập tiêu đề của thẻ!')
             return
         }
 
         const newColumnData = {
-            title: newColumnTitle
+            title: newColumnTitle,
+            boardUuid: data[0].uuid
         }
 
-        createNewColumn(newColumnData)
+        dispatch(addNewColumns(newColumnData))
 
         toggleOpenNewColumnForm()
         setNewColumnTitle('')
     }
     return (
-        <SortableContext items={columns?.map((column) => column._id)} strategy={horizontalListSortingStrategy}>
+        <SortableContext items={columns?.map((column) => column.uuid)} strategy={horizontalListSortingStrategy}>
             <Box sx={{
                 width: '100%',
                 display: 'flex',
                 overflowX: 'auto',
                 overflowY: 'hidden',
-                '*::webkit-scrollbar-track': { m: 2 }
+                '*::-webkit-scrollbar-track': { m: 2 }
             }}>
-                {columns?.map(column => <Column 
-                    deleteColumnDetails={deleteColumnDetails} 
-                    createNewCard={createNewCard} 
-                    key={column._id} 
-                    column={column}/>)}
+                {columns?.map(column => <Column key={column.uuid} column={column} />)}
+                
                 { !openNewColumnForm ? 
                     <Box onClick={toggleOpenNewColumnForm} sx={{
                         minWidth: '250px',

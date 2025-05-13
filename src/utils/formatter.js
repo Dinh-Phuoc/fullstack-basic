@@ -5,9 +5,9 @@ export default function capitalizeFirstLetter(val) {
 
 export function generatePlaceHolderCard(column) {
     return {
-        _id: `${column._id}-placeholder-card`,
-        boardId: column._boardId,
-        columnId: column._id,
+        uuid: `${column.uuid}-placeholder-card`,
+        boardUuid: column.boardUuid,
+        columnUuid: column.uuid,
         FE_PlaceholderCard: true 
     }
 }

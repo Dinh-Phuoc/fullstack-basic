@@ -30,7 +30,7 @@ export default function CardItem({ card }) {
     const [user, setUser] = useState(null)
     const token =localStorage.getItem('token')
 
-    const [imageHeaderURL, setImageHeaderURL] = useState(null)
+    const [imageHeaderCardURL, setImageHeaderCardURL] = useState(null)
     const shouldShowCardAction = () => {
         return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
     }
@@ -41,27 +41,7 @@ export default function CardItem({ card }) {
         transform,
         transition,
         isDragging
-    } = useSortable({ id: card?._id, data: { ...card } })
-
-    // useEffect(() => {
-    //     token && getInforUserApi().then((userInfo) => {
-    //         if (userInfo.imageHeader !== '') setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`)
-    //         setUser(userInfo)
-    //     })
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [token])
-
-
-    // if (!user) {
-    //     return (<Box sx={{ 
-    //         display: 'flex',
-    //         alignItems: 'center',
-    //         justifyContent: 'center',
-    //         gap: 2
-    //     }}>
-    //         <CircularProgress/>
-    //     </Box>)
-    // }
+    } = useSortable({ id: card?.uuid, data: { ...card } })
 
     const handleImageHeaderChange = async (e) => {
         const imageHeader = e.target.files[0]
@@ -70,13 +50,13 @@ export default function CardItem({ card }) {
         }
 
         const formData = new FormData()
-        formData.append('image-header', imageHeader)
+        formData.append('image-header-card', imageHeader)
 
         const isUploadImageHeaderSuccess = await uploadImageHeaderApi(formData, user._id)
-        if (isUploadImageHeaderSuccess) setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}`)
+        if (isUploadImageHeaderSuccess) setImageHeaderCardURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}`)
     }
 
-    const handleClickUploadHeaderImage = () => {
+    const handleClickUploadHeaderImageCard = () => {
         setAnchorEl(uploadHeaderImageRef.current.click())
     }
 
@@ -92,7 +72,7 @@ export default function CardItem({ card }) {
         minHeight: '600px',
         borderRadius: '12px',
         backgroundColor:  theme => theme.palette.mode === 'dark' ? '#333643' : 'white',
-        mt: 10
+        mt: { xs: '90px', sm: '10px' }
     }
 
     const dndKitCardStyle = {
@@ -102,10 +82,9 @@ export default function CardItem({ card }) {
         border: isDragging ? '1px solid #ff9a9cc4' : undefined
     }
     return (
-        <>
+        <div ref={setNodeRef} style={dndKitCardStyle} {...attributes} {...listeners}>
             <Card
                 onClick={handleOpen} 
-                ref={setNodeRef} style={dndKitCardStyle} {...attributes} {...listeners}
                 sx={{ 
                     cursor: 'pointer',
                     boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
@@ -115,7 +94,15 @@ export default function CardItem({ card }) {
                     '&:hover': { borderColor: theme => theme.palette.primary.main }
                 }}
             >
-                {card?.cover && <CardMedia sx={{ height: 140, borderTopLeftRadius: '3px', borderTopRightRadius: '3px' }} image={card?.cover} />}
+                {card?.cover && 
+                    <CardMedia 
+                        sx={{ 
+                            height: 140, 
+                            borderTopLeftRadius: '3px', 
+                            borderTopRightRadius: '3px' }} 
+                        image={card?.cover || imageHeaderCardURL} 
+                    />
+                }
                 <CardContent sx={{ p: '8px', mt: '8px', display: 'inline-flex' }}>
                     <Typography 
                         sx={{
@@ -217,12 +204,12 @@ export default function CardItem({ card }) {
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center center',
                                             overflow: 'hidden',
-                                            backgroundImage: 'linear-gradient(270deg, rgb(255, 179, 201) 0%, rgb(244, 110, 139) 100%)'
+                                            backgroundColor: '#ffe2e2'
                                         }}>
                                         </Box>
                                     }
                                 </Box>
-                                <Box onClick={handleClickUploadHeaderImage} 
+                                <Box onClick={handleClickUploadHeaderImageCard} 
                                     sx={{ 
                                         color: theme => theme.palette.mode === 'dark' ? 
                                             theme.palette.primary.light : theme.palette.primary.main, 
@@ -263,7 +250,7 @@ export default function CardItem({ card }) {
                             <Box sx={{ ml: '42px', display: 'flex' }}>
                                 <Box>
                                     <Typography>Thông báo</Typography>
-                                    <Button variant='outlined' sx={{ p: '4px', color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor }} ><RemoveRedEyeOutlined/>Theo dõi</Button>
+                                    <Button variant='outlined' sx={{ p: '4px', color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor }}><RemoveRedEyeOutlined/>Theo dõi</Button>
                                 </Box>
                                 <Box sx={{ ml: '12px' }}>
                                     <Typography>Ngày hết hạn</Typography>
@@ -273,7 +260,7 @@ export default function CardItem({ card }) {
     
                             {/* Description */}
                             <Box sx={{ width: '100%' }}>
-                                <Box sx={{ mt: '12px', ml: '8px', display: 'flex', width: '100%'}}>
+                                <Box sx={{ mt: '12px', ml: '8px', display: 'flex', width: '100%' }}>
                                     <Subject fontSize='medium' ></Subject>
                                     <Box sx={{ ml: '8px', width: '100%' }}>
                                         <Typography sx={{ mb: '12px' }}>Mô tả</Typography>
@@ -335,7 +322,7 @@ export default function CardItem({ card }) {
                     </Box>
                 </Box>
             </Modal> 
-        </>          
+        </div>      
 
     )
 }

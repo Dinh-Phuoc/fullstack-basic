@@ -7,29 +7,25 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import { HelpOutline, KeyboardArrowDown, Logout } from '@mui/icons-material'
-import { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import UserContext from '~/contexts/User/UserContext'
-import { getInforUserApi } from '~/apis'
-import { API_ROOT } from '~/utils/constant'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import DocumentPage from './ProFilesDetailPages/DocumentPage'
 import EmailPage from './ProFilesDetailPages/EmailPage'
 import ChangePasswordPage from './ProFilesDetailPages/ChangePasswordPage'
 import PrivatePage from './ProFilesDetailPages/PrivatePage'
 import AccountOptionPage from './ProFilesDetailPages/AccountOptionPage'
+import { useDispatch, useSelector } from 'react-redux'
+import { userSelector } from '~/redux/selector'
+import { logoutThunk, setUserInfoThunk } from '~/redux/slice/userSlice'
 
-export function Profile() {
-    const navigate = useNavigate()
-
-    const [state, dispatch] = useContext(UserContext)
+export default function Profile() {
+    const { user, pending } = useSelector(userSelector)
+    const dispatch = useDispatch()
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorElSeemore, setAnchorElSeemore] = useState(null)
-    const [token] = useState(localStorage.getItem('token'))
-    const [user, setUser] = useState(state)
     const [checked, setChecked] = useState(isDarkMode)
     const { setMode } = useColorScheme()
-    const [update, setUpdate] = useState(false)
 
     const style = {
         width: '100%', 
@@ -45,29 +41,12 @@ export function Profile() {
     }
 
     useEffect(() => {
-        if (!token) navigate('/')
-        if (token || update) {
-            getInforUserApi().then((userInfo) => {
-                const newUser = {
-                    ...userInfo,
-                    avatar: userInfo.avatar !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}` : '',
-                    imageHeader: userInfo.imageHeader !== '' ? `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}` : ''
-                }
-
-                dispatch({ type: 'SET_USER_INFO', payload: newUser })
-                setUser(newUser)
-            })
-        }
+        dispatch(setUserInfoThunk())
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [update, token])
-
-    const handleUpdate = () => {
-        setUpdate(prev => !prev)
-    }
+    }, [])
 
     const handleLogOut = () => {
-        localStorage.removeItem('token')
-        setUser(null)
+        dispatch(logoutThunk())
     }
     
     const open = Boolean(anchorEl)
@@ -93,7 +72,7 @@ export function Profile() {
         setAnchorElSeemore(null)
     }
 
-    if (!user) {
+    if (pending) {
         return (<Box sx={{ 
             display: 'flex',
             alignItems: 'center',
@@ -293,7 +272,7 @@ export function Profile() {
                                     <Avatar 
                                         sx={{ width: 24, height: 24 }} 
                                         alt='Your Avatar'
-                                        src= {user ? user.avatar : 'https://scontent.fsgn2-9.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_eui2=AeHqQE3on298CPVk3u69jaEuWt9TLzuBU1Ba31MvO4FTUFhDxoZtUH-dRPf7El8qQgUnbjMfmSOGfSnmHksnLgLR&_nc_ohc=a1K6_KaoqeEQ7kNvgHzC7kp&_nc_oc=AdkRjhHLU9H8YlcRXa6xwjBM8CUNK6C-uOq5hG1trLniobaNddY6zwK2q6FAq9NVt2U&_nc_zt=24&_nc_ht=scontent.fsgn2-9.fna&oh=00_AYHnf59jjfC5rvYvsSxoQ4dsw_gKEFwd7KaeglaIswcncw&oe=6813DF7A'
+                                        src= {user ? user.avatar : 'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'
                                         }/>
                                 </IconButton>
                             </Tooltip>
@@ -353,7 +332,7 @@ export function Profile() {
                                     <Avatar 
                                         sx={{ '&.MuiAvatar-root': { width: 30, height: 30 } }} 
                                         alt='Your Avatar'
-                                        src= {user ? user.avatar : 'https://scontent.fsgn2-9.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_eui2=AeHqQE3on298CPVk3u69jaEuWt9TLzuBU1Ba31MvO4FTUFhDxoZtUH-dRPf7El8qQgUnbjMfmSOGfSnmHksnLgLR&_nc_ohc=a1K6_KaoqeEQ7kNvgHzC7kp&_nc_oc=AdkRjhHLU9H8YlcRXa6xwjBM8CUNK6C-uOq5hG1trLniobaNddY6zwK2q6FAq9NVt2U&_nc_zt=24&_nc_ht=scontent.fsgn2-9.fna&oh=00_AYHnf59jjfC5rvYvsSxoQ4dsw_gKEFwd7KaeglaIswcncw&oe=6813DF7A'}
+                                        src= {user ? user.avatar : 'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'}
                                     />
                                     <Box 
                                         sx={{ 
@@ -454,7 +433,7 @@ export function Profile() {
                     sx={{ 
                         backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white'
                     }}>
-                    <MyTabPanel value={0}><DocumentPage handleUpdate={handleUpdate}/></MyTabPanel>
+                    <MyTabPanel value={0}><DocumentPage user={user}/></MyTabPanel>
                     <MyTabPanel value={1}><EmailPage/></MyTabPanel>
                     <MyTabPanel value={2}><ChangePasswordPage/></MyTabPanel>
                     <MyTabPanel value={3}><PrivatePage/></MyTabPanel>

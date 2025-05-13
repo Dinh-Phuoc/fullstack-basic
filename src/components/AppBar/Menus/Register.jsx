@@ -203,11 +203,6 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                     helperText={messageError.password}
                     required={required.password}
                     onBlur={handlePassWordValidator}
-                    onKeyDown={(e) => {
-                        if (e.key.toLowerCase() === 'l') {
-                            e.stopPropagation()
-                        }
-                    }}
                     sx={{ 
                         '& input': {
                             p: '8px'
@@ -230,11 +225,6 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
                     aria-describedby="my-helper-text" />
                 
                 <TextField
-                    onKeyDown={(e) => {
-                        if (e.key.toLowerCase() === 'l') {
-                            e.stopPropagation()
-                        }
-                    }}
                     value={retypePasswordValue}
                     onChange={handleRetypePasswordValue}
                     required={required.retype} 

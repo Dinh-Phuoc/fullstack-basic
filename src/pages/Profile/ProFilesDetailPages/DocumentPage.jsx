@@ -21,22 +21,18 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import Public from '@mui/icons-material/Public'
 
 // React
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 // My import
-import { getInforUserApi, updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import { updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
 import { API_ROOT } from '~/utils/constant'
 import { toast } from 'react-toastify'
 
-const DocumentPage = ({ handleUpdate }) => {
-    // const negative = useNavigate()
-    // const [, dispatch] = useContext(UserContext)
+const DocumentPage = ({ user }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
     const imageRef = useRef()
     const open = Boolean(anchorEl)
-    const [user, setUser] = useState(null)
-    const [token] = useState(localStorage.getItem('token'))
 
     // States of personal information
     const [fullName, setFullName] = useState(null)
@@ -82,18 +78,6 @@ const DocumentPage = ({ handleUpdate }) => {
         }
     }
 
-    useEffect(() => {
-        token && getInforUserApi().then((userInfo) => {
-            setFullName(userInfo.fullName)
-            setJobTitle(userInfo.jobTitle)
-            setDepartment(userInfo.department)
-            setAddress(userInfo.address)
-            if (userInfo.avatar !== '') setAvatarURL(`${API_ROOT}/v1/manage/users/profile/get-image/avatar/${userInfo._id}/?t=${Date.now()}`)
-            if (userInfo.imageHeader !== '') setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${userInfo._id}/?t=${Date.now()}`)
-            setUser(userInfo)
-        })
-    }, [token])
-
     if (!user) {
         return (<Box sx={{ 
             display: 'flex',
@@ -119,7 +103,6 @@ const DocumentPage = ({ handleUpdate }) => {
 
         const isUploadImageHeaderSuccess = await uploadImageHeaderApi(formData, user._id)
         if (isUploadImageHeaderSuccess) setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}`)
-        handleUpdate()
     }
 
     const handleClickUploadHeaderImage = () => {
@@ -142,7 +125,6 @@ const DocumentPage = ({ handleUpdate }) => {
 
         const isUploadAvatarSuccess = await uploadAvatarApi(formData, user._id)
         if (isUploadAvatarSuccess) setAvatarURL(`${API_ROOT}/v1/manage/users/profile/get-image/avatar/${user._id}/?t=${Date.now()}`)
-        handleUpdate()
     }
 
     const handleUploadAvatarThroughCameraIcon = () => {
