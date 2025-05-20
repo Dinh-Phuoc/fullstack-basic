@@ -24,15 +24,20 @@ import Public from '@mui/icons-material/Public'
 import { useRef, useState } from 'react'
 
 // My import
-import { updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import { updateProfileApi } from '~/apis'
 import { API_ROOT } from '~/utils/constant'
 import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from 'react-redux'
+import { userSelector } from '~/redux/selector'
+import { uploadAvatarThunk, uploadImageHeaderThunk } from '~/redux/slice/userSlice'
 
-const DocumentPage = ({ user }) => {
+const DocumentPage = () => {
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
     const imageRef = useRef()
     const open = Boolean(anchorEl)
+    const { data: user } = useSelector(userSelector)
+    const dispatch = useDispatch()
 
     // States of personal information
     const [fullName, setFullName] = useState(null)
@@ -48,10 +53,6 @@ const DocumentPage = ({ user }) => {
     const [jobTitleFocus, setJobTitleFocus] = useState(false)
     const [departmentFocus, setDepartmentFocus] = useState(false)
     const [addressFocus, setAddressFocus] = useState(false)
-
-    const [avatarURL, setAvatarURL] = useState(null)
-    const [imageHeaderURL, setImageHeaderURL] = useState(null)
-    
 
     const styleInput = { 
         '& .MuiOutlinedInput-root': {
@@ -101,8 +102,7 @@ const DocumentPage = ({ user }) => {
         const formData = new FormData()
         formData.append('image-header', imageHeader)
 
-        const isUploadImageHeaderSuccess = await uploadImageHeaderApi(formData, user._id)
-        if (isUploadImageHeaderSuccess) setImageHeaderURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}`)
+        dispatch(uploadImageHeaderThunk(formData))
     }
 
     const handleClickUploadHeaderImage = () => {
@@ -122,9 +122,7 @@ const DocumentPage = ({ user }) => {
 
         const formData = new FormData()
         formData.append('avatar', avatar)
-
-        const isUploadAvatarSuccess = await uploadAvatarApi(formData, user._id)
-        if (isUploadAvatarSuccess) setAvatarURL(`${API_ROOT}/v1/manage/users/profile/get-image/avatar/${user._id}/?t=${Date.now()}`)
+        dispatch(uploadAvatarThunk(formData))
     }
 
     const handleUploadAvatarThroughCameraIcon = () => {
@@ -326,7 +324,7 @@ const DocumentPage = ({ user }) => {
                                 height: '100%'
                             }}
                         >
-                            { imageHeaderURL || user.imageHeader ? 
+                            { user.imageHeader ? 
                                 <Box>
                                     <img style={{ 
                                         width: '100%',
@@ -335,7 +333,7 @@ const DocumentPage = ({ user }) => {
                                         objectFit: 'cover',
                                         verticalAlign: 'top'
                                     }}
-                                    src={ `${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}` }
+                                    src={ `${API_ROOT}/v1/manage/users/profile/get-image/image-header/?t=${Date.now()}` }
                                     ></img>
                                 </Box> 
                                 : 
@@ -400,7 +398,7 @@ const DocumentPage = ({ user }) => {
                                     transformOrigin={{ horizontal: 'center', vertical: 'top' }}
                                 >
                                     <MenuItem onClick={handleClickUploadHeaderImage}>Tải ảnh lên</MenuItem>
-                                    <MenuItem disabled={ imageHeaderURL ||user.imageHeader ? false : true }>Xóa ảnh</MenuItem>
+                                    <MenuItem disabled={ user.imageHeader ? false : true }>Xóa ảnh</MenuItem>
                                 </Menu>
                             </Box>
                         </Box>
@@ -428,7 +426,7 @@ const DocumentPage = ({ user }) => {
                                 }
                             }}
                         >
-                            { avatarURL || user.avatar !== '' ? 
+                            { user.avatar !== '' ? 
                                 <Box>
                                     <img style={{ 
                                         height: '96px',
@@ -438,7 +436,7 @@ const DocumentPage = ({ user }) => {
                                         objectFit: 'cover',
                                         verticalAlign: 'top'
                                     }}
-                                    src={avatarURL || user.avatar}
+                                    src={`${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}`}
                                     ></img>
                                 </Box> 
                                 : 

@@ -51,7 +51,7 @@ const MyTabItem = ({ notLine = false, myStyle, myStyleChild, typeWrapper = 'Box'
                 },
                 ...myStyle
             }}
-            onClick={setActive}
+            onClick={ setActive }
         >
             <Typography sx={{
                 width: '100%',

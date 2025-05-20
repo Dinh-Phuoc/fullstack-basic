@@ -17,9 +17,10 @@ import AccountOptionPage from './ProFilesDetailPages/AccountOptionPage'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSelector } from '~/redux/selector'
 import { logoutThunk, setUserInfoThunk } from '~/redux/slice/userSlice'
+import { API_ROOT } from '~/utils/constant'
 
 export default function Profile() {
-    const { user, pending } = useSelector(userSelector)
+    const { data: user, pending } = useSelector(userSelector)
     const dispatch = useDispatch()
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [anchorEl, setAnchorEl] = useState(null)
@@ -272,7 +273,9 @@ export default function Profile() {
                                     <Avatar 
                                         sx={{ width: 24, height: 24 }} 
                                         alt='Your Avatar'
-                                        src= {user ? user.avatar : 'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'
+                                        src= { user.avatar !== '' ?
+                                            `${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}` : 
+                                            'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'
                                         }/>
                                 </IconButton>
                             </Tooltip>
@@ -332,7 +335,9 @@ export default function Profile() {
                                     <Avatar 
                                         sx={{ '&.MuiAvatar-root': { width: 30, height: 30 } }} 
                                         alt='Your Avatar'
-                                        src= {user ? user.avatar : 'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'}
+                                        src= { user.avatar !== '' ? 
+                                            `${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}` : 
+                                            'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'}
                                     />
                                     <Box 
                                         sx={{ 
@@ -433,7 +438,7 @@ export default function Profile() {
                     sx={{ 
                         backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white'
                     }}>
-                    <MyTabPanel value={0}><DocumentPage user={user}/></MyTabPanel>
+                    <MyTabPanel value={0}><DocumentPage/></MyTabPanel>
                     <MyTabPanel value={1}><EmailPage/></MyTabPanel>
                     <MyTabPanel value={2}><ChangePasswordPage/></MyTabPanel>
                     <MyTabPanel value={3}><PrivatePage/></MyTabPanel>

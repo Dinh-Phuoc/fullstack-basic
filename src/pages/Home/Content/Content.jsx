@@ -3,28 +3,10 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
-import CircularProgress from '@mui/material/CircularProgress'
 
-// My import
+// MUI Icon
 import { Tooltip } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { userSelector } from '~/redux/selector'
-const AccountOptionPage = () => {
-    const { data: user } = useSelector(userSelector)
-
-    if (!user) {
-        return (<Box sx={{ 
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            width: '100vw',
-            gap: 2
-        }}>
-            <CircularProgress/>
-        </Box>)
-    }
-
+const Content = () => {
     return (
         <Box 
             sx={{
@@ -40,16 +22,19 @@ const AccountOptionPage = () => {
                 paddingBottom: '32px'
             }}
         >
+            {/* Header Document section */}
             <Box>
-                <Typography variant='h6' sx={{ m: '12px 0' }}>Tùy chọn tài khoản</Typography>
+                <Typography variant='h6' sx={{ m: '12px 0' }}>Quyền riêng tư</Typography>
                 <Typography sx={{ m: '12px 0' }}>
-                    Kiểm soát cài đặt liên quan đến tài khoản của bạn.
+                    Vì quyền riêng tư của bạn rất quan trọng đối với chúng tôi nên chúng tôi minh bạch trong việc thu thập, sử dụng và chia sẻ thông tin về bạn.
                 </Typography>
             </Box>
 
-            <Typography sx={{ m: '12px 0 12px' }} variant='subtitle2'>Xóa tài khoản</Typography>
+            <Typography sx={{ m: '12px 0 12px' }} variant='subtitle2'>Tùy chọn cookie</Typography>
+            {/* Introduction */}
 
             <Paper sx={{ padding: '12px' }}>
+                {/* Full Name */}
                 <Box 
                     sx={{ 
                         display: 'flex', 
@@ -61,7 +46,11 @@ const AccountOptionPage = () => {
                 >
                     <Box sx={{ position: 'relative' }}>
                         <Typography sx={{ m: '12px 0' }}>
-                        Khi xóa tài khoản, bạn sẽ mất quyền truy cập vào các dịch vụ trên tài khoản Sariii nè! và chúng tôi sẽ xóa vĩnh viễn dữ liệu cá nhân của bạn. Bạn có thể hủy hành động xóa trong vòng 14 ngày.                     
+                            Khi bạn truy cập sản phẩm của Sariii nè!, sản phẩm đó có thể lưu trữ hoặc truy xuất thông tin từ trình duyệt của bạn, 
+                            chủ yếu dưới dạng cookie. Thông tin này có thể là về bạn, tùy chọn hoặc thiết bị của bạn và chủ yếu dùng để giúp cho 
+                            trang web hoạt động như bạn mong đợi. Thông tin này thường không chỉ đích danh bạn, nhưng sẽ cung cấp cho bạn trải 
+                            nghiệm web phù hợp hơn. Chúng tôi tôn trọng quyền riêng tư của bạn. Vì vậy, bạn có thể chọn loại cookie mà bạn cho phép. 
+                            Thông báo Cookie và Theo dõi của Sariii nè!                        
                         </Typography>
                         <Tooltip title='Chức năng đang trong quá trình phát triền :(((('>
                             <Button 
@@ -72,7 +61,7 @@ const AccountOptionPage = () => {
                                     borderColor: theme => theme.palette.mode === 'dark' ? 
                                         theme.palette.primary.light : theme.palette.primary.main
                                 }}>
-                                Xóa tài khoản
+                                Mở tùy chọn cookie
                             </Button>
                         </Tooltip>
                     </Box>
@@ -82,4 +71,4 @@ const AccountOptionPage = () => {
     )
 }
 
-export default AccountOptionPage
+export default Content

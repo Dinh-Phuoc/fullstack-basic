@@ -3,7 +3,7 @@ import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useRef, useState } from 'react'
-import { loginThunk, logoutThunk } from '~/redux/slice/userSlice'
+import { loginThunk } from '~/redux/slice/userSlice'
 import { registerApi } from '~/apis'
 import MyTabs from '~/components/Tabs/store/MyTabs'
 import MyTabList from '~/components/Tabs/MyTabList'
@@ -17,8 +17,6 @@ import bgImageFormLoginLightMD from '~/assets/loginformlight.jpg'
 import bgImageFormLoginDarkMD from '~/assets/loginformdark.jpg'
 export default function Auth() {
     const dispatch = useDispatch()
-    const [anchorEl, setAnchorEl] = useState(null)
-    const [anchorModal, setAnchorModal] = useState(null)
     const [openChildModal, setOpenChildModal] = useState(false)
     const [childModalLoginProcessing, setChildModalLoginProcessing] = useState(false)
     const [messageRigister, setMessageRegister] = useState('')
@@ -35,7 +33,6 @@ export default function Auth() {
             .unwrap()
             .then(() => {
                 handleChildModalLoginProcessingClose()
-                handleModalClose()
             })
             .catch(() => {
                 handleChildModalOpen()
@@ -52,9 +49,6 @@ export default function Auth() {
         setMessageRegister(message)
     }
     
-    const handleModalClose = () => {
-        setAnchorModal(null)
-    }
 
     const handleSetTitle = () => {
         titleForm === 'register' ? handleTitleLoginForm() : handleTitleRegisterForm()
@@ -110,6 +104,7 @@ export default function Auth() {
             <Box sx={{ 
                 backgroundColor: '#ffeef8',
                 width: '100%',
+                height: '100%',
                 display: 'flex',
                 justifyContent: 'center'
             }}>

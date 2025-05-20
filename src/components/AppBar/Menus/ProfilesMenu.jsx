@@ -29,7 +29,7 @@ import { userSelector } from '~/redux/selector'
 import { loginThunk, logoutThunk, setUserInfoThunk } from '~/redux/slice/userSlice'
 
 export default function Profiles() {
-    const { user } = useSelector(userSelector)
+    const { data: user } = useSelector(userSelector)
     const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorModal, setAnchorModal] = useState(null)

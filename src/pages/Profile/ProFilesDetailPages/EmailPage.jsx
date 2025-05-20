@@ -11,17 +11,17 @@ import Check from '@mui/icons-material/Check'
 import Close from '@mui/icons-material/Close'
 
 // React
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 // My import
-import { getInforUserApi, updateProfileApi } from '~/apis'
+import { updateProfileApi } from '~/apis'
 import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
+import { userSelector } from '~/redux/selector'
 const EmailPage = () => {
-    const [user, setUser] = useState(null)
-    const [token] = useState(localStorage.getItem('token'))
-
+    const { data: user } = useSelector(userSelector)
     // States of personal information
-    const [email, setEmail] = useState(null)
+    const [email, setEmail] = useState(user.email)
     const [prevValue, setPreValue] = useState('Prev')
     const [emailFocus, setEmailFocus] = useState(false)
     const [invalidMessage, setInvalidMessage] = useState('')
@@ -53,13 +53,6 @@ const EmailPage = () => {
                 theme.palette.primary.main
         }
     }
-
-    useEffect(() => {
-        token && getInforUserApi().then((userInfo) => {
-            setEmail(userInfo.email)
-            setUser(userInfo)
-        })
-    }, [token])
 
     if (!user) {
         return (<Box sx={{ 

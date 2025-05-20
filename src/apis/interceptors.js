@@ -8,13 +8,6 @@ const instance = axios.create({
     }
 })
 
-instance.interceptors.request.use(
-    request => {
-        return request
-    },
-    async error => Promise.reject(error)
-)
-
 let isRefreshing = false
 let failedQueue = []
 
@@ -38,7 +31,7 @@ instance.interceptors.response.use(
     async error => {
         const originalRequest = error.config
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if ((error.response?.status === 401 || error.response?.status === 403 ) && !originalRequest._retry) {
             if (isRefreshing) {
                 localStorage.setItem('currentPath', window.location.pathname)
                 window.location.href = '/auth'

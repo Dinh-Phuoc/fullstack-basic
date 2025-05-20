@@ -50,12 +50,8 @@ export const loginApi = async (infoAccount) => {
 }
 
 export const refreshApi = async () => {
-    try {
-        const response = await instance.post(`${AUTH_ROOT}/auth/refresh`)
-        return response.data
-    } catch (error) {
-        console.log(error)
-    }
+    const response = await instance.post(`${AUTH_ROOT}/auth/refresh`)
+    return response.data
 }
 
 // Call Api for Logout
@@ -76,10 +72,9 @@ export const getInforUserApi = async () => {
     return response.data
 }
 // Call Api for upload Image
-export const uploadImageHeaderApi = async (file, userId) => {
-    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/upload/image-header/${userId}`, file, {
+export const uploadImageHeaderApi = async (file) => {
+    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/upload/image-header`, file, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'multipart/form-data',
             withCredentials: true
         }
@@ -87,10 +82,9 @@ export const uploadImageHeaderApi = async (file, userId) => {
     return response.data
 }
 
-export const uploadAvatarApi = async (file, userId) => {
-    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/upload/avatar/${userId}`, file, {
+export const uploadAvatarApi = async (file) => {
+    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/upload/avatar`, file, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'multipart/form-data',
             withCredentials: true
         }

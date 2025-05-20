@@ -7,14 +7,15 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 
 // Another
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 // My import
-import { getInforUserApi, updatePasswordApi } from '~/apis'
+import { updatePasswordApi } from '~/apis'
+import { useSelector } from 'react-redux'
+import { userSelector } from '~/redux/selector'
 const ChangePasswordPage = () => {
-    const [user, setUser] = useState(null)
-    const [token] = useState(localStorage.getItem('token'))
+    const { data: user } = useSelector(userSelector)
 
     const [presentPassword, setPresentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -52,12 +53,6 @@ const ChangePasswordPage = () => {
             color: 'red'
         } 
     }
-
-    useEffect(() => {
-        token && getInforUserApi().then((userInfo) => {
-            setUser(userInfo)
-        })
-    }, [token])
 
     if (!user) {
         return (<Box sx={{ 
