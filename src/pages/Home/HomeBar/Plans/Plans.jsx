@@ -54,6 +54,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                     right: 0,
                     top: '58px',
                     backgroundColor: 'white',
+                    boxShadow: 'rgba(9, 30, 66, 0.15) 0px 0.5rem 1rem 0px inset',
                     animation: openPlansMenu ? `${fadeIn} 0.2s ease forwards` : `${fadeOut} 0.2s ease forwards`,
                     display: 'flex',
                     transformOrigin: 'top'
@@ -88,7 +89,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -124,7 +125,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -160,7 +161,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -196,7 +197,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -232,7 +233,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -268,7 +269,7 @@ export default function Plans({ handleClose, openPlansMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',

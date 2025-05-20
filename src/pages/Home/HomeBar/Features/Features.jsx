@@ -1,4 +1,4 @@
-import { BoltOutlined, IntegrationInstructionsOutlined, LibraryBooksOutlined, Mail, PowerOutlined, ScheduleOutlined } from '@mui/icons-material'
+import { BoltOutlined, IntegrationInstructionsOutlined, LibraryBooksOutlined, MailOutline, PowerOutlined, ScheduleOutlined } from '@mui/icons-material'
 import { Box, Button, Divider, keyframes, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 
@@ -53,6 +53,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                     right: 0,
                     top: '58px',
                     backgroundColor: 'white',
+                    boxShadow: 'rgba(9, 30, 66, 0.15) 0px 0.5rem 1rem 0px inset',
                     animation: openFeaturesMenu ? `${fadeIn} 0.2s ease forwards` : `${fadeOut} 0.2s ease forwards`,
                     transformOrigin: 'top',
                     display: 'flex'
@@ -87,7 +88,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -101,7 +102,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                                 variant='h6'
                                 sx={{ fontSize: '1rem', display: 'flex', alignItems: 'center', mb: '8px' }}
                             >
-                                <Mail sx={{ mr: '12px' }}/> Inbox 
+                                <MailOutline sx={{ mr: '12px' }}/> Inbox 
                             </Typography>
                             <Typography
                                 sx={{ 
@@ -123,7 +124,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -159,7 +160,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -195,7 +196,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -231,7 +232,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',
@@ -267,7 +268,7 @@ export default function Features({ handleClose, openFeaturesMenu }) {
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
-                                width: '210px',
+                                width: '30%',
                                 padding: '16px',
                                 display: 'block',
                                 marginTop: '12px',

@@ -42,13 +42,23 @@ export default function HomeMenu() {
     }
 
     return (
-        <Box>
+        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <Box sx={{ display: 'flex', alignContent: 'center' }}>
-                <Button sx={{ color: 'white' }} name={'features'} onClick={toggleOpenMenu}>Features<KeyboardArrowDownOutlined/></Button>
-                <Button sx={{ color: 'white' }} name={'solutions'} onClick={toggleOpenMenu}>Solutions<KeyboardArrowDownOutlined/></Button>
-                <Button sx={{ color: 'white' }} name={'plans'} onClick={toggleOpenMenu}>Plans<KeyboardArrowDownOutlined/></Button>
-                <Button sx={{ color: 'white' }} name={'resources'} onClick={toggleOpenMenu}>Resources<KeyboardArrowDownOutlined/></Button>
-                <Link to='/pricing' style={{ textDecoration: 'none', color: 'white', alignContent: 'center' }}>Pricing</Link>
+                <Button sx={{ color: theme => theme.trelloCustom.myColor }} name={'features'} onClick={toggleOpenMenu}>Features<KeyboardArrowDownOutlined/></Button>
+                <Button sx={{ color: theme => theme.trelloCustom.myColor }} name={'solutions'} onClick={toggleOpenMenu}>Solutions<KeyboardArrowDownOutlined/></Button>
+                <Button sx={{ color: theme => theme.trelloCustom.myColor }} name={'plans'} onClick={toggleOpenMenu}>Plans<KeyboardArrowDownOutlined/></Button>
+                <Button sx={{ color: theme => theme.trelloCustom.myColor }} name={'resources'} onClick={toggleOpenMenu}>Resources<KeyboardArrowDownOutlined/></Button>
+                <Box 
+                    component={Link} 
+                    to='/pricing' 
+                    sx={{ 
+                        textDecoration: 'none', 
+                        color: theme => theme.trelloCustom.myColor, 
+                        alignContent: 'center' 
+                    }}
+                >
+                    Pricing
+                </Box>
             </Box>
             <Box>
                 {(activetab === 'features' || open.features) && 
