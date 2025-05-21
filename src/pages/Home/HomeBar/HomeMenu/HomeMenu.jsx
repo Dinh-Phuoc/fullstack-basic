@@ -1,10 +1,10 @@
 import { KeyboardArrowDownOutlined } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
 import { useState } from 'react'
-import Features from '../Features/Features'
-import Solutions from '../Solutions/Solutions'
-import Plans from '../Plans/Plans'
-import Resources from '../Resources/Resources'
+import Features from './Features/Features'
+import Solutions from './Solutions/Solutions'
+import Plans from './Plans/Plans'
+import Resources from './Resources/Resources'
 import { Link } from 'react-router-dom'
 
 export default function HomeMenu() {

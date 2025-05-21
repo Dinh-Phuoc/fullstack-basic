@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import HomeMenu from './HomeMenu/HomeMenu'
 import { Link } from 'react-router-dom'
-import HomeBarXS from './HomeBarXS'
+import HomeMenuXS from './HomeMenuXS/HomeMenuXS'
 
 export default function HomeBar() {
     const [scrolled, setScrolled] = useState(false)
@@ -45,7 +45,6 @@ export default function HomeBar() {
             ref={navbarRef}
         >
             <Box sx={{ display: 'flex', alignContent: 'center', gap: 1 }}>
-                <HomeBarXS/>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <SvgIcon 
                         component={TrelloIcon} 
@@ -55,7 +54,6 @@ export default function HomeBar() {
                     />
                     <Typography variant='span' 
                         sx={{ 
-                            display: { xs: 'none', sm: 'block' }, 
                             fontSize: '1.1rem', 
                             fontWeight: 'bold', 
                             minWidth: '80px', 
@@ -69,10 +67,13 @@ export default function HomeBar() {
 
             <HomeMenu/>
 
+            <HomeMenuXS/>
+            
             <Box
                 component={Link}
                 to='/auth' 
                 sx={{ 
+                    display: { xs: 'none', md: 'block' },
                     textDecoration: 'none', 
                     alignContent: 'center',
                     fontWeight: 600,
