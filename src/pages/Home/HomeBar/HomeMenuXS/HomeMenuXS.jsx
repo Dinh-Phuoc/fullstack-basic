@@ -1,13 +1,10 @@
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import MenuRounded from '@mui/icons-material/MenuRounded'
 import Drawer from '@mui/material/Drawer'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import Fade from '@mui/material/Fade'
 import Button from '@mui/material/Button'
-import CloseOutlined from '@mui/icons-material/CloseOutlined'
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -21,6 +18,14 @@ export default function HomeMenuXS() {
 
     const toggleDrawer = () => {
         setOpenDrawerMenu(!openDrawerMenu)
+    }
+
+    const barStyle = {
+        width: '35px',
+        height: '4px',
+        backgroundColor: theme => theme.trelloCustom.myColor,
+        margin: '6px 0',
+        transition: '0.4s'
     }
     return (
         <>
@@ -38,16 +43,28 @@ export default function HomeMenuXS() {
                     height: '35px',
                     '&:hover': {
                         bgcolor: 'white'
+                    },
+                    '& .bar1': {
+                        transform: openDrawerMenu ? 'translate(0, 11px) rotate(-45deg)' : 'none'
+                    },
+                    '& .bar2': {
+                        opacity: openDrawerMenu ? 0 : 1
+                    },
+                    '& .bar3': {
+                        transform: openDrawerMenu ? 'translate(0, -11px) rotate(45deg)' : 'none'
                     }
                 }}
             > 
-                <Fade in={!openDrawerMenu} timeout={500} unmountOnExit>
+                {/* <Fade in={!openDrawerMenu} timeout={500} unmountOnExit>
                     <MenuRounded fontSize="large" />
                 </Fade>
                 <Fade in={openDrawerMenu} timeout={500} unmountOnExit>
                     <CloseOutlined fontSize="large" sx={{ position: 'absolute', top: 0, right: 0 }} />
-                </Fade>
+                </Fade> */}
 
+                <Box sx={barStyle} className={'bar1'}></Box>
+                <Box sx={barStyle} className={'bar2'}></Box>
+                <Box sx={barStyle} className={'bar3'}></Box>
             </Button>
 
             <Drawer

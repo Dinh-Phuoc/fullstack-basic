@@ -77,86 +77,136 @@ export default function Introduction() {
                 </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', width: '100%', flexWrap: 'wrap' }}>
-                <Box 
-                    sx={{ 
-                        width: { xs: '100%', md: '50%' }, 
-                        bgcolor: '#f3f3f5', 
-                        textAlign: 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        p: '128px 18px 18px'
-                    }}
-                >
-                    <Typography variant='h4' sx={{ mb: '12px' }}>
-                        Capture, organize, and tackle your to-dos from anywhere.
-                    </Typography>
-                    <Typography sx={{ mb: '12px' }}>
-                        Escape the clutter and chaos—unleash your productivity with Trello.
-                    </Typography>
-                    <OutlinedInput 
-                        sx={{ 
-                            mb: '12px',
-                            '& .MuiOutlinedInput-input': {
-                                p: '10px 14px'
-                            }
-                        }} 
-                        type='email' 
-                        placeholder='Email'
-                    />
-
-                    <Button 
-                        sx={{ mb: '12px', bgcolor: '#ffb1b3', color: 'white' }}
-                        variant='outlined'
-                    >
-                            Sign up - it&apos;s free!
-                    </Button>
+            <Box 
+                sx={{ 
+                    overflow: 'hidden',
+                    bgcolor: '#f3f3f5'
+                }}>
+                <Box sx={{
+                    display: 'flex', 
+                    flexWrap: 'wrap',
+                    margin: '0 50px'
+                }}>
                     <Box 
                         sx={{ 
+                            width: { xs: '100%', md: '50%' }, 
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: { xs: 'center', md: 'flex-start' }
-                        }}>
-                        
-                        <Typography sx={{ mb: '12px' }}>
-                            By entering my email, I acknowledge the&nbsp; 
-                            <Box component={Link} sx={styleLink}>
-                                Atlassian Privacy Policy
-                            </Box>
-                        </Typography>
-
-                        <Button
-                            onClick={handleOpen} 
+                            p: '128px 18px 18px'
+                        }}
+                    >
+                        <Box 
                             sx={{ 
-                                ...styleLink, 
-                                p: 0,
-                                width: '130px', 
-                                ml: 0,
-                                justifyContent: { xs: 'center', md: 'flex-start' },
-                                '&:hover .watchIcon': 
-                                { transform: 'translate3d(3px, 0, 0)' } 
-                            }}>
-                            Watch video 
-                            <PlayCircleFilledOutlined 
-                                className='watchIcon'
+                                display: 'block',
+                                textAlign: { xs: 'center', md: 'start' },
+                                marginX: { xs: '-55px', md: '0' }
+                            }}
+                        >
+                            <Typography variant='h3' sx={{ mb: '12px', fontWeight: 500 }}>
+                                Capture, organize, and tackle your to-dos from anywhere.
+                            </Typography>
+                            <Typography sx={{ mb: '12px' }}>
+                                Escape the clutter and chaos—unleash your productivity with Trello.
+                            </Typography>
+                        </Box>
+    
+                        <Box 
+                            sx={{ 
+                                display: 'flex', 
+                                justifyContent: { xs: 'center', md: 'flex-start' } 
+                            }}
+                        >
+                            <OutlinedInput 
                                 sx={{ 
-                                    ml: '6px',
-                                    transition: 'transform 0.3s'
+                                    mb: '12px',
+                                    mr: '12px',
+                                    '& .MuiOutlinedInput-input': {
+                                        p: '10px 14px'
+                                    },
+                                    display: { xs: 'none', md: 'block' } 
                                 }}
+                                type='email' 
+                                placeholder='Email'
                             />
-                        </Button>
+        
+                            <Button 
+                                sx={{ 
+                                    mb: '12px', 
+                                    bgcolor: '#ffb1b3', 
+                                    color: 'white', 
+                                    height: '43px',
+                                    lineHeight: '1.4',
+                                    '&:hover': {
+                                        bgcolor: '#f0777acc',
+                                        border: '2px solid',
+                                        borderColor: '#f0777acc'
+                                    }
+                                }}
+                                variant='outlined'
+                            >
+                                    Sign up - it&apos;s free!
+                            </Button>
+                        </Box>
+    
+                        <Box 
+                            sx={{ 
+                                display: 'block',
+                                textAlign: { xs: 'center', md: 'start' } 
+                            }}>
+                            
+                            <Typography sx={{ mb: '12px' }}>
+                                By entering my email, I acknowledge the&nbsp; 
+                                <Box component={Link} sx={styleLink}>
+                                    Atlassian Privacy Policy
+                                </Box>
+                            </Typography>
+    
+                            <Button
+                                onClick={handleOpen} 
+                                sx={{ 
+                                    ...styleLink, 
+                                    p: 0,
+                                    width: '130px', 
+                                    ml: 0,
+                                    justifyContent: { xs: 'center', md: 'flex-start' },
+                                    '&:hover .watchIcon': 
+                                    { transform: 'translate3d(3px, 0, 0)' } 
+                                }}>
+                                Watch video 
+                                <PlayCircleFilledOutlined 
+                                    className='watchIcon'
+                                    sx={{ 
+                                        ml: '6px',
+                                        transition: 'transform 0.3s'
+                                    }}
+                                />
+                            </Button>
+                        </Box>
                     </Box>
-                </Box>
-
-                <Box sx={{ width: { xs: '100%', md: '50%' }, bgcolor: '#f3f3f5' }}>
-                    <video ref={videoRef} width={'100%'} height={'100%'} muted>
-                        <source 
-                            type='video/mp4' 
-                            src='https://videos.ctfassets.net/rz1oowkt5gyp/4AJBdHGUKUIDo7Po3f2kWJ/3923727607407f50f70ccf34ab3e9d90/updatedhero-mobile-final.mp4'
-                        />
-                    </video>
-                </Box>
+    
+                    <Box 
+                        sx={{ 
+                            position: 'relative',
+                            left: '16.6666%',
+                            width: { xs: '100%', md: '58.3333%' }, 
+                            pt: '8rem',
+                            flex: '0 0 auto',
+                            marginLeft: '-16.6666%'
+                        }}
+                    >
+                        <video 
+                            style={{
+                                width: '100%',
+                                height: 'auto'
+                            }} 
+                            ref={videoRef} muted>
+                            <source 
+                                type='video/mp4' 
+                                src='https://videos.ctfassets.net/rz1oowkt5gyp/4AJBdHGUKUIDo7Po3f2kWJ/3923727607407f50f70ccf34ab3e9d90/updatedhero-mobile-final.mp4'
+                            />
+                        </video>
+                    </Box>
+                </Box >
             </Box>
 
             <Modal
