@@ -2,7 +2,7 @@ import { Box, CircularProgress, Modal, SvgIcon, Typography } from '@mui/material
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { loginThunk } from '~/redux/slice/userSlice'
 import { registerApi } from '~/apis'
 import MyTabs from '~/components/Tabs/store/MyTabs'
@@ -18,6 +18,7 @@ import bgImageFormLoginDarkMD from '~/assets/loginformdark.jpg'
 export default function Auth() {
     const dispatch = useDispatch()
     const [openChildModal, setOpenChildModal] = useState(false)
+    const [activeUnderLine, setActiveUnderLine] = useState({ login: true, register: false })
     const [childModalLoginProcessing, setChildModalLoginProcessing] = useState(false)
     const [messageRigister, setMessageRegister] = useState('')
     const [openChildModalRegistering, setOpenChildModalRegistering] = useState(false)
@@ -25,6 +26,14 @@ export default function Auth() {
     const [titleForm, setTitleForm] = useState('login')
     const childrenLoginRef = useRef()
     const childrenRegisterRef = useRef()
+
+    useEffect(() => {
+        const register = !!localStorage.getItem('register')
+        setActiveUnderLine({
+            login: register ? false : true,
+            register
+        })
+    }, [])
 
     const handleLogin = async() => {
         const data = childrenLoginRef.current?.getChildrenRef()
@@ -44,6 +53,9 @@ export default function Auth() {
         const data = childrenRegisterRef.current?.getChildrenValue()
         handleChildModalRegisterProcessingOpen()
         const message = await registerApi(data)
+        localStorage.getItem('email') && localStorage.removeItem('email')
+        localStorage.getItem('register') && localStorage.removeItem('register')
+        setActiveUnderLine({ login: true, register: false })
         handleChildModalRegisterProcessingClose()
         handleChildModalRegisteringOpen()
         setMessageRegister(message)
@@ -146,7 +158,7 @@ export default function Auth() {
                                         myStyleChild={{ textTransform: 'upperCase' }} 
                                         handleTitleLoginForm={handleTitleLoginForm} 
                                         value={0} 
-                                        active='true'>
+                                        active={activeUnderLine.login}>
                                             Đăng nhập
                                     </MyTabItem>
 
@@ -154,7 +166,8 @@ export default function Auth() {
                                         onClick={handleSetTitle}
                                         myStyleChild={{ textTransform: 'upperCase' }} 
                                         handleTitleRegisterForm={handleTitleRegisterForm} 
-                                        value={1}>
+                                        value={1}
+                                        active={activeUnderLine.register}>
                                         Đăng ký
                                     </MyTabItem>
                                 </MyTabList>

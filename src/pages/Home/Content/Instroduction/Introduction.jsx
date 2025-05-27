@@ -1,12 +1,17 @@
 // MUI Component
-import { PlayCircleFilledOutlined } from '@mui/icons-material'
-import { Button, Modal, OutlinedInput, Typography } from '@mui/material'
+import { ErrorOutline, PlayCircleFilledOutlined } from '@mui/icons-material'
+import { Button, Modal, TextField, Tooltip, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 export default function Introduction() {
     const [open, setOpen] = useState(false)
+    const [emailValue, setEmailValue] = useState('')
+    const [openTooltip, setOpenTooltip] = useState(false)
+    const emailInputRef = useRef()
     const videoRef = useRef()
+    const navigate = useNavigate()
+
     useEffect(() => {
         const elVideo = videoRef.current
 
@@ -52,9 +57,41 @@ export default function Introduction() {
             width: '100%'
         }
     }
+    
+    const handleSendEmailToAuthForm = () => {
+        const display = emailInputRef.current.offsetParent
+        if (emailValue === '' && !display) {
+            localStorage.setItem('register', 'true')
+            navigate('/auth')
+            return
+        }
+
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (!pattern.test(emailValue)) {
+            handleTooltipOpen()
+            return
+        }
+        localStorage.setItem('email', emailValue)
+        localStorage.setItem('register', 'true')
+        navigate('/auth')
+    }
+
+    const handleSetEmailValue = (e) => {
+        setEmailValue(e.target.value)
+        handleTooltipClose()
+    }
 
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
+
+    const handleTooltipClose = () => {
+        setOpenTooltip(false)
+    }
+
+    const handleTooltipOpen = () => {
+        setOpenTooltip(true)
+    }
+
     return (
         <>
             <Box 
@@ -116,19 +153,56 @@ export default function Introduction() {
                                 justifyContent: { xs: 'center', md: 'flex-start' } 
                             }}
                         >
-                            <OutlinedInput 
-                                sx={{ 
-                                    mb: '12px',
-                                    mr: '12px',
-                                    '& .MuiOutlinedInput-input': {
-                                        p: '10px 14px'
+                            <Tooltip
+                                onClose={handleTooltipClose}
+                                open={openTooltip}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
+                                arrow
+                                title={<Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <ErrorOutline fontSize='small' /> The email address is invalid
+                                </Typography>} 
+                                slotProps={{
+                                    popper: {
+                                        disablePortal: true,
+                                        sx: {
+                                            boxShadow: ''
+                                        }
                                     },
-                                    display: { xs: 'none', md: 'block' } 
+                                    tooltip: {
+                                        sx: {
+                                            p: '12px'
+                                        }
+                                    },
+                                    arrow: {
+                                        sx: {
+                                            color: 'white'
+                                        }
+                                    }
                                 }}
-                                type='email' 
-                                placeholder='Email'
-                            />
-        
+                            >
+                                <TextField 
+                                    inputRef={emailInputRef}
+                                    sx={{ 
+                                        mb: '12px',
+                                        mr: '12px',
+                                        display: { xs: 'none', md: 'block' },
+                                        '& .MuiOutlinedInput-input': {
+                                            p: '10px 14px'
+                                        }
+                                    }}
+                                    type='email' 
+                                    placeholder='Email'
+                                    value={emailValue}
+                                    aria-describedby="my-helper-text" 
+                                    onChange={handleSetEmailValue}
+                                    onKeyDown={(e) => {
+                                        if (!(e.key === 'Enter')) return
+                                        handleSendEmailToAuthForm()
+                                    }}
+                                />
+                            </Tooltip>
                             <Button 
                                 sx={{ 
                                     mb: '12px', 
@@ -142,6 +216,7 @@ export default function Introduction() {
                                         borderColor: '#f0777acc'
                                     }
                                 }}
+                                onClick={handleSendEmailToAuthForm}
                                 variant='outlined'
                             >
                                     Sign up - it&apos;s free!

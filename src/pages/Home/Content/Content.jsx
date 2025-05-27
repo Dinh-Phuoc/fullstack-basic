@@ -4,6 +4,8 @@ import Box from '@mui/material/Box'
 import Introduction from './Instroduction/Introduction'
 import Review from './Review/Review'
 import Convenience from './Convenience/Convenience'
+import MoreInfo from './MoreInfo/MoreInfo'
+import Story from './Story/Story'
 const Content = () => {
     
     return (
@@ -11,6 +13,8 @@ const Content = () => {
             <Introduction/>
             <Review/>
             <Convenience/>
+            <MoreInfo/>
+            <Story/>
         </Box>
     )
 }

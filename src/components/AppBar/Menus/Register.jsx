@@ -1,6 +1,6 @@
 import { Facebook, Google } from '@mui/icons-material'
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
-import { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 
 const Register = forwardRef(( { onClick, ...props }, ref ) => { 
     const [userNameValue, setUserNameValue] = useState('')
@@ -9,11 +9,16 @@ const Register = forwardRef(( { onClick, ...props }, ref ) => {
     const [retypePasswordValue, setRetypePasswordValue] = useState('')
     const [messageError, setMessageError] = useState({ user: '', password: '', retype: '', email: '' })
     const [required, setRequired] = useState({ user: true, password: true, retype: true, email: true })
-
     const passProps = {
         onClick,
         ...props
     }
+    useEffect(() => {
+        if (!localStorage.getItem('email')) return
+        setEmailValue(localStorage.getItem('email'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     useImperativeHandle(ref, () => ({
         getChildrenValue: () => ({
             userName: userNameValue,

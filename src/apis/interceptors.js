@@ -23,7 +23,7 @@ const processQueue = (error, token = null) => {
 instance.interceptors.response.use(
     response => {
         if (response.config.url.includes('auth/login')) {
-            const path = localStorage.getItem('currentPath') || '/'
+            const path = '/trello' || '/'
             window.location.href = path
         }
         return response

@@ -89,11 +89,13 @@ export default function Review() {
             border: '3px solid'
         },
         transition: 'transform 0.3s',
-        '&:hover': {
-            transform: 'translate(-5px, -5px)',
-            '&:after': {
-                visibility: 'visible',
-                color: '#ff9a9c40'
+        '@media (hover: hover) and (pointer: fine)': {
+            '&:hover': {
+                transform: 'translate(-5px, -5px)',
+                '&:after': {
+                    visibility: 'visible',
+                    color: '#ff9a9c40'
+                }
             }
         }
     }
@@ -114,41 +116,36 @@ export default function Review() {
     const hanldeActiveCard = (id) => () => {
         const elImage = scrollImageRef.current
         const elCard = scrollCardRef.current
+
         setCardActive({
             1: false, 2: false, 3: false,
             [id]: true
         })
 
+        const handleScrollTo = (...els) => {
+            els.forEach(element => {
+                element?.el?.scrollTo({
+                    left: element.distance,
+                    behavior: 'smooth'
+                })
+            })
+        }
+
         if (id === 1) {
-            elImage.scrollTo({
-                left: 0,
-                behavior: 'smooth'
-            })
-
-            elCard.scrollTo({
-                left: 0,
-                behavior: 'smooth'
-            })
+            handleScrollTo(
+                { el: elImage, distance: 0 }, 
+                { el: elCard, distance: 0 }
+            )
         } else if (id === 2) {
-            elImage.scrollTo({
-                left: elImage.clientWidth,
-                behavior: 'smooth'
-            })
-
-            elCard.scrollTo({
-                left: elCard.clientWidth,
-                behavior: 'smooth'
-            })
-        } else {
-            elImage.scrollTo({
-                left: elImage.scrollWidth - elImage.clientWidth,
-                behavior: 'smooth'
-            })
-
-            elCard.scrollTo({
-                left: elCard.scrollWidth - elCard.clientWidth,
-                behavior: 'smooth'
-            })
+            handleScrollTo(
+                { el: elImage, distance: elImage.clientWidth },
+                { el: elCard, distance: elCard.clientWidth }
+            )
+        } else if (id === 3) {
+            handleScrollTo(
+                { el: elImage, distance: elImage.scrollWidth - elImage.clientWidth },
+                { el: elCard, distance: elCard.scrollWidth - elCard.clientWidth }
+            )
         }
     }
 
@@ -234,12 +231,7 @@ export default function Review() {
                 <Typography sx={{ mb: '12px' }}>TRELLO 101</Typography>
                 <Typography variant='h4' sx={{ mb: '12px', fontWeight: 500 }}>Your productivity powerhouse</Typography>
                 <Typography 
-                    sx={{
-                        '&.MuiTypography-root.MuiTypography-body1': {
-                            fontSize: '1.2rem'
-                        }
-                    }}
-                >
+                    sx={{ '&.MuiTypography-root.MuiTypography-body1': { fontSize: '1.2rem' } }}>
                     Stay organized and efficient with Inbox, Boards, and Planner. Every to-do, idea, or responsibility—no matter how small—finds its place, keeping you at the top of your game.
                 </Typography>
             </Box>
@@ -319,6 +311,7 @@ export default function Review() {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 width: '100%',
+                                gap: 1,
                                 '&::-webkit-scrollbar': {
                                     display: 'none'
                                 }
@@ -352,7 +345,9 @@ export default function Review() {
                         display: { xs: 'block', md: 'none' },
                         overflow: 'hidden',
                         mt: '24px',
-                        width: '100%'
+                        width: '100%',
+                        cursor:  isDragging ? 'grabbing' : 'grab'
+
                     }}>
                     <Box 
                         style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
@@ -361,21 +356,24 @@ export default function Review() {
                             display: 'flex',
                             flexDirection: 'row',
                             width: '100%',
-                            gap: 2,
+                            gap: 1,
                             '&::-webkit-scrollbar': {
                                 display: 'none'
                             }
                         }}
                         ref={scrollCardRef}
+                        onMouseMove={handleMove}
+                        onMouseDown={handleDown}
+                        onMouseUp={handleUp}
+                        onMouseLeave={handleUp}
                     >
                         { card.map(card => (
                             <Paper 
-                                key={card.id} 
-                                onClick={hanldeActiveCard(card.id)}
+                                data-id={card.id}
+                                key={card.id}
                                 sx={{
                                     width: '100%',
                                     p: '12px',
-                                    mb: '24px',
                                     position: 'relative',
                                     flexShrink: 0,
                                     '&:after': {
@@ -393,6 +391,7 @@ export default function Review() {
                                 elevation={cardActive[card.id] ? 4 : 0 }
                             >
                                 <Typography 
+                                    data-id={card.id}
                                     sx={{ 
                                         fontWeight: 600,
                                         '&.MuiTypography-root.MuiTypography-body1': {
@@ -418,7 +417,8 @@ export default function Review() {
                     sx={{ 
                         display: { xs: 'flex', md: 'none' },
                         justifyContent: 'center',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        mt: '24px'
                     }}
                 >
                     { card.map(card => (

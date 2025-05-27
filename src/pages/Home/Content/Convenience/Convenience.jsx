@@ -4,10 +4,9 @@ import { CalendarIcon, FairyIcon } from '~/assets/icon'
 
 export default function Convenience() {
     const styleBox = { 
-        width: { xs: '80%', md: '70%' }, 
+        width: { xs: '90%', md: '90%' }, 
         display: 'flex', 
         flexWrap: 'wrap',
-        alignItems: 'center',
         padding: { xs: '12px', md: '32px' },
         bgcolor: 'white',
         borderRadius: '10px',
@@ -16,31 +15,27 @@ export default function Convenience() {
 
     const styleBoxDiscription = {
         container: { 
-            width: { xs: '100%', md: '60%' }, 
-            display: 'flex',
-            pl: '32px',
-            mt: { xs: '32px', md: 0 },
-            flexWrap: 'wrap'
+            width: { xs: '100%', md: '50%' }, 
+            p: { xs: '16px', sm: '32px', md: '0 0 0 32px' },
+            mt: { xs: '32px', md: 0 }
         },
         title: { 
-            mb: '12px', 
             display: 'flex',
             alignItems: 'center',
+            fontWeight: 600,
             '&.MuiTypography-body1': {
-                fontSize: '1rem' 
+                fontSize: '1.3rem' 
             }
         },
         desc: {
-            display: 'flex',
-            alignItems: 'center', 
             '&.MuiTypography-body1': {
-                fontSize: '1.1rem'
+                fontSize: '1.5rem'
             } 
         }
     }
 
     const styleImage = {
-        width: '100%',
+        width: { xs: '100%', md: '50%' },
         aspectRatio: '16 / 9'
     }
 
@@ -65,23 +60,24 @@ export default function Convenience() {
                     color: 'white',
                     textAlign: 'center'
                 }}>
-                <Typography variant='h6' sx={{ fontWeight: '600', fontSize: '2rem' }}>Từ thư đến hành động</Typography>
+                <Typography variant='h6' sx={{ fontWeight: '600', fontSize: '2rem' }}>From message to action</Typography>
                 <Typography 
                     sx={{ 
                         textAlign: 'center', 
                         '&.MuiTypography-body1': {
-                            fontSize: '1.2rem'
+                            fontSize: '1.5rem'
                         }
                     }}>
-                    Nhanh chóng biến thông tin liên lạc từ các ứng dụng bạn yêu thích thành việc cần làm, sắp xếp tất cả các cuộc thảo luận và nhiệm vụ của bạn ở một nơi.
+                    Quickly turn communication from your favorite apps into to-dos, keeping all your discussions and tasks organized in one place.
                 </Typography>
             </Box>
-
+            
+            {/* Email Box */}
             <Box 
                 sx={styleBox}>
                 <Box 
                     component='img'
-                    style={styleImage} 
+                    sx={styleImage} 
                     src="https://images.ctfassets.net/rz1oowkt5gyp/2QvggeQ9nzUdaDnhJCSUwA/3ef97067e1aa3d0a5e6a04b5780fd751/email-todos.png?w=1110&fm=webp" alt="" 
                 />
                 <Box 
@@ -89,18 +85,17 @@ export default function Convenience() {
                     <Typography 
                         sx={styleBoxDiscription.title}>
                         <FairyIcon style={styleIcon}/>
-                        ĐIỀU KỲ DIỆU VỚI EMAIL
+                        EMAIL MAGIC
                     </Typography>
 
                     <Typography
                         sx={styleBoxDiscription.desc}>
-                        Dễ dàng biến email thành việc cần làm! Chỉ cần chuyển tiếp email tới hộp thư đến Trello
-                        và Atlassian Intelligence (AI) sẽ chuyển những email này thành việc cần làm được sắp xếp
-                        khoa học kèm theo mọi liên kết bạn cần.                    
+                        Easily turn your emails into to-dos! Just forward them to your Trello Inbox, and they&apos;ll be transformed by Atlassian Intelligence (AI) into organized to-dos with all the links you need.                  
                     </Typography>
                 </Box>
             </Box>
-
+            
+            {/* Message Box */}
             <Box 
                 sx={{ 
                     ...styleBox,
@@ -112,14 +107,14 @@ export default function Convenience() {
                     sx={{ ...styleImage, display: { xs: 'block', md: 'none' } }} 
                     src="https://images.ctfassets.net/rz1oowkt5gyp/3r1BvsfEsj4THe6YwpBOVy/2b1befa1e5e3522a2b0daae0dd3f3de0/slackteams-to-inbox.png?w=1110&fm=webp" alt="" />
                 <Box 
-                    sx={{ ...styleBoxDiscription.container, mr: '16px' }}>
+                    sx={{ ...styleBoxDiscription.container, pl: 0, pr:'32px' }}>
                     <Typography sx={styleBoxDiscription.title}>
                         <CalendarIcon style={{ ...styleIcon, width: '3.6rem', height: '3.6rem' }}/>
-                        PHÉP MÀU CỦA ỨNG DỤNG TIN NHẮN
+                        MESSAGE APP SORCERY
                     </Typography>
                     
                     <Typography sx={styleBoxDiscription.desc}>
-                        Bạn cần theo dõi tin nhắn từ Slack hoặc Microsoft Teams? Hãy gửi thẳng tin nhắn đến bảng Trello! Giao diện ứng dụng yêu thích, cho phép bạn lưu thư, sẽ xuất hiện trong hộp thư đến Trello nhờ các liên kết và bản tóm tắt do AI tạo.                    
+                        Need to follow up on a message from Slack or Microsoft Teams? Send it directly to your Trello board! Your favorite app interface lets you save messages that appear in your Trello Inbox with AI-generated summaries and links.
                     </Typography>
                 </Box>
                 <Box 

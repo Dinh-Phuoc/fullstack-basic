@@ -24,9 +24,9 @@ const MyTabItem = ({ notLine = false, myStyle, myStyleChild, typeWrapper = 'Box'
     if (typeWrapper === 'Button') TypeWrapper = Button
 
     useEffect(() => {
-        active === 'true' && handleSwithTab()
+        active && handleSwithTab()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [active])
 
     const setActive = () => {
         handleSwithTab()

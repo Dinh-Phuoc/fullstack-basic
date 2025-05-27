@@ -54,14 +54,7 @@ export default function HomeMenuXS() {
                         transform: openDrawerMenu ? 'translate(0, -11px) rotate(45deg)' : 'none'
                     }
                 }}
-            > 
-                {/* <Fade in={!openDrawerMenu} timeout={500} unmountOnExit>
-                    <MenuRounded fontSize="large" />
-                </Fade>
-                <Fade in={openDrawerMenu} timeout={500} unmountOnExit>
-                    <CloseOutlined fontSize="large" sx={{ position: 'absolute', top: 0, right: 0 }} />
-                </Fade> */}
-
+            >
                 <Box sx={barStyle} className={'bar1'}></Box>
                 <Box sx={barStyle} className={'bar2'}></Box>
                 <Box sx={barStyle} className={'bar3'}></Box>
