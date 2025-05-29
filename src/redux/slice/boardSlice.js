@@ -78,8 +78,8 @@ export const boardSilce = createSlice({
     }
 })
 
-export const fetchBoard = createAsyncThunk('board/fetchBoard', async() => {
-    const data = await fetchBoardDetailsApi('dae10414-1ed4-47b9-bf37-5b782aed990e')
+export const fetchBoard = createAsyncThunk('board/fetchBoard', async(boardUuid) => {
+    const data = await fetchBoardDetailsApi(boardUuid)
 
     data.columns = mapOrder(data?.columns, data?.columnOrderIds, 'uuid')
     data.columns.forEach(column => {

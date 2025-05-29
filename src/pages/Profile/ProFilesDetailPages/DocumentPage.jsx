@@ -24,14 +24,14 @@ import Public from '@mui/icons-material/Public'
 import { useRef, useState } from 'react'
 
 // My import
-import { updateProfileApi } from '~/apis'
 import { API_ROOT } from '~/utils/constant'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSelector } from '~/redux/selector'
-import { uploadAvatarThunk, uploadImageHeaderThunk } from '~/redux/slice/userSlice'
+import { updateProfileThunk, uploadAvatarThunk, uploadImageHeaderThunk } from '~/redux/slice/userSlice'
 
 const DocumentPage = () => {
+    // const [user, setUser] = useState()
     const [anchorEl, setAnchorEl] = useState(null)
     const uploadHeaderImageRef = useRef()
     const imageRef = useRef()
@@ -40,10 +40,10 @@ const DocumentPage = () => {
     const dispatch = useDispatch()
 
     // States of personal information
-    const [fullName, setFullName] = useState(null)
-    const [jobTitle, setJobTitle] = useState(null)
-    const [address, setAddress] = useState(null)
-    const [department, setDepartment] = useState(null)
+    const [fullName, setFullName] = useState(user.fullName)
+    const [jobTitle, setJobTitle] = useState(user.jobTitle)
+    const [address, setAddress] = useState(user.address)
+    const [department, setDepartment] = useState(user.department)
 
     const uploadAvatarRef = useRef()
     const cameraIconRef = useRef()
@@ -53,6 +53,27 @@ const DocumentPage = () => {
     const [jobTitleFocus, setJobTitleFocus] = useState(false)
     const [departmentFocus, setDepartmentFocus] = useState(false)
     const [addressFocus, setAddressFocus] = useState(false)
+
+    const setPropertyFocus = {
+        fullName: (isFocus=true) => setFullNameFocus(isFocus),
+        jobTitle: (isFocus=true) => setJobTitleFocus(isFocus),
+        department: (isFocus=true) => setDepartmentFocus(isFocus),
+        address: (isFocus=true) => setAddressFocus(isFocus)
+    }
+
+    const setProperty = {
+        fullName: (value) => setFullName(value),
+        jobTitle: (value) => setJobTitle(value),
+        department: (value) => setDepartment(value),
+        address: (value) => setAddress(value)
+    }
+
+    const getProperty = {
+        fullName: () => fullName,
+        jobTitle: () => jobTitle,
+        department: () => department,
+        address: () => address
+    }
 
     const styleInput = { 
         '& .MuiOutlinedInput-root': {
@@ -132,119 +153,83 @@ const DocumentPage = () => {
     //Handle Edit information group
     const handleFocus = (e, textFieldName) => {
         setPreValue(e.target.value)
-        switch (textFieldName) {
-        case 'fullName':
-            setFullNameFocus(true)
-            e.target.select()
-            return
-        case 'jobTitle':
-            setJobTitleFocus(true)
-            e.target.select()
-            return
-        case 'department':
-            setDepartmentFocus(true)
-            e.target.select()
-            return
-        case 'address':
-            setAddressFocus(true)
-            e.target.select()
-            return
-        default:
-            return
-        }
+        setPropertyFocus[textFieldName]()
+        e.target.select()
+        return
+
+        // switch (textFieldName) {
+        // case 'fullName':
+        //     setFullNameFocus(true)
+        //     e.target.select()
+        //     return
+        // case 'jobTitle':
+        //     setJobTitleFocus(true)
+        //     e.target.select()
+        //     return
+        // case 'department':
+        //     setDepartmentFocus(true)
+        //     e.target.select()
+        //     return
+        // case 'address':
+        //     setAddressFocus(true)
+        //     e.target.select()
+        //     return
+        // default:
+        //     return
+        // }
     }
 
     const handleChangeValue = (e, textFieldName) => {
-        switch (textFieldName) {
-        case 'fullName':
-            setFullName(e.target.value)
-            return
-        case 'jobTitle':
-            setJobTitle(e.target.value)
-            return
-        case 'department':
-            setDepartment(e.target.value)
-            return
-        case 'address':
-            setAddress(e.target.value)
-            return
-        default:
-            return
-        }
+        setProperty[textFieldName](e.target.value)
     }
 
-    const handleEditTextField = async (e, textFieldName) => {
-        switch (textFieldName) {
-        case 'fullName':
-            if (e.target.value !== prevValue) {
-                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
-                setFullName(e.target.value)
-                setFullNameFocus(false)
-                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
-                return
+    const handleEditTextField = (textFieldName) => {
+        if (getProperty[textFieldName]() !== prevValue) {
+            const data = {
+                fieldName: textFieldName,
+                dataToUpdate: getProperty[textFieldName]()
             }
-            setFullNameFocus(false)
-            return
 
-        case 'jobTitle':
-            if (e.target.value !== prevValue) {
-                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
-                setJobTitle(e.target.value)
-                setJobTitleFocus(false)
-                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
-                return
-            }
-            setJobTitleFocus(false)
-            return
-
-        case 'department':
-            if (e.target.value !== prevValue) {
-                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
-                setDepartment(e.target.value)
-                setDepartmentFocus(false)
-                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
-                return
-            }
-            setDepartmentFocus(false)
-            return
-
-        case 'address':
-            if (e.target.value !== prevValue) {
-                const result = await updateProfileApi(user._id, textFieldName, e.target.value)
-                setAddress(e.target.value)
-                setAddressFocus(false)
-                result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
-                return
-            }
-            setAddressFocus(false)
-            return
-
-        default:
-            return
+            dispatch(updateProfileThunk(data))
+                .unwrap()
+                .then(() => {
+                    toast.success('Cập nhật thành công')
+                    setPropertyFocus[textFieldName](false)
+                    return
+                })
+                .catch(() => {
+                    toast.error('Cập nhật thất bại')
+                    return
+                })
         }
+        setPropertyFocus[textFieldName](false)
+        return
     }
 
     const handleCancelEditTextField = (textFieldName) => {
-        switch (textFieldName) {
-        case 'fullName':
-            setFullName(prevValue)
-            setFullNameFocus(false)
-            return
-        case 'jobTitle':
-            setJobTitle(prevValue)
-            setJobTitleFocus(false)
-            return
-        case 'department':
-            setDepartment(prevValue)
-            setDepartmentFocus(false)
-            return
-        case 'address':
-            setAddress(prevValue)
-            setAddressFocus(false)
-            return
-        default:
-            return
-        }
+        setProperty[textFieldName](prevValue)
+        setPropertyFocus[textFieldName](false)
+        return
+        // switch (textFieldName) {
+        // case 'fullName':
+        //     setFullName(prevValue)
+        //     setFullNameFocus(false)
+        //     return
+        // case 'jobTitle':
+        //     setJobTitle(prevValue)
+        //     setJobTitleFocus(false)
+        //     return
+        // case 'department':
+        //     setDepartment(prevValue)
+        //     setDepartmentFocus(false)
+        //     return
+        // case 'address':
+        //     setAddress(prevValue)
+        //     setAddressFocus(false)
+        //     return
+        // default:
+        //     return
+        // }
     }
 
     //Handle Menu
@@ -523,7 +508,7 @@ const DocumentPage = () => {
                             onBlur={(e) => {
                                 const focusedElement = e.relatedTarget
                                 focusedElement?.dataset?.action === 'confirm' ? 
-                                    handleEditTextField(e, 'fullName') :
+                                    handleEditTextField('fullName') :
                                     handleCancelEditTextField('fullName')
                             }}
                             sx={styleInput}
@@ -540,16 +525,14 @@ const DocumentPage = () => {
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
-                                    data-action='confirm'
-                                    onClick={() => handleEditTextField('fullName')} 
+                                    data-action='confirm' 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
-                                <Button
-                                    onClick={() => handleCancelEditTextField('fullName')} 
+                                <Button 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
@@ -588,7 +571,7 @@ const DocumentPage = () => {
                             onBlur={(e) => {
                                 const focusedElement = e.relatedTarget
                                 focusedElement?.dataset?.action === 'confirmJobTitle' ? 
-                                    handleEditTextField(e, 'jobTitle') :
+                                    handleEditTextField('jobTitle') :
                                     handleCancelEditTextField('jobTitle')
                             }}
                             sx={styleInput}
@@ -605,16 +588,14 @@ const DocumentPage = () => {
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
-                                    data-action='confirmJobTitle'
-                                    onClick={() => handleEditTextField('jobTitle')} 
+                                    data-action='confirmJobTitle' 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
-                                <Button
-                                    onClick={() => handleCancelEditTextField('jobTitle')} 
+                                <Button 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
@@ -652,7 +633,7 @@ const DocumentPage = () => {
                             onBlur={(e) => {
                                 const focusedElement = e.relatedTarget
                                 focusedElement?.dataset?.action === 'confirmDepartment' ? 
-                                    handleEditTextField(e, 'department') :
+                                    handleEditTextField('department') :
                                     handleCancelEditTextField('department')
                             }}
                             sx={styleInput}
@@ -669,16 +650,14 @@ const DocumentPage = () => {
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
-                                    data-action='confirmDepartment'
-                                    onClick={() => handleEditTextField('department')} 
+                                    data-action='confirmDepartment' 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
-                                <Button
-                                    onClick={() => handleCancelEditTextField('department')} 
+                                <Button 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>
@@ -716,7 +695,7 @@ const DocumentPage = () => {
                             onBlur={(e) => {
                                 const focusedElement = e.relatedTarget
                                 focusedElement?.dataset?.action === 'confirmAddress' ? 
-                                    handleEditTextField(e, 'address') :
+                                    handleEditTextField('address') :
                                     handleCancelEditTextField('address')
                             }}
                             sx={styleInput}
@@ -733,16 +712,14 @@ const DocumentPage = () => {
                             }}>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px', mr: '4px' }}>
                                 <Button
-                                    data-action='confirmAddress'
-                                    onClick={() => handleEditTextField('address')} 
+                                    data-action='confirmAddress' 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Check/>
                                 </Button>
                             </Paper>
                             <Paper sx={{ height: '32px', bgcolor: theme => theme.palette.mode === 'dark' ? '#262626' : 'background.paper', width: '32px' }}>
-                                <Button
-                                    onClick={() => handleCancelEditTextField('address')} 
+                                <Button 
                                     sx={{ height: '32px', width: '32px', p: 0, color: '#ff9a9cc4', minWidth: '32px' }}
                                 >
                                     <Close/>

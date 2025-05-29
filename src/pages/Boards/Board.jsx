@@ -1,20 +1,28 @@
-import Container from '@mui/material/Container'
-import { AppBar } from '~/components/AppBar'
-import BoardBar from './BoardBar/BoardBar'
-import BoardContent from './BoardContent/BoardContent'
 import { useEffect } from 'react'
 
-import { Box, CircularProgress } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
+
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+
+
+import AppBar from '~/components/AppBar/AppBar'
+import BoardBar from './BoardBar/BoardBar'
+import BoardContent from './BoardContent/BoardContent'
 import { boardSelector } from '~/redux/selector'
 import { fetchBoard } from '~/redux/slice/boardSlice'
+import { setUserInfoThunk } from '~/redux/slice/userSlice'
 
 function Board() {
-    const dispatch = useDispatch()
     const { status, data } = useSelector(boardSelector)
+    const dispatch = useDispatch()
     
     useEffect(() => {
-        dispatch(fetchBoard())
+        dispatch(setUserInfoThunk())
+            .unwrap()
+            .then(data => dispatch(fetchBoard(data.boardUuid[0])))
+            
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     

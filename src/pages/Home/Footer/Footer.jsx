@@ -194,11 +194,11 @@ export default function Footer() {
                             gap: 2
                         }}
                     >
-                        <Box component={'a'} href='https://www.facebook.com/saru.an.169/'>
+                        <Box component={'a'} href='https://www.facebook.com/saru.an.169/' target="_blank" rel="noopener noreferrer">
                             <FacebookOutlined sx={styleIcon}/>
                         </Box>
     
-                        <Box component={'a'} href='https://www.instagram.com/pdphuoc_ordinary/'>
+                        <Box component={'a'} href='https://www.instagram.com/pdphuoc_ordinary/' target="_blank" rel="noopener noreferrer">
                             <Instagram sx={styleIcon}/>
                         </Box>
     

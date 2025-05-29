@@ -23,6 +23,12 @@ const ChangePasswordPage = () => {
     
     const [messageError, setMessageError] = useState({ presentPassword: '', newPassword: '', retype: '' })
     const [required, setRequired] = useState({ presentPassword: true, newPassword: true, retype: true })
+
+    const setProperty = {
+        presentPassword: (value) => setPresentPassword(value),
+        newPassword: (value) => setNewPassword(value),
+        retypeNewPassword: (value) => setRetypeNewPassword(value)
+    }
     
     const styleInput = { 
         width: { xs: '280px', sm: '350px' },
@@ -136,25 +142,13 @@ const ChangePasswordPage = () => {
             setPresentPassword('')
             setNewPassword('')
             setRetypeNewPassword('')
-            const resultUpdate = await updatePasswordApi(user._id, 'password', { presentPassword, newPassword })
+            const resultUpdate = await updatePasswordApi('password', { presentPassword, newPassword })
             resultUpdate.change ? toast.success(resultUpdate.message) : toast.error(resultUpdate.message)
         }
     }
+
     const handleChangeValue = (e, textFieldName) => {
-        switch (textFieldName) {
-            
-        case 'presentPassword':
-            setPresentPassword(e.target.value)
-            return
-        case 'newPassword':
-            setNewPassword(e.target.value)
-            return
-        case 'retypeNewPassword':
-            setRetypeNewPassword(e.target.value)
-            return
-        default:
-            return
-        }
+        setProperty[textFieldName](e.target.value)
     }
 
     return (

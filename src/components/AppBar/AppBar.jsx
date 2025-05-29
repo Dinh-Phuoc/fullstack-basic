@@ -1,5 +1,7 @@
 import { useState } from 'react'
-
+import MenuRounded from '@mui/icons-material/MenuRounded'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import SvgIcon from '@mui/material/SvgIcon'
 import TextField from '@mui/material/TextField'
 import SearchIcon from '@mui/icons-material/Search'
@@ -21,8 +23,7 @@ import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import Workspaces from './Menus/Workpages'
 import Recent from './Menus/Recent'
 import Profiles from './Menus/ProfilesMenu'
-import { MenuRounded } from '@mui/icons-material'
-import { Menu, MenuItem } from '@mui/material'
+
 
 export default function AppBar() {
     const [searchValue, setSearchValue] = useState('')

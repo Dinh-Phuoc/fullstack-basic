@@ -12,10 +12,14 @@ const Login = forwardRef(({ onClick, ...props }, ref ) => {
     }
 
     useImperativeHandle(ref, () => ({
-        getChildrenRef: () => ({
-            userName: userNameRef.current?.value,
-            password: passwordRef.current?.value
-        })
+        getChildrenRef: () => {
+            const userName = userNameRef.current?.value
+            const password = passwordRef.current?.value
+
+            if (!userName || !password ) return 
+
+            return { userName, password }
+        }
     }))
     
     return (

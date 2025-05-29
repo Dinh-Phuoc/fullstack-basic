@@ -17,16 +17,13 @@ export default function Story() {
         if (!el) return
 
         const handleTouchStart = (e) => {
-            if (e.cancelable) e.preventDefault()
             handleDown(e)
         }
         const handleTouchMove = (e) => {
-            if (e.cancelable) e.preventDefault()
             handleMove(e)
         }
 
         const handleTouchEnd = (e) => {
-            if (e.cancelable) e.preventDefault()
             handleUp(e)
         }
 
@@ -124,7 +121,7 @@ export default function Story() {
     }
 
     const handleSetScrollLeft = (e) => {
-        const condition = e.touches ? 100 : 300
+        const condition = e.touches ? 60 : 300
         
         const getNextCardId = () => {
             if (prevPosition.scroll < condition) return prevPosition.id
@@ -159,7 +156,6 @@ export default function Story() {
     }
 
     const handleMove = (e) => {
-        e.preventDefault()
         if (!isDragging || !prevPosition) return
         const scrollEl = scrollElRef.current
 
@@ -172,6 +168,11 @@ export default function Story() {
         const dx = prevPosition.x - clientX
         const dy = prevPosition.y - clientY
 
+        if (Math.abs(dy) > Math.abs(dx)) {
+            setIsDragging(false)
+            return
+        }
+        
         if (dx < 0 && prevPosition.id === 1) {
             return 
         }
@@ -262,7 +263,7 @@ export default function Story() {
                 }}
                 elevation={4}>
                 <Box 
-                    style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
+                    // style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
                     sx={{ 
                         overflow: 'auto',
                         display: 'flex',

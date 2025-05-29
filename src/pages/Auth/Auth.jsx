@@ -1,22 +1,27 @@
-import { Box, CircularProgress, Modal, SvgIcon, Typography } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
-import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import Modal from '@mui/material/Modal'
+import SvgIcon from '@mui/material/SvgIcon'
+import Typography from '@mui/material/Typography'
+import Face2Outlined from '@mui/icons-material/Face2Outlined'
+import SentimentDissatisfied from '@mui/icons-material/SentimentDissatisfied'
+
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { loginThunk } from '~/redux/slice/userSlice'
-import { registerApi } from '~/apis'
+
+import { loginApi, registerApi } from '~/apis'
 import MyTabs from '~/components/Tabs/store/MyTabs'
 import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
 import Login from '~/components/AppBar/Menus/Login'
 import Register from '~/components/AppBar/Menus/Register'
-import { Face2Outlined, SentimentDissatisfied } from '@mui/icons-material'
 
+import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import bgImageFormLoginLightMD from '~/assets/loginformlight.jpg'
 import bgImageFormLoginDarkMD from '~/assets/loginformdark.jpg'
+
 export default function Auth() {
-    const dispatch = useDispatch()
     const [openChildModal, setOpenChildModal] = useState(false)
     const [activeUnderLine, setActiveUnderLine] = useState({ login: true, register: false })
     const [childModalLoginProcessing, setChildModalLoginProcessing] = useState(false)
@@ -26,6 +31,7 @@ export default function Auth() {
     const [titleForm, setTitleForm] = useState('login')
     const childrenLoginRef = useRef()
     const childrenRegisterRef = useRef()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const register = !!localStorage.getItem('register')
@@ -37,16 +43,29 @@ export default function Auth() {
 
     const handleLogin = async() => {
         const data = childrenLoginRef.current?.getChildrenRef()
+        if (!data) return
+
         handleChildModalLoginProcessingOpen()
-        dispatch(loginThunk(data))
-            .unwrap()
-            .then(() => {
-                handleChildModalLoginProcessingClose()
-            })
-            .catch(() => {
-                handleChildModalOpen()
-                handleChildModalLoginProcessingClose()
-            })
+        const resultLogin = await loginApi(data)
+        handleChildModalLoginProcessingClose()
+
+        if (!resultLogin.isSuccess) {
+            handleChildModalOpen()
+            return
+        }
+        navigate('/trello')
+        
+        // dispatch(loginThunk(data))
+        //     .unwrap()
+        //     .then((data) => {
+        //         console.log('🚀 ~ handleLogin ~ erorr:', data)
+        //         handleChildModalLoginProcessingClose()
+        //     })
+        //     .catch((erorr) => {
+        //         console.log('🚀 ~ handleLogin ~ erorr:', erorr)
+        //         handleChildModalLoginProcessingClose()
+        //         handleChildModalOpen()
+        //     })
     }
 
     const handleRegister = async() => {

@@ -1,8 +1,11 @@
 // eslint-disable-next-line no-unused-vars
-import { Box, Button, Typography } from '@mui/material'
-import { useEffect, useRef } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 
+import { useEffect, useRef } from 'react'
 import { useContext } from 'react'
+
 import Context from './store/Context'
 
 const MyTabItem = ({ notLine = false, myStyle, myStyleChild, typeWrapper = 'Box', active, value, children, onClick, ...props }) => {

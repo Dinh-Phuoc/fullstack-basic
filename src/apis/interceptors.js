@@ -29,6 +29,10 @@ instance.interceptors.response.use(
         return response
     },
     async error => {
+        if (error.config.url.includes('auth/login')) {
+            return error.response
+        }
+
         const originalRequest = error.config
 
         if ((error.response?.status === 401 || error.response?.status === 403 ) && !originalRequest._retry) {

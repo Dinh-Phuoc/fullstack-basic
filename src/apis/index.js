@@ -104,13 +104,13 @@ export const getAvatarApi = async (userId) => {
 }
 
 // Call Api for update profile
-export const updateProfileApi = async (userId, fieldName, data) => {
-    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/update/${userId}/${fieldName}`, { data })
+export const updateProfileApi = async (fieldName, data) => {
+    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/update/${fieldName}`, { data })
     return response.data
 }
 
-export const updatePasswordApi = async (userId, fieldName, data) => {
-    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/update/${userId}/${fieldName}`, data)
+export const updatePasswordApi = async (fieldName, data) => {
+    const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/update/${fieldName}`, data)
     return response.data
 }
 

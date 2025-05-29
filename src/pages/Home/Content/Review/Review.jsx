@@ -150,7 +150,7 @@ export default function Review() {
     }
 
     const handleSetScrollLeft = (e) => {
-        const condition = e.touches ? 100 : 300
+        const condition = e.touches ? 60 : 300
         
         const getNextCardId = () => {
             if (prevPosition.scroll < condition) return prevPosition.id
@@ -193,6 +193,11 @@ export default function Review() {
         const dx = prevPosition.x - clientX
         const dy = prevPosition.y - clientY
 
+        if (Math.abs(dy) > Math.abs(dx)) {
+            setIsDragging(false)
+            return
+        }
+        
         if (dx < 0 && prevPosition.id === 1) {
             return 
         }
@@ -323,7 +328,7 @@ export default function Review() {
                             onMouseLeave={handleUp}
                         >
                             { card.map(card => (
-                                <Box key={card.id} sx={{ width: '100%', flexShrink: 0 }} >
+                                <Box key={card.id} sx={{ width: '100%', flexShrink: 0 }} data-id={card.id}>
                                     <img 
                                         data-id={card.id}
                                         style={{ 

@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getInforUserApi, loginApi, logoutApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import { getInforUserApi, logoutApi, updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
 
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
         loginPending: false,
+        isUpdating: false,
         pending: true,
         data: null
     },
@@ -21,17 +22,9 @@ export const userSlice = createSlice({
                 state.pending = false
                 state.data = action.payload
             })
-
-            //Login
-            .addCase(loginThunk.pending, (state) => {
-                state.loginPending = true
-            })
-            .addCase(loginThunk.fulfilled, (state, action) => {
-                state.loginPending = false
-                state.data = action.payload
-            }).addCase(loginThunk.rejected, (state, action) => {
-                state.loginPending = false
-                state.data = action.null
+            .addCase(setUserInfoThunk.rejected, (state) => {
+                state.pending = false
+                state.data = null
             })
             
             //Logout
@@ -49,6 +42,15 @@ export const userSlice = createSlice({
             .addCase(uploadAvatarThunk.fulfilled, (state, action) => {
                 state.data = action.payload
             })
+
+            //updateProfile
+            .addCase(updateProfileThunk.pending, state => {
+                state.isUpdating = true
+            })
+            .addCase(updateProfileThunk.fulfilled, (state, action) => {
+                state.isUpdating = false
+                state.data[action.payload.fieldName] = action.payload.dataToUpdate
+            })
     }
 })
 
@@ -57,15 +59,14 @@ export const setUserInfoThunk = createAsyncThunk('user/setUser', async () => {
     return user
 })
 
-export const loginThunk = createAsyncThunk('user/login', async (data) => {
-    await loginApi(data)
-    const user = await getInforUserApi()
-    return user
-})
-
 export const logoutThunk = createAsyncThunk('user/logout', async () => {
     await logoutApi()
     return
+})
+
+export const updateProfileThunk = createAsyncThunk('user/updateProfile', async(data) => {
+    await updateProfileApi(data.fieldName, data.dataToUpdate)
+    return { fieldName: data.fieldName, dataToUpdate: data.dataToUpdate }
 })
 
 export const uploadImageHeaderThunk = createAsyncThunk('user/uploadImageHeaderThunk', async (formData) => {
