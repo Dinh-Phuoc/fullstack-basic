@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getInforUserApi, logoutApi, updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
+import { getInforUserApi, updateProfileApi, uploadAvatarApi, uploadImageHeaderApi } from '~/apis'
 
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
         loginPending: false,
         isUpdating: false,
+        isLogout: false,
         pending: true,
         data: null
     },
@@ -25,12 +26,6 @@ export const userSlice = createSlice({
             .addCase(setUserInfoThunk.rejected, (state) => {
                 state.pending = false
                 state.data = null
-            })
-            
-            //Logout
-            .addCase(logoutThunk.fulfilled, (state) => {
-                state.data = null
-                state.online = false
             })
 
             //uploadImageHeader
@@ -57,11 +52,6 @@ export const userSlice = createSlice({
 export const setUserInfoThunk = createAsyncThunk('user/setUser', async () => {
     const user = await getInforUserApi()
     return user
-})
-
-export const logoutThunk = createAsyncThunk('user/logout', async () => {
-    await logoutApi()
-    return
 })
 
 export const updateProfileThunk = createAsyncThunk('user/updateProfile', async(data) => {

@@ -1,9 +1,17 @@
 // MUI Component
-import { ErrorOutline, PlayCircleFilledOutlined } from '@mui/icons-material'
-import { Button, Modal, TextField, Tooltip, Typography } from '@mui/material'
+import ErrorOutline from '@mui/icons-material/ErrorOutline'
+import PlayCircleFilledOutlined from '@mui/icons-material/PlayCircleFilledOutlined'
+import Button from '@mui/material/Button'
+import Modal from '@mui/material/Modal'
+import TextField from '@mui/material/TextField'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Container } from '@mui/material'
+
 export default function Introduction() {
     const [open, setOpen] = useState(false)
     const [emailValue, setEmailValue] = useState('')
@@ -119,169 +127,171 @@ export default function Introduction() {
                     overflow: 'hidden',
                     bgcolor: '#f3f3f5'
                 }}>
-                <Box sx={{
-                    display: 'flex', 
-                    flexWrap: 'wrap',
-                    margin: '0 50px'
-                }}>
-                    <Box 
-                        sx={{ 
-                            width: { xs: '100%', md: '50%' }, 
-                            display: 'flex',
-                            flexDirection: 'column',
-                            p: '128px 18px 18px'
-                        }}
-                    >
+                <Container>
+                    <Box sx={{
+                        display: 'flex', 
+                        flexWrap: 'wrap',
+                        margin: '0 50px'
+                    }}>
                         <Box 
                             sx={{ 
-                                display: 'block',
-                                textAlign: { xs: 'center', md: 'start' },
-                                marginX: { xs: '-55px', md: '0' }
+                                width: { xs: '100%', md: '50%' }, 
+                                display: 'flex',
+                                flexDirection: 'column',
+                                p: '128px 18px 18px'
                             }}
                         >
-                            <Typography variant='h3' sx={{ mb: '12px', fontWeight: 500 }}>
-                                Capture, organize, and tackle your to-dos from anywhere.
-                            </Typography>
-                            <Typography sx={{ mb: '12px' }}>
-                                Escape the clutter and chaos—unleash your productivity with Trello.
-                            </Typography>
-                        </Box>
-    
-                        <Box 
-                            sx={{ 
-                                display: 'flex', 
-                                justifyContent: { xs: 'center', md: 'flex-start' } 
-                            }}
-                        >
-                            <Tooltip
-                                onClose={handleTooltipClose}
-                                open={openTooltip}
-                                disableFocusListener
-                                disableHoverListener
-                                disableTouchListener
-                                arrow
-                                title={<Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    <ErrorOutline fontSize='small' /> The email address is invalid
-                                </Typography>} 
-                                slotProps={{
-                                    popper: {
-                                        disablePortal: true,
-                                        sx: {
-                                            boxShadow: ''
-                                        }
-                                    },
-                                    tooltip: {
-                                        sx: {
-                                            p: '12px'
-                                        }
-                                    },
-                                    arrow: {
-                                        sx: {
-                                            color: 'white'
-                                        }
-                                    }
+                            <Box 
+                                sx={{ 
+                                    display: 'block',
+                                    textAlign: { xs: 'center', md: 'start' },
+                                    marginX: { xs: '-55px', md: '0' }
                                 }}
                             >
-                                <TextField 
-                                    inputRef={emailInputRef}
+                                <Typography variant='h3' sx={{ mb: '12px', fontWeight: 500 }}>
+                                    Capture, organize, and tackle your to-dos from anywhere.
+                                </Typography>
+                                <Typography sx={{ mb: '12px' }}>
+                                    Escape the clutter and chaos—unleash your productivity with Trello.
+                                </Typography>
+                            </Box>
+        
+                            <Box 
+                                sx={{ 
+                                    display: 'flex', 
+                                    justifyContent: { xs: 'center', md: 'flex-start' } 
+                                }}
+                            >
+                                <Tooltip
+                                    onClose={handleTooltipClose}
+                                    open={openTooltip}
+                                    disableFocusListener
+                                    disableHoverListener
+                                    disableTouchListener
+                                    arrow
+                                    title={<Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <ErrorOutline fontSize='small' /> The email address is invalid
+                                    </Typography>} 
+                                    slotProps={{
+                                        popper: {
+                                            disablePortal: true,
+                                            sx: {
+                                                boxShadow: ''
+                                            }
+                                        },
+                                        tooltip: {
+                                            sx: {
+                                                p: '12px'
+                                            }
+                                        },
+                                        arrow: {
+                                            sx: {
+                                                color: 'white'
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <TextField 
+                                        inputRef={emailInputRef}
+                                        sx={{ 
+                                            mb: '12px',
+                                            mr: '12px',
+                                            display: { xs: 'none', md: 'block' },
+                                            '& .MuiOutlinedInput-input': {
+                                                p: '10px 14px'
+                                            }
+                                        }}
+                                        type='email' 
+                                        placeholder='Email'
+                                        value={emailValue}
+                                        aria-describedby="my-helper-text" 
+                                        onChange={handleSetEmailValue}
+                                        onKeyDown={(e) => {
+                                            if (!(e.key === 'Enter')) return
+                                            handleSendEmailToAuthForm()
+                                        }}
+                                    />
+                                </Tooltip>
+                                <Button 
                                     sx={{ 
-                                        mb: '12px',
-                                        mr: '12px',
-                                        display: { xs: 'none', md: 'block' },
-                                        '& .MuiOutlinedInput-input': {
-                                            p: '10px 14px'
+                                        mb: '12px', 
+                                        bgcolor: '#ffb1b3', 
+                                        color: 'white', 
+                                        height: '43px',
+                                        lineHeight: '1.4',
+                                        '&:hover': {
+                                            bgcolor: '#f0777acc',
+                                            border: '2px solid',
+                                            borderColor: '#f0777acc'
                                         }
                                     }}
-                                    type='email' 
-                                    placeholder='Email'
-                                    value={emailValue}
-                                    aria-describedby="my-helper-text" 
-                                    onChange={handleSetEmailValue}
-                                    onKeyDown={(e) => {
-                                        if (!(e.key === 'Enter')) return
-                                        handleSendEmailToAuthForm()
-                                    }}
-                                />
-                            </Tooltip>
-                            <Button 
+                                    onClick={handleSendEmailToAuthForm}
+                                    variant='outlined'
+                                >
+                                        Sign up - it&apos;s free!
+                                </Button>
+                            </Box>
+        
+                            <Box 
                                 sx={{ 
-                                    mb: '12px', 
-                                    bgcolor: '#ffb1b3', 
-                                    color: 'white', 
-                                    height: '43px',
-                                    lineHeight: '1.4',
-                                    '&:hover': {
-                                        bgcolor: '#f0777acc',
-                                        border: '2px solid',
-                                        borderColor: '#f0777acc'
-                                    }
-                                }}
-                                onClick={handleSendEmailToAuthForm}
-                                variant='outlined'
-                            >
-                                    Sign up - it&apos;s free!
-                            </Button>
-                        </Box>
-    
-                        <Box 
-                            sx={{ 
-                                display: 'block',
-                                textAlign: { xs: 'center', md: 'start' } 
-                            }}>
-                            
-                            <Typography sx={{ mb: '12px' }}>
-                                By entering my email, I acknowledge the&nbsp; 
-                                <Box component={Link} sx={styleLink}>
-                                    Atlassian Privacy Policy
-                                </Box>
-                            </Typography>
-    
-                            <Button
-                                onClick={handleOpen} 
-                                sx={{ 
-                                    ...styleLink, 
-                                    p: 0,
-                                    width: '130px', 
-                                    ml: 0,
-                                    justifyContent: { xs: 'center', md: 'flex-start' },
-                                    '&:hover .watchIcon': 
-                                    { transform: 'translate3d(3px, 0, 0)' } 
+                                    display: 'block',
+                                    textAlign: { xs: 'center', md: 'start' } 
                                 }}>
-                                Watch video 
-                                <PlayCircleFilledOutlined 
-                                    className='watchIcon'
+                                
+                                <Typography sx={{ mb: '12px' }}>
+                                    By entering my email, I acknowledge the&nbsp; 
+                                    <Box component={Link} sx={styleLink}>
+                                        Atlassian Privacy Policy
+                                    </Box>
+                                </Typography>
+        
+                                <Button
+                                    onClick={handleOpen} 
                                     sx={{ 
-                                        ml: '6px',
-                                        transition: 'transform 0.3s'
-                                    }}
-                                />
-                            </Button>
+                                        ...styleLink, 
+                                        p: 0,
+                                        width: '130px', 
+                                        ml: 0,
+                                        justifyContent: { xs: 'center', md: 'flex-start' },
+                                        '&:hover .watchIcon': 
+                                        { transform: 'translate3d(3px, 0, 0)' } 
+                                    }}>
+                                    Watch video 
+                                    <PlayCircleFilledOutlined 
+                                        className='watchIcon'
+                                        sx={{ 
+                                            ml: '6px',
+                                            transition: 'transform 0.3s'
+                                        }}
+                                    />
+                                </Button>
+                            </Box>
                         </Box>
-                    </Box>
-    
-                    <Box 
-                        sx={{ 
-                            position: 'relative',
-                            left: '16.6666%',
-                            width: { xs: '100%', md: '58.3333%' }, 
-                            pt: '8rem',
-                            flex: '0 0 auto',
-                            marginLeft: '-16.6666%'
-                        }}
-                    >
-                        <video 
-                            style={{
-                                width: '100%',
-                                height: 'auto'
-                            }} 
-                            ref={videoRef} muted>
-                            <source 
-                                type='video/mp4' 
-                                src='https://videos.ctfassets.net/rz1oowkt5gyp/4AJBdHGUKUIDo7Po3f2kWJ/3923727607407f50f70ccf34ab3e9d90/updatedhero-mobile-final.mp4'
-                            />
-                        </video>
-                    </Box>
-                </Box >
+        
+                        <Box 
+                            sx={{ 
+                                position: 'relative',
+                                left: '16.6666%',
+                                width: { xs: '100%', md: '58.3333%' }, 
+                                pt: '8rem',
+                                flex: '0 0 auto',
+                                marginLeft: '-16.6666%'
+                            }}
+                        >
+                            <video 
+                                style={{
+                                    width: '100%',
+                                    height: 'auto'
+                                }} 
+                                ref={videoRef} muted>
+                                <source 
+                                    type='video/mp4' 
+                                    src='https://videos.ctfassets.net/rz1oowkt5gyp/4AJBdHGUKUIDo7Po3f2kWJ/3923727607407f50f70ccf34ab3e9d90/updatedhero-mobile-final.mp4'
+                                />
+                            </video>
+                        </Box>
+                    </Box >
+                </Container>
             </Box>
 
             <Modal

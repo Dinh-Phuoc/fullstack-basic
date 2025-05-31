@@ -1,23 +1,17 @@
-import { Box, CircularProgress, Container } from '@mui/material'
+import { Container, useColorScheme } from '@mui/material'
 import HomeBar from './HomeBar/HomeBar'
 import Content from './Content/Content'
 import Footer from './Footer/Footer'
+import { useEffect } from 'react'
 
 export default function Home() {
-    const isDarkLight = localStorage.getItem('mui-mode') && localStorage.removeItem('mui-mode')
+    const { setMode } = useColorScheme()
 
-    if (isDarkLight) {
-        return (<Box sx={{ 
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            width: '100vw',
-            gap: 2
-        }}>
-            <CircularProgress/>
-        </Box>)
-    }
+    useEffect(() => {
+        setMode('light')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <Container disableGutters maxWidth={false}>
             <HomeBar />

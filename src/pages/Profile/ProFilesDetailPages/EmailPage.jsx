@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import CircularProgress from '@mui/material/CircularProgress'
 
 // MUI Icon
 import Check from '@mui/icons-material/Check'
@@ -14,10 +13,10 @@ import Close from '@mui/icons-material/Close'
 import { useState } from 'react'
 
 // My import
-import { updateProfileApi } from '~/apis'
 import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { userSelector } from '~/redux/selector'
+import { updateProfileThunk } from '~/redux/slice/userSlice'
 const EmailPage = () => {
     const { data: user } = useSelector(userSelector)
     // States of personal information
@@ -25,6 +24,7 @@ const EmailPage = () => {
     const [prevValue, setPreValue] = useState('Prev')
     const [emailFocus, setEmailFocus] = useState(false)
     const [invalidMessage, setInvalidMessage] = useState('')
+    const dispatch = useDispatch()
 
     const styleInput = { 
         '& .MuiOutlinedInput-root': {
@@ -54,20 +54,6 @@ const EmailPage = () => {
         }
     }
 
-    if (!user) {
-        return (<Box sx={{ 
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            width: '100vw',
-            gap: 2
-        }}>
-            <CircularProgress/>
-        </Box>)
-    }
-
-
     //Handle Edit information group
     const handleFocus = (e, textFieldName) => {
         setPreValue(e.target.value)
@@ -92,27 +78,35 @@ const EmailPage = () => {
     }
 
     const handleEditTextField = async (e, textFieldName) => {
-        switch (textFieldName) {
-        case 'email':
-            if (e.target.value !== prevValue) {
-                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                const isValid = pattern.test(e.target.value)
-                if (isValid) {
-                    setInvalidMessage('')
-                    const result = await updateProfileApi(user._id, textFieldName, e.target.value)
-                    setEmail(e.target.value)
-                    setEmailFocus(false)
-                    result.change ? toast.success('Cập nhật thành công') : toast.error('Cập nhật thất bại')
-                    return
-                }
+        if (e.target.value !== prevValue) {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            const isValid = pattern.test(e.target.value)
+            if (!isValid) {
                 setInvalidMessage('Vui lòng nhập đúng Email!!!')
                 setEmailFocus(false)
+                return
             }
-            setEmailFocus(false)
-            return
-        default:
-            return
+
+            setInvalidMessage('')
+            const data = {
+                fieldName: textFieldName,
+                dataToUpdate: e.target.value
+            }
+            dispatch(updateProfileThunk(data))
+                .unwrap()
+                .then(() => {
+                    toast.success('Cập nhật thành công')
+                    setEmailFocus(false)
+                    return
+                })
+                .catch(() => {
+                    toast.error('Cập nhật thất bại')
+                    setEmailFocus(false)
+                    return
+                })
         }
+        setEmailFocus(false)
+        return
     }
 
     const handleCancelEditTextField = (textFieldName) => {

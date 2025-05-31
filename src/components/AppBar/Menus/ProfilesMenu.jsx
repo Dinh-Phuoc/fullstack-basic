@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
@@ -22,22 +22,22 @@ import NotificationsNone from '@mui/icons-material/NotificationsNone'
 import PersonOutlineOutlined from '@mui/icons-material/PersonOutlineOutlined'
 
 import { userSelector } from '~/redux/selector'
-import { logoutThunk } from '~/redux/slice/userSlice'
 import { API_ROOT } from '~/utils/constant'
+import { logoutApi } from '~/apis'
 
 export default function Profiles() {
     const [anchorEl, setAnchorEl] = useState(null)
     const isDarkMode = localStorage.getItem('mui-mode') === 'dark' ? true : false
     const [checked, setChecked] = useState(isDarkMode)
+    const navigate = useNavigate()
     const { data: user } = useSelector(userSelector)
     const { setMode } = useColorScheme()
-    const dispatch = useDispatch()
 
-    const handleLogOut = () => {
-        dispatch(logoutThunk())
-        setAnchorEl(null)
+    const handleLogOut = async() => {
+        await logoutApi()
+        navigate('/')
     }
-    
+
     const open = Boolean(anchorEl)
 
     const handleChange = (event) => {
@@ -67,7 +67,7 @@ export default function Profiles() {
                     <Avatar 
                         sx={{ width: 32, height: 32 }} 
                         alt='Your Avatar'
-                        src= {user.avatar ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}` : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-2409187029.jpg'
+                        src= {user?.avatar ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}` : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-2409187029.jpg'
                         }/>
                 </IconButton>
             </Tooltip>
@@ -127,7 +127,7 @@ export default function Profiles() {
                     <Avatar 
                         sx={{ '&.MuiAvatar-root': { width: 30, height: 30 } }} 
                         alt='Your Avatar'
-                        src= {user.avatar ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}` : 'https://images.unsplash.com/photo-1603269414002-7f3d2acd0409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dmlldG5hbSUyMG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D'}
+                        src= {user?.avatar ? `${API_ROOT}/v1/manage/users/profile/get-image/avatar/?t=${Date.now()}` : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-2409187029.jpg'}
                     />
                     <Box 
                         sx={{ 

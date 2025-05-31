@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import SvgIcon from '@mui/material/SvgIcon'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-
-import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
+import Button from '@mui/material/Button'
+import Menu from '@mui/material/Menu'
+import Email from '@mui/icons-material/Email'
+import FacebookOutlined from '@mui/icons-material/FacebookOutlined'
+import Instagram from '@mui/icons-material/Instagram'
 import HomeMenu from './HomeMenu/HomeMenu'
-import { Link } from 'react-router-dom'
 import HomeMenuXS from './HomeMenuXS/HomeMenuXS'
-import { Button, Menu } from '@mui/material'
-import { Email, FacebookOutlined, Instagram } from '@mui/icons-material'
+
 import { ReactComponent as ZaloIcon } from '~/assets/zaloIcon.svg'
+import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 
 export default function HomeBar() {
     const [scrolled, setScrolled] = useState(false)
@@ -64,14 +67,15 @@ export default function HomeBar() {
                 zIndex: 99,
                 top: 0,
                 width: '100%',
+                m: 'auto',
                 height: (theme) => theme.trelloCustom.appBarHeight,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: { xs: 'space-between', lg: 'center' },
                 gap: 2,
                 pl: 2,
                 overflowX: 'auto',
-                bgcolor: 'white',
+                bgcolor: theme => theme.palette.mode === 'dark' ? 'black' : 'white',
                 '&:hover': {
                     boxShadow: 'rgba(9, 30, 66, 0.15) 0px 0.5rem 1rem 0px'
                 },

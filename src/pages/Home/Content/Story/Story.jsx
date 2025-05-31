@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { useEffect, useRef, useState } from 'react'
-import { Button, Divider, Paper } from '@mui/material'
+import { Button, Container, Divider, Paper } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from '@mui/icons-material'
 
@@ -215,193 +215,19 @@ export default function Story() {
     }
 
     return (
-        <Box sx={{ mt: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box 
-                sx={{ 
-                    display: { xs: 'none', md: 'flex' },
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    textAlign: 'end',
-                    flexDirection: 'row',
-                    ml: 'auto',
-                    mr: '48px'
-                }}
-            >
-                { card.map(card => (
-                    <Typography 
-                        key={card.id}
-                        sx={{ 
-                            ...dotStyle,
-                            width: cardActive[card.id] ? '6rem' : dotStyle.width,
-                            opacity: cardActive[card.id] ? 0.5 : 1
-                        }}
-                    />
-                ))}
-
+        <Container>
+            <Box sx={{ mt: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Box 
                     sx={{ 
                         display: { xs: 'none', md: 'flex' },
                         justifyContent: 'flex-end',
-                        textAlign: 'end',
-                        flexDirection: 'row',
-                        ml: '12px',
-                        gap: 2
-                    }}>
-                    <Button sx={styleButton} onClick={handleArrowBack}><ArrowBackIosNewOutlined/></Button>
-                    <Button sx={styleButton} onClick={handleArrowForward}><ArrowForwardIosOutlined/></Button>
-                </Box>
-            </Box>
-
-            <Paper 
-                sx={{ 
-                    overflow: 'hidden',
-                    mt: '24px',
-                    cursor:  isDragging ? 'grabbing' : 'grab',
-                    width: '90%',
-                    height: '100%',
-                    borderRadius: '10px'
-                }}
-                elevation={4}>
-                <Box 
-                    // style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
-                    sx={{ 
-                        overflow: 'auto',
-                        display: 'flex',
-                        height: '100%',
-                        flexDirection: 'row',
-                        width: '100%',
-                        gap: 2,
-                        '&::-webkit-scrollbar': {
-                            display: 'none'
-                        }
-                    }}
-                    ref={scrollElRef}
-                    onMouseMove={handleMove}
-                    onMouseDown={handleDown}
-                    onMouseUp={handleUp}
-                    onMouseLeave={handleUp}
-                >
-                    { card.map(card => (
-                        <Box 
-                            key={card.id} 
-                            sx={{ width: '100%', flexShrink: 0, userSelect: 'none' }} 
-                            data-id={card.id}
-                        >
-                            <Box 
-                                sx={{ 
-                                    display: 'flex', 
-                                    flexDirection: { xs: 'column', md: 'row' },
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    alignContent: 'space-around',
-                                    height: { xs: '100%', sm: '100%', md: '450px' }
-                                }}>
-                                <Box 
-                                    sx={{ 
-                                        height: { xs: '70%', sm: '450px', md: '100%' }, 
-                                        width: { xs: '100%', md: '70%' }, 
-                                        p: { xs: '12px', sm: '28px' },
-                                        justifyContent: 'space-between',
-                                        display: 'flex',
-                                        flexDirection: 'column'
-                                    }}>
-                                    <Typography 
-                                        sx={{ ...styleText }}>
-                                        {card.feedback}
-                                    </Typography>
-
-                                    <Box >
-                                        <Divider sx={{ width: '40%', borderBottom: '2px solid', borderColor: 'black', mb: '32px', mt: { xs: '32px' } }}/>
-
-                                        <Typography>
-                                            {card.name}
-                                        </Typography>
-
-                                        <Typography>
-                                            {card.jobTitle}
-                                        </Typography>
-
-                                        <Box 
-                                            sx={{ 
-                                                display: 'flex',
-                                                flexWrap: 'wrap',
-                                                alignItems: 'end',
-                                                justifyContent: 'space-between',
-                                                mt: { xs: '32px', sm: '0' }
-                                            }}>
-
-                                            <Box 
-                                                component={'img'} 
-                                                src={card.img} 
-                                                sx={{
-                                                    width: '30%',
-                                                    aspectRatio: '16 / 9'
-                                                }}>
-                                            </Box>
-
-                                            <Box 
-                                                component={Link} 
-                                                to={`/story/${card.id}`}
-                                                sx={{ color: theme => theme.trelloCustom.myColor }}
-                                            >
-                                                Read the story
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                </Box>
-
-                                <Box 
-                                    sx={{ 
-                                        width: { xs: '100%', md: '30%' },
-                                        height: { xs: '30%', sm: '230px', md: '100%' },
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'space-between',
-                                        flexWrap: 'wrap',
-                                        p: { xs: '12px', sm: '28px' },
-                                        borderBottomLeftRadius: { xs: '10px', md: 0 },
-                                        borderBottomRightRadius: { xs: '10px', md: 0 },
-                                        bgcolor: theme => theme.trelloCustom.myColor
-                                    }}>
-                                    <Typography 
-                                        sx={{ ...styleText, color: 'white', mb: '30px' }}
-                                    >
-                                        {card.title}
-                                    </Typography>
-                                    
-                                    <Box 
-                                        component={Link} 
-                                        to='/trello-techvalidate-survey' 
-                                        sx={{ color: 'white' }}>
-                                            Trello TechValidate Survey
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                    ))}
-                </Box>
-            </Paper>
-
-            <Box 
-                sx={{ 
-                    display: { xs: 'flex', md: 'none' },
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    textAlign: 'end',
-                    flexDirection: 'row'
-                }}
-            >
-                <Box 
-                    sx={{ 
-                        display: { xs: 'flex', md: 'none' },
-                        justifyContent: 'center',
                         alignItems: 'center',
                         textAlign: 'end',
                         flexDirection: 'row',
-                        mt: '24px',
-                        gap: 2
-                    }}>
-                    <Button sx={styleButton} onClick={handleArrowBack}><ArrowBackIosNewOutlined/></Button>
+                        ml: 'auto',
+                        mr: '48px'
+                    }}
+                >
                     { card.map(card => (
                         <Typography 
                             key={card.id}
@@ -412,9 +238,185 @@ export default function Story() {
                             }}
                         />
                     ))}
-                    <Button sx={styleButton} onClick={handleArrowForward}><ArrowForwardIosOutlined/></Button>
+    
+                    <Box 
+                        sx={{ 
+                            display: { xs: 'none', md: 'flex' },
+                            justifyContent: 'flex-end',
+                            textAlign: 'end',
+                            flexDirection: 'row',
+                            ml: '12px',
+                            gap: 2
+                        }}>
+                        <Button sx={styleButton} onClick={handleArrowBack}><ArrowBackIosNewOutlined/></Button>
+                        <Button sx={styleButton} onClick={handleArrowForward}><ArrowForwardIosOutlined/></Button>
+                    </Box>
+                </Box>
+    
+                <Paper 
+                    sx={{ 
+                        overflow: 'hidden',
+                        mt: '24px',
+                        cursor:  isDragging ? 'grabbing' : 'grab',
+                        width: '90%',
+                        height: '100%',
+                        borderRadius: '10px'
+                    }}
+                    elevation={4}>
+                    <Box 
+                        // style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
+                        sx={{ 
+                            overflow: 'auto',
+                            display: 'flex',
+                            height: '100%',
+                            flexDirection: 'row',
+                            width: '100%',
+                            gap: 2,
+                            '&::-webkit-scrollbar': {
+                                display: 'none'
+                            }
+                        }}
+                        ref={scrollElRef}
+                        onMouseMove={handleMove}
+                        onMouseDown={handleDown}
+                        onMouseUp={handleUp}
+                        onMouseLeave={handleUp}
+                    >
+                        { card.map(card => (
+                            <Box 
+                                key={card.id} 
+                                sx={{ width: '100%', flexShrink: 0, userSelect: 'none' }} 
+                                data-id={card.id}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        flexDirection: { xs: 'column', md: 'row' },
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        alignContent: 'space-around',
+                                        height: { xs: '100%', sm: '100%', md: '450px' }
+                                    }}>
+                                    <Box 
+                                        sx={{ 
+                                            height: { xs: '70%', sm: '450px', md: '100%' }, 
+                                            width: { xs: '100%', md: '70%' }, 
+                                            p: { xs: '12px', sm: '28px' },
+                                            justifyContent: 'space-between',
+                                            display: 'flex',
+                                            flexDirection: 'column'
+                                        }}>
+                                        <Typography 
+                                            sx={{ ...styleText }}>
+                                            {card.feedback}
+                                        </Typography>
+    
+                                        <Box >
+                                            <Divider sx={{ width: '40%', borderBottom: '2px solid', borderColor: 'black', mb: '32px', mt: { xs: '32px' } }}/>
+    
+                                            <Typography>
+                                                {card.name}
+                                            </Typography>
+    
+                                            <Typography>
+                                                {card.jobTitle}
+                                            </Typography>
+    
+                                            <Box 
+                                                sx={{ 
+                                                    display: 'flex',
+                                                    flexWrap: 'wrap',
+                                                    alignItems: 'end',
+                                                    justifyContent: 'space-between',
+                                                    mt: { xs: '32px', sm: '0' }
+                                                }}>
+    
+                                                <Box 
+                                                    component={'img'} 
+                                                    src={card.img} 
+                                                    sx={{
+                                                        width: '30%',
+                                                        aspectRatio: '16 / 9'
+                                                    }}>
+                                                </Box>
+    
+                                                <Box 
+                                                    component={Link} 
+                                                    to={`/story/${card.id}`}
+                                                    sx={{ color: theme => theme.trelloCustom.myColor }}
+                                                >
+                                                    Read the story
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+    
+                                    <Box 
+                                        sx={{ 
+                                            width: { xs: '100%', md: '30%' },
+                                            height: { xs: '30%', sm: '230px', md: '100%' },
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'space-between',
+                                            flexWrap: 'wrap',
+                                            p: { xs: '12px', sm: '28px' },
+                                            borderBottomLeftRadius: { xs: '10px', md: 0 },
+                                            borderBottomRightRadius: { xs: '10px', md: 0 },
+                                            bgcolor: theme => theme.trelloCustom.myColor
+                                        }}>
+                                        <Typography 
+                                            sx={{ ...styleText, color: 'white', mb: '30px' }}
+                                        >
+                                            {card.title}
+                                        </Typography>
+                                        
+                                        <Box 
+                                            component={Link} 
+                                            to='/trello-techvalidate-survey' 
+                                            sx={{ color: 'white' }}>
+                                                Trello TechValidate Survey
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        ))}
+                    </Box>
+                </Paper>
+    
+                <Box 
+                    sx={{ 
+                        display: { xs: 'flex', md: 'none' },
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'end',
+                        flexDirection: 'row'
+                    }}
+                >
+                    <Box 
+                        sx={{ 
+                            display: { xs: 'flex', md: 'none' },
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            textAlign: 'end',
+                            flexDirection: 'row',
+                            mt: '24px',
+                            gap: 2
+                        }}>
+                        <Button sx={styleButton} onClick={handleArrowBack}><ArrowBackIosNewOutlined/></Button>
+                        { card.map(card => (
+                            <Typography 
+                                key={card.id}
+                                sx={{ 
+                                    ...dotStyle,
+                                    width: cardActive[card.id] ? '6rem' : dotStyle.width,
+                                    opacity: cardActive[card.id] ? 0.5 : 1
+                                }}
+                            />
+                        ))}
+                        <Button sx={styleButton} onClick={handleArrowForward}><ArrowForwardIosOutlined/></Button>
+                    </Box>
                 </Box>
             </Box>
-        </Box>
+        </Container>
     )
 }

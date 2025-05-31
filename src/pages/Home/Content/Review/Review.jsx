@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material'
+import { Container, Paper, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useEffect, useRef, useState } from 'react'
 import capitalizeFirstLetter from '~/utils/formatter'
@@ -16,36 +16,68 @@ export default function Review() {
         const elCard = scrollCardRef.current
         if (!el) return
 
-        const handleTouchStart = (e) => {
-            if (e.cancelable) e.preventDefault()
+        const prevHandleStart = (e) => {
+            if (e.touches) {
+                handleDown(e)
+                return
+            }
+            e.preventDefault()
             handleDown(e)
         }
-        const handleTouchMove = (e) => {
-            if (e.cancelable) e.preventDefault()
+        const prevHandleMove = (e) => {
+            if (e.touches) {
+                handleMove(e)
+                return
+            }
+            e.preventDefault()
             handleMove(e)
         }
 
-        const handleTouchEnd = (e) => {
-            if (e.cancelable) e.preventDefault()
+        const prevHandleUp = (e) => {
+            if (e.touches) {
+                handleUp(e)
+                return
+            }
+            e.preventDefault()
             handleUp(e)
         }
 
-        el.addEventListener('touchstart', handleTouchStart, { passive: false })
-        el.addEventListener('touchmove', handleTouchMove, { passive: false })
-        el.addEventListener('touchend', handleTouchEnd, { passive: false })
+        el.addEventListener('touchstart', prevHandleStart, { passive: false })
+        el.addEventListener('touchmove', prevHandleMove, { passive: false })
+        el.addEventListener('touchend', prevHandleUp, { passive: false })
 
-        elCard.addEventListener('touchstart', handleTouchStart, { passive: false })
-        elCard.addEventListener('touchmove', handleTouchMove, { passive: false })
-        elCard.addEventListener('touchend', handleTouchEnd, { passive: false })
+        el.addEventListener('mousedown', prevHandleStart)
+        el.addEventListener('mousemove', prevHandleMove)
+        el.addEventListener('mouseup', prevHandleUp)
+        el.addEventListener('mouseleave', prevHandleUp)
+
+        elCard.addEventListener('touchstart', prevHandleStart, { passive: false })
+        elCard.addEventListener('touchmove', prevHandleMove, { passive: false })
+        elCard.addEventListener('touchend', prevHandleUp, { passive: false })
+
+        elCard.addEventListener('mousedown', prevHandleStart)
+        elCard.addEventListener('mousemove', prevHandleMove)
+        elCard.addEventListener('mouseup', prevHandleUp)
+        elCard.addEventListener('mouseleave', prevHandleUp)
 
         return () => {
-            el.removeEventListener('touchstart', handleTouchStart)
-            el.removeEventListener('touchmove', handleTouchMove)
-            el.removeEventListener('touchend', handleTouchEnd)
+            el.removeEventListener('touchstart', prevHandleStart)
+            el.removeEventListener('touchmove', prevHandleMove)
+            el.removeEventListener('touchend', prevHandleUp)
 
-            elCard.removeEventListener('touchstart', handleTouchStart)
-            elCard.removeEventListener('touchmove', handleTouchMove)
-            elCard.removeEventListener('touchend', handleTouchEnd)
+            el.removeEventListener('mousedown', prevHandleStart)
+            el.removeEventListener('mousemove', prevHandleMove)
+            el.removeEventListener('mouseup', prevHandleUp)
+            el.removeEventListener('mouseleave', prevHandleUp)
+
+            elCard.removeEventListener('touchstart', prevHandleStart)
+            elCard.removeEventListener('touchmove', prevHandleMove)
+            elCard.removeEventListener('touchend', prevHandleUp)
+
+            elCard.removeEventListener('mousedown', prevHandleStart)
+            elCard.removeEventListener('mousemove', prevHandleMove)
+            elCard.removeEventListener('mouseup', prevHandleUp)
+            elCard.removeEventListener('mouseleave', prevHandleUp)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prevPosition])
@@ -163,11 +195,9 @@ export default function Review() {
     }
 
     const handleDown = (e) => {
-        e.preventDefault()
+        setIsDragging(true)
         const clientX = e.touches ? e.touches[0].clientX : e.clientX
         const clientY = e.touches ? e.touches[0].clientY : e.clientY
-
-        setIsDragging(true)
         setPrevPosition({
             id: Number(e.target.getAttribute('data-id')),
             left: Math.floor(e.currentTarget.scrollLeft),
@@ -179,7 +209,6 @@ export default function Review() {
     }
 
     const handleMove = (e) => {
-        e.preventDefault()
         if (!isDragging || !prevPosition) return
         const elImage = scrollImageRef.current
         const elTitle = scrollCardRef.current
@@ -194,7 +223,6 @@ export default function Review() {
         const dy = prevPosition.y - clientY
 
         if (Math.abs(dy) > Math.abs(dx)) {
-            setIsDragging(false)
             return
         }
         
@@ -231,63 +259,192 @@ export default function Review() {
     }
 
     return (
-        <Box sx={{ m: '24px 50px 24px' }}>
-            <Box sx={{ mb: '24px', width: '100%', p: '18px' }}>
-                <Typography sx={{ mb: '12px' }}>TRELLO 101</Typography>
-                <Typography variant='h4' sx={{ mb: '12px', fontWeight: 500 }}>Your productivity powerhouse</Typography>
-                <Typography 
-                    sx={{ '&.MuiTypography-root.MuiTypography-body1': { fontSize: '1.2rem' } }}>
-                    Stay organized and efficient with Inbox, Boards, and Planner. Every to-do, idea, or responsibility—no matter how small—finds its place, keeping you at the top of your game.
-                </Typography>
-            </Box>
-
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignContent: 'center' }}>
-                <Box 
-                    sx={{ 
-                        width: '35%',
-                        display: { xs: 'none', md: 'flex' },
-                        flexDirection: { md: 'column' },
-                        p: '8px'
-                    }}
-                >
-                    { card.map(card => (
-                        <Paper 
-                            key={card.id} 
-                            onClick={hanldeActiveCard(card.id)}
-                            sx={{
-                                ...styleCard,
-                                '&:after': {
-                                    ...styleCard['&:after'],
-                                    visibility: cardActive[card.id] ? 'visible' : 'hidden'
-                                }
-                            }} 
-                            elevation={cardActive[card.id] ? 4 : 0 }
-                        >
-                            <Typography 
-                                sx={{ 
-                                    fontWeight: 600,
-                                    '&.MuiTypography-root.MuiTypography-body1': {
-                                        fontSize: '1.2rem'
-                                    }
-                                }}>
-                                {capitalizeFirstLetter(card.title)}
-                            </Typography>
-                            <Typography 
-                                sx={{ 
-                                    '&.MuiTypography-root.MuiTypography-body1': {
-                                        fontSize: '1rem'
-                                    }
-                                }}>{card.desc}</Typography>
-                        </Paper>
-                    ))}
+        <Container>
+            <Box sx={{ m: '24px 50px 24px' }}>
+                <Box sx={{ mb: '24px', width: '100%', p: '18px' }}>
+                    <Typography sx={{ mb: '12px' }}>TRELLO 101</Typography>
+                    <Typography variant='h4' sx={{ mb: '12px', fontWeight: 500 }}>Your productivity powerhouse</Typography>
+                    <Typography 
+                        sx={{ '&.MuiTypography-root.MuiTypography-body1': { fontSize: '1.2rem' } }}>
+                        Stay organized and efficient with Inbox, Boards, and Planner. Every to-do, idea, or responsibility—no matter how small—finds its place, keeping you at the top of your game.
+                    </Typography>
                 </Box>
-
-                <Box sx={{ width: { xs: '100%', md: '70%' } }}>
+    
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignContent: 'center' }}>
                     <Box 
                         sx={{ 
+                            width: '35%',
                             display: { xs: 'none', md: 'flex' },
-                            justifyContent: 'flex-end',
-                            flexDirection: 'row'
+                            flexDirection: { md: 'column' },
+                            p: '8px'
+                        }}
+                    >
+                        { card.map(card => (
+                            <Paper 
+                                key={card.id} 
+                                onClick={hanldeActiveCard(card.id)}
+                                sx={{
+                                    ...styleCard,
+                                    '&:after': {
+                                        ...styleCard['&:after'],
+                                        visibility: cardActive[card.id] ? 'visible' : 'hidden'
+                                    }
+                                }} 
+                                elevation={cardActive[card.id] ? 4 : 0 }
+                            >
+                                <Typography 
+                                    sx={{ 
+                                        fontWeight: 600,
+                                        '&.MuiTypography-root.MuiTypography-body1': {
+                                            fontSize: '1.2rem'
+                                        }
+                                    }}>
+                                    {capitalizeFirstLetter(card.title)}
+                                </Typography>
+                                <Typography 
+                                    sx={{ 
+                                        '&.MuiTypography-root.MuiTypography-body1': {
+                                            fontSize: '1rem'
+                                        }
+                                    }}>{card.desc}</Typography>
+                            </Paper>
+                        ))}
+                    </Box>
+    
+                    <Box sx={{ width: { xs: '100%', md: '70%' } }}>
+                        <Box 
+                            sx={{ 
+                                display: { xs: 'none', md: 'flex' },
+                                justifyContent: 'flex-end',
+                                flexDirection: 'row'
+                            }}
+                        >
+                            { card.map(card => (
+                                <Typography 
+                                    key={card.id}
+                                    sx={{ 
+                                        ...dotStyle,
+                                        width: cardActive[card.id] ? '6rem' : dotStyle.width,
+                                        opacity: cardActive[card.id] ? 0.5 : 1
+                                    }}
+                                />
+                            ))}
+                        </Box>
+    
+                        <Box 
+                            sx={{ 
+                                overflow: 'hidden',
+                                mt: '24px',
+                                cursor:  isDragging ? 'grabbing' : 'grab',
+                                width: '100%'
+                            }}>
+                            <Box 
+                                sx={{ 
+                                    overflow: 'auto',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    width: '100%',
+                                    gap: 1,
+                                    '&::-webkit-scrollbar': {
+                                        display: 'none'
+                                    }
+                                }}
+                                ref={scrollImageRef}
+                            >
+                                { card.map(card => (
+                                    <Box key={card.id} sx={{ width: '100%', flexShrink: 0 }} data-id={card.id}>
+                                        <img 
+                                            data-id={card.id}
+                                            style={{ 
+                                                userSelect: 'none',
+                                                width: '100%', 
+                                                objectFit: 'contain' 
+                                            }} 
+                                            src={card.img} 
+                                            alt={card.title} 
+                                        />
+                                    </Box>
+                                ))}
+                            </Box>
+                        </Box>
+                    </Box>
+    
+                    <Box 
+                        sx={{ 
+                            display: { xs: 'block', md: 'none' },
+                            overflow: 'hidden',
+                            mt: '24px',
+                            width: '100%',
+                            cursor:  isDragging ? 'grabbing' : 'grab'
+    
+                        }}>
+                        <Box 
+                            sx={{ 
+                                overflow: 'auto',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                width: '100%',
+                                gap: 1,
+                                '&::-webkit-scrollbar': {
+                                    display: 'none'
+                                }
+                            }}
+                            ref={scrollCardRef}
+                        >
+                            { card.map(card => (
+                                <Paper 
+                                    data-id={card.id}
+                                    key={card.id}
+                                    sx={{
+                                        width: '100%',
+                                        p: '12px',
+                                        position: 'relative',
+                                        flexShrink: 0,
+                                        '&:after': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            left: 0,
+                                            top: 0,
+                                            borderTopLeftRadius: '4px',
+                                            borderBottomLeftRadius: '4px',
+                                            height: '100%',
+                                            color: theme => theme.trelloCustom.myColor,
+                                            border: '3px solid'
+                                        }
+                                    }} 
+                                    elevation={cardActive[card.id] ? 4 : 0 }
+                                >
+                                    <Typography 
+                                        data-id={card.id}
+                                        sx={{ 
+                                            userSelect: 'none',
+                                            fontWeight: 600,
+                                            '&.MuiTypography-root.MuiTypography-body1': {
+                                                fontSize: '1.2rem'
+                                            }
+                                        }}>
+                                        {capitalizeFirstLetter(card.title)}
+                                    </Typography>
+                                    <Typography 
+                                        data-id={card.id}
+                                        sx={{ 
+                                            userSelect: 'none',
+                                            '&.MuiTypography-root.MuiTypography-body1': {
+                                                fontSize: '1rem'
+                                            }
+                                        }}>{card.desc}
+                                    </Typography>
+                                </Paper>
+                            ))}
+                        </Box>
+                    </Box>                   
+    
+                    <Box 
+                        sx={{ 
+                            display: { xs: 'flex', md: 'none' },
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            mt: '24px'
                         }}
                     >
                         { card.map(card => (
@@ -301,143 +458,8 @@ export default function Review() {
                             />
                         ))}
                     </Box>
-
-                    <Box 
-                        sx={{ 
-                            overflow: 'hidden',
-                            mt: '24px',
-                            cursor:  isDragging ? 'grabbing' : 'grab',
-                            width: '100%'
-                        }}>
-                        <Box 
-                            style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
-                            sx={{ 
-                                overflow: 'auto',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                width: '100%',
-                                gap: 1,
-                                '&::-webkit-scrollbar': {
-                                    display: 'none'
-                                }
-                            }}
-                            ref={scrollImageRef}
-                            onMouseMove={handleMove}
-                            onMouseDown={handleDown}
-                            onMouseUp={handleUp}
-                            onMouseLeave={handleUp}
-                        >
-                            { card.map(card => (
-                                <Box key={card.id} sx={{ width: '100%', flexShrink: 0 }} data-id={card.id}>
-                                    <img 
-                                        data-id={card.id}
-                                        style={{ 
-                                            userSelect: 'none',
-                                            width: '100%', 
-                                            objectFit: 'contain' 
-                                        }} 
-                                        src={card.img} 
-                                        alt={card.title} 
-                                    />
-                                </Box>
-                            ))}
-                        </Box>
-                    </Box>
-                </Box>
-
-                <Box 
-                    sx={{ 
-                        display: { xs: 'block', md: 'none' },
-                        overflow: 'hidden',
-                        mt: '24px',
-                        width: '100%',
-                        cursor:  isDragging ? 'grabbing' : 'grab'
-
-                    }}>
-                    <Box 
-                        style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
-                        sx={{ 
-                            overflow: 'auto',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            width: '100%',
-                            gap: 1,
-                            '&::-webkit-scrollbar': {
-                                display: 'none'
-                            }
-                        }}
-                        ref={scrollCardRef}
-                        onMouseMove={handleMove}
-                        onMouseDown={handleDown}
-                        onMouseUp={handleUp}
-                        onMouseLeave={handleUp}
-                    >
-                        { card.map(card => (
-                            <Paper 
-                                data-id={card.id}
-                                key={card.id}
-                                sx={{
-                                    width: '100%',
-                                    p: '12px',
-                                    position: 'relative',
-                                    flexShrink: 0,
-                                    '&:after': {
-                                        content: '""',
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 0,
-                                        borderTopLeftRadius: '4px',
-                                        borderBottomLeftRadius: '4px',
-                                        height: '100%',
-                                        color: theme => theme.trelloCustom.myColor,
-                                        border: '3px solid'
-                                    }
-                                }} 
-                                elevation={cardActive[card.id] ? 4 : 0 }
-                            >
-                                <Typography 
-                                    data-id={card.id}
-                                    sx={{ 
-                                        fontWeight: 600,
-                                        '&.MuiTypography-root.MuiTypography-body1': {
-                                            fontSize: '1.2rem'
-                                        }
-                                    }}>
-                                    {capitalizeFirstLetter(card.title)}
-                                </Typography>
-                                <Typography 
-                                    data-id={card.id}
-                                    sx={{ 
-                                        '&.MuiTypography-root.MuiTypography-body1': {
-                                            fontSize: '1rem'
-                                        }
-                                    }}>{card.desc}
-                                </Typography>
-                            </Paper>
-                        ))}
-                    </Box>
-                </Box>                   
-
-                <Box 
-                    sx={{ 
-                        display: { xs: 'flex', md: 'none' },
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                        mt: '24px'
-                    }}
-                >
-                    { card.map(card => (
-                        <Typography 
-                            key={card.id}
-                            sx={{ 
-                                ...dotStyle,
-                                width: cardActive[card.id] ? '6rem' : dotStyle.width,
-                                opacity: cardActive[card.id] ? 0.5 : 1
-                            }}
-                        />
-                    ))}
                 </Box>
             </Box>
-        </Box>
+        </Container>
     )
 }

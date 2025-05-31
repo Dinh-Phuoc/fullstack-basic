@@ -21,7 +21,7 @@ function Board() {
     useEffect(() => {
         dispatch(setUserInfoThunk())
             .unwrap()
-            .then(data => dispatch(fetchBoard(data.boardUuid[0])))
+            .then(data => dispatch(fetchBoard(data?.boardUuid?.[0] || 'dae10414-1ed4-47b9-bf37-5b782aed990e')))
             
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

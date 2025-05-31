@@ -1,11 +1,11 @@
 import { Email, ErrorOutline, FacebookOutlined, Instagram } from '@mui/icons-material'
-import { Box, Button, SvgIcon, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Container, SvgIcon, TextField, Tooltip, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { TrelloWebIcon } from '~/assets/icon'
 
 import { ReactComponent as ZaloIcon } from '~/assets/zaloIcon.svg'
-export default function Footer() {
+export default function Footer({ display='flex' }) {
     const [emailValue, setEmailValue] = useState('')
     const [open, setOpen] = useState(false)
     const emailInputRef = useRef()
@@ -75,7 +75,7 @@ export default function Footer() {
         <Box sx={{ width: { md: '100%' }, mt: '32px' }}>
             <Box 
                 sx={{ 
-                    display: 'flex', 
+                    display: { display }, 
                     flexDirection: 'column', 
                     alignItems: 'center', 
                     justifyContent: 'center',
@@ -166,51 +166,63 @@ export default function Footer() {
 
             <Box 
                 sx={{ 
-                    display: 'flex', 
-                    flexDirection: { xs: 'column', sm: 'row' }, 
-                    alignItems: 'center', 
-                    justifyContent: 'space-between',
-                    gap: 2,
-                    textAlign: 'center',
-                    bgcolor: theme => theme.trelloCustom.myColor,
-                    color: 'white'
+                    bgcolor: theme => theme.trelloCustom.myColor
                 }}>
-                <Box sx={{ p: '16px', gap: 2, textAlign: 'center' }}>
-                    <Typography variant='h6' sx={{ mb: '12px', fontSize: '1.4rem' }}>
-                        Trang web được tạo nên dựa trên giao diện của 
-                    </Typography>
-                    <Box component={Link} to='https://trello.com/' sx={{ cursor: 'pointer' }}>
-                        <TrelloWebIcon/>
-                    </Box>
-                </Box>
-                <Box sx={{ p: '28px' }}>
-                    <Typography variant='h6' sx={{ fontWeight: 600, mb: '12px', fontSize: '1.4rem' }}>Liên hệ với tôi qua:</Typography>
-                    <Box
+                <Container
+                    sx={{ 
+                        display: 'flex', 
+                        flexDirection: { xs: 'column', sm: 'row' }, 
+                        alignItems: 'center', 
+                        justifyContent: display === 'none' ? 'center' : 'space-between',
+                        gap: 2,
+                        textAlign: 'center',
+                        color: 'white'
+                    }}
+                >
+                    <Box 
                         sx={{ 
-                            display: 'flex', 
-                            flexDirection: 'row', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            gap: 2
-                        }}
-                    >
-                        <Box component={'a'} href='https://www.facebook.com/saru.an.169/' target="_blank" rel="noopener noreferrer">
-                            <FacebookOutlined sx={styleIcon}/>
-                        </Box>
-    
-                        <Box component={'a'} href='https://www.instagram.com/pdphuoc_ordinary/' target="_blank" rel="noopener noreferrer">
-                            <Instagram sx={styleIcon}/>
-                        </Box>
-    
-                        <Box component={'a'} href='mailto:phandinhphuoc02@gmail.com'>
-                            <Email sx={styleIcon}/>
-                        </Box>
-    
-                        <Box component={'a'} href="https://zalo.me/0366159200" target="_blank" rel="noopener noreferrer">
-                            <SvgIcon component={ZaloIcon} fontSize='large' inheritViewBox sx={styleIcon}/>
+                            p: '16px', 
+                            gap: 2, 
+                            textAlign: 'center', 
+                            display: { display },
+                            flexDirection: 'column'
+                        }}>
+                        <Typography variant='h6' sx={{ mb: '12px', fontSize: '1.4rem' }}>
+                            Trang web được tạo nên dựa trên giao diện của 
+                        </Typography>
+                        <Box component={Link} to='https://trello.com/' sx={{ cursor: 'pointer' }}>
+                            <TrelloWebIcon/>
                         </Box>
                     </Box>
-                </Box>
+                    <Box sx={{ p: '28px' }}>
+                        <Typography variant='h6' sx={{ fontWeight: 600, mb: '12px', fontSize: '1.4rem' }}>Liên hệ với tôi qua:</Typography>
+                        <Box
+                            sx={{ 
+                                display: 'flex', 
+                                flexDirection: 'row', 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                gap: 2
+                            }}
+                        >
+                            <Box component={'a'} href='https://www.facebook.com/saru.an.169/' target="_blank" rel="noopener noreferrer">
+                                <FacebookOutlined sx={styleIcon}/>
+                            </Box>
+        
+                            <Box component={'a'} href='https://www.instagram.com/pdphuoc_ordinary/' target="_blank" rel="noopener noreferrer">
+                                <Instagram sx={styleIcon}/>
+                            </Box>
+        
+                            <Box component={'a'} href='mailto:phandinhphuoc02@gmail.com'>
+                                <Email sx={styleIcon}/>
+                            </Box>
+        
+                            <Box component={'a'} href="https://zalo.me/0366159200" target="_blank" rel="noopener noreferrer">
+                                <SvgIcon component={ZaloIcon} fontSize='large' inheritViewBox sx={styleIcon}/>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Container>
             </Box>
         </Box>
     )

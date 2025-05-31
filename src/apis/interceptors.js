@@ -29,7 +29,7 @@ instance.interceptors.response.use(
         return response
     },
     async error => {
-        if (error.config.url.includes('auth/login')) {
+        if (error.config.url.includes('auth/login') || error.config.url.includes('auth/register')) {
             return error.response
         }
 

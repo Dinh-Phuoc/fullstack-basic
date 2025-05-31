@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Container, Typography } from '@mui/material'
 
 export default function MoreInfo() {
     const cards = [
@@ -30,51 +30,53 @@ export default function MoreInfo() {
         aspectRatio: '16 / 9'
     }
     return (
-        <Box sx={{ textAlign: 'center', marginX: { xs: '12px', md: '48px' } }}>
-            <Box sx={{ height: '228px' }}></Box>
-            <Box sx={{ mb: '24px', width: '100%', p: '18px', textAlign: 'start' }}>
-                <Typography sx={{ mb: '12px' }}>WORK SMARTER</Typography>
-                <Typography variant='h4' sx={{ mb: '12px', fontWeight: 500 }}>Do more with Trello</Typography>
-                <Typography 
-                    sx={{
-                        '&.MuiTypography-root.MuiTypography-body1': {
-                            fontSize: '1.2rem'
-                        }
-                    }}
-                >
-                    Customize the way you organize with easy integrations, automation, and mirroring of your to-dos across multiple locations.
-                </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'space-between' }}>
-                {cards.map(card => (
-                    <Box 
-                        key={card.id}
-                        sx={{ 
-                            p: '24px',
-                            display: 'flex',
-                            width: { xs: '100%', sm: '30%' },
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            bgcolor: '#efb7b814',
-                            borderRadius: '10px',
-                            justifyContent: 'space-between',
-                            textAlign: 'start',
-                            gap: 2
+        <Container>
+            <Box sx={{ textAlign: 'center', marginX: { xs: '12px', md: '48px' } }}>
+                <Box sx={{ height: '228px' }}></Box>
+                <Box sx={{ mb: '24px', width: '100%', p: '18px', textAlign: 'start' }}>
+                    <Typography sx={{ mb: '12px' }}>WORK SMARTER</Typography>
+                    <Typography variant='h4' sx={{ mb: '12px', fontWeight: 500 }}>Do more with Trello</Typography>
+                    <Typography 
+                        sx={{
+                            '&.MuiTypography-root.MuiTypography-body1': {
+                                fontSize: '1.2rem'
+                            }
                         }}
                     >
-                        <Box
-                            component={'img'}
-                            src={card.img}
-                            sx={styleImage}
+                        Customize the way you organize with easy integrations, automation, and mirroring of your to-dos across multiple locations.
+                    </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'space-between' }}>
+                    {cards.map(card => (
+                        <Box 
+                            key={card.id}
+                            sx={{ 
+                                p: '24px',
+                                display: 'flex',
+                                width: { xs: '100%', sm: '30%' },
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                bgcolor: '#efb7b814',
+                                borderRadius: '10px',
+                                justifyContent: 'space-between',
+                                textAlign: 'start',
+                                gap: 2
+                            }}
                         >
+                            <Box
+                                component={'img'}
+                                src={card.img}
+                                sx={styleImage}
+                            >
+                            </Box>
+    
+                            <Typography variant='h6'>{card.title}</Typography>
+                            <Typography>{card.desc}</Typography>
+                            <Button variant='outlined' sx={{ }}>{card.button}</Button>
                         </Box>
-
-                        <Typography variant='h6'>{card.title}</Typography>
-                        <Typography>{card.desc}</Typography>
-                        <Button variant='outlined' sx={{ }}>{card.button}</Button>
-                    </Box>
-                ))}
+                    ))}
+                </Box>
             </Box>
-        </Box>
+        </Container>
     )
 }

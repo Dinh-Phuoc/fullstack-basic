@@ -44,20 +44,20 @@ export default function AppBar() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 2,
+            gap: 1,
             paddingX: 2,
             overflowX: 'auto',
             bgcolor: (theme) => (theme.palette.primary.main) 
         }}>
             <Box sx={{ display: 'flex', alignContent: 'center', gap: 1 }}>
-                <MenuRounded 
-                    onClick={handleClick} 
-                    fontSize='large' 
-                    sx={{ 
-                        color: theme => theme.palette.mode === 'dark' ? theme.trelloCustom.myColor : 'white', 
-                        display: { xs: 'block', md: 'none' } 
-                    }}
-                />
+                <Button onClick={handleClick} sx={{ minWidth: '32px', p: 0, display: { xs: 'block', md: 'none' } }}>
+                    <MenuRounded
+                        fontSize='large' 
+                        sx={{ 
+                            color: theme => theme.palette.mode === 'dark' ? theme.trelloCustom.myColor : 'white'
+                        }}
+                    />
+                </Button>
                 <Menu
                     id="basic-menu-workspaces"
                     anchorEl={anchorEl}
