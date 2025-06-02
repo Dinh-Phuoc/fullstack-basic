@@ -36,7 +36,7 @@ const DocumentPage = () => {
     const uploadHeaderImageRef = useRef()
     const imageRef = useRef()
     const open = Boolean(anchorEl)
-    const { data: user } = useSelector(userSelector)
+    const { data: user, isUploadImageHeader, isUploadAvatar } = useSelector(userSelector)
     const dispatch = useDispatch()
 
     // States of personal information
@@ -156,27 +156,6 @@ const DocumentPage = () => {
         setPropertyFocus[textFieldName]()
         e.target.select()
         return
-
-        // switch (textFieldName) {
-        // case 'fullName':
-        //     setFullNameFocus(true)
-        //     e.target.select()
-        //     return
-        // case 'jobTitle':
-        //     setJobTitleFocus(true)
-        //     e.target.select()
-        //     return
-        // case 'department':
-        //     setDepartmentFocus(true)
-        //     e.target.select()
-        //     return
-        // case 'address':
-        //     setAddressFocus(true)
-        //     e.target.select()
-        //     return
-        // default:
-        //     return
-        // }
     }
 
     const handleChangeValue = (e, textFieldName) => {
@@ -210,26 +189,6 @@ const DocumentPage = () => {
         setProperty[textFieldName](prevValue)
         setPropertyFocus[textFieldName](false)
         return
-        // switch (textFieldName) {
-        // case 'fullName':
-        //     setFullName(prevValue)
-        //     setFullNameFocus(false)
-        //     return
-        // case 'jobTitle':
-        //     setJobTitle(prevValue)
-        //     setJobTitleFocus(false)
-        //     return
-        // case 'department':
-        //     setDepartment(prevValue)
-        //     setDepartmentFocus(false)
-        //     return
-        // case 'address':
-        //     setAddress(prevValue)
-        //     setAddressFocus(false)
-        //     return
-        // default:
-        //     return
-        // }
     }
 
     //Handle Menu
@@ -284,25 +243,27 @@ const DocumentPage = () => {
                 position: 'relative' }}
             >
                 {/* Image header */}
-                <Box sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '112px', 
-                    borderRadius: '4px',
-                    userSelect: 'none', 
-                    '&:hover .uploadButton': {
-                        opacity: '1'
-                    }
-                }}>
-                    <Box sx={{
+                <Box 
+                    sx={{
                         position: 'absolute',
                         top: 0,
                         left: 0,
                         width: '100%',
-                        height: '112px'
+                        height: '112px', 
+                        borderRadius: '4px',
+                        userSelect: 'none', 
+                        '&:hover .uploadButton': {
+                            opacity: '1'
+                        }
                     }}>
+                    <Box 
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '112px'
+                        }}>
                         <Box 
                             sx={{ 
                                 appearance: 'none',
@@ -337,55 +298,95 @@ const DocumentPage = () => {
                                 </Box>
                             }
 
-                            <Box 
-                                className='uploadButton'
-                                sx={{ 
-                                    opacity:  open ? 1 : 0,
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    width: '100%',
-                                    height: '112px',
-                                    background: 'gray',
-                                    cursor: 'pointer'
-                                }}
-                            >
+                            { !isUploadImageHeader ? 
                                 <Box 
-                                    role="button"
-                                    tabIndex={0} 
+                                    className='uploadButton'
                                     sx={{ 
-                                        width: '100%', 
-                                        height: '100%', 
-                                        display: 'flex', 
+                                        opacity:  open ? 1 : 0,
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        display: 'flex',
                                         flexDirection: 'column',
                                         justifyContent: 'center',
-                                        alignItems: 'center', 
-                                        color: theme => theme.palette.primary.main
-                                    }} 
-                                    onClick={handleMenuThroughImageIcon}
-                                >
-                                    <Typography ref={imageRef} onClick={handleClick}><Image/></Typography>
-                                    <Typography sx={{ marginTop: '12px' }}>Thay đổi ảnh tiêu đề</Typography>
-                                </Box>
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleClose}
-                                    sx={{ marginTop: '12px', marginLeft: '10px' }}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button'
+                                        alignItems: 'center',
+                                        width: '100%',
+                                        height: '112px',
+                                        background: 'gray',
+                                        cursor: 'pointer'
                                     }}
-                                    transformOrigin={{ horizontal: 'center', vertical: 'top' }}
                                 >
-                                    <MenuItem onClick={handleClickUploadHeaderImage}>Tải ảnh lên</MenuItem>
-                                    <MenuItem disabled={ user.imageHeader ? false : true }>Xóa ảnh</MenuItem>
-                                </Menu>
-                            </Box>
+                                    <Box 
+                                        role="button"
+                                        tabIndex={0} 
+                                        sx={{ 
+                                            width: '100%', 
+                                            height: '100%', 
+                                            display: 'flex', 
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center', 
+                                            color: theme => theme.palette.primary.main
+                                        }} 
+                                        onClick={handleMenuThroughImageIcon}
+                                    >
+                                        <Typography ref={imageRef} onClick={handleClick}><Image/></Typography>
+                                        <Typography sx={{ marginTop: '12px' }}>Thay đổi ảnh tiêu đề</Typography>
+                                    </Box>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        sx={{ marginTop: '12px', marginLeft: '10px' }}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'basic-button'
+                                        }}
+                                        transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+                                    >
+                                        <MenuItem onClick={handleClickUploadHeaderImage}>Tải ảnh lên</MenuItem>
+                                        <MenuItem disabled={ user.imageHeader ? false : true }>Xóa ảnh</MenuItem>
+                                    </Menu>
+                                </Box>
+                                :
+                                <Box 
+                                    className='uploadButton'
+                                    sx={{ 
+                                        opacity:  isUploadImageHeader ? 1 : 0,
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        width: '100%',
+                                        height: '112px',
+                                        background: 'gray',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Box 
+                                        sx={{ 
+                                            width: '100%', 
+                                            height: '100%', 
+                                            display: 'flex', 
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center', 
+                                            color: theme => theme.palette.primary.main
+                                        }} 
+                                    >
+                                        <Box sx={{ 
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <CircularProgress/>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            }
                         </Box>
                         <Input inputRef={uploadHeaderImageRef} onChange={handleImageHeaderChange} sx={{ display: 'none' }} type='file'/>
                     </Box>
@@ -436,24 +437,45 @@ const DocumentPage = () => {
                                 </Box>
                             }
 
-                            <Box 
-                                className='uploadAvatarIcon'
-                                sx={{ 
-                                    opacity: 0,
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    transform: 'translate(-50%, -50%)'
-                                }}
-                            >
-                                <CameraAltOutlined
-                                    sx={{ color: 'white' }}
-                                    aria-hidden="false"
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={handleUploadAvatarThroughCameraIcon} ref={cameraIconRef}
-                                />
-                            </Box>
+                            { !isUploadAvatar ? 
+                                <Box 
+                                    className='uploadAvatarIcon'
+                                    sx={{ 
+                                        opacity: 0,
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)'
+                                    }}
+                                >
+                                    <CameraAltOutlined
+                                        sx={{ color: 'white' }}
+                                        aria-hidden="false"
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={handleUploadAvatarThroughCameraIcon} ref={cameraIconRef}
+                                    />
+                                </Box>
+                                :
+                                <Box 
+                                    className='uploadAvatarIcon'
+                                    sx={{ 
+                                        opacity: isUploadAvatar ? 1 : 0,
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)'
+                                    }}
+                                >
+                                    <Box sx={{ 
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <CircularProgress sx={{ color: 'white' }}/>
+                                    </Box>
+                                </Box>
+                            }
                         </Box>
                         <Input inputRef={uploadAvatarRef} onChange={handleAvatarChange} sx={{ display: 'none' }} type='file'/>
                     </Box>

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from '@mui/icons-material'
 
 export default function Story() {
-    const [cardActive, setCardActive] = useState({ 1: true, 2: false, 3: false })
+    const [cardActive, setCardActive] = useState(1)
     const scrollElRef = useRef()
     const [isDragging, setIsDragging] = useState(false)
     const [prevPosition, setPrevPosition] = useState(null)
@@ -97,10 +97,7 @@ export default function Story() {
     const hanldeActiveCard = (id) => () => {
         const scrollEl = scrollElRef.current
 
-        setCardActive({
-            1: false, 2: false, 3: false,
-            [id]: true
-        })
+        setCardActive(id)
 
         const handleScrollTo = (...els) => {
             els.forEach(element => {
@@ -121,7 +118,7 @@ export default function Story() {
     }
 
     const handleSetScrollLeft = (e) => {
-        const condition = e.touches ? 60 : 300
+        const condition = e.touches ? 30 : 300
         
         const getNextCardId = () => {
             if (prevPosition.scroll < condition) return prevPosition.id
@@ -155,9 +152,8 @@ export default function Story() {
         })
     }
 
-    const handleMove = (e) => {
+    const handleMove = (e, elementToScroll) => {
         if (!isDragging || !prevPosition) return
-        const scrollEl = scrollElRef.current
 
         const clientX = e.touches ? e.touches[0].clientX : e.clientX
         const clientY = e.touches ? e.touches[0].clientY : e.clientY
@@ -184,8 +180,10 @@ export default function Story() {
         const scrollLeft = prevScrollLeft + dx
         const scrollTop = prevScrollTop + dy
 
-        scrollEl.scrollLeft = scrollLeft
-        scrollEl.scrollTop = scrollTop
+        if (!e.touches) {
+            elementToScroll.scrollLeft = scrollLeft
+            elementToScroll.scrollTop = scrollTop
+        }
         
         setPrevPosition((prev) => ({
             ...prev,
@@ -233,8 +231,8 @@ export default function Story() {
                             key={card.id}
                             sx={{ 
                                 ...dotStyle,
-                                width: cardActive[card.id] ? '6rem' : dotStyle.width,
-                                opacity: cardActive[card.id] ? 0.5 : 1
+                                width: cardActive === card.id ? '6rem' : dotStyle.width,
+                                opacity: cardActive === card.id ? 0.5 : 1
                             }}
                         />
                     ))}
@@ -277,10 +275,19 @@ export default function Story() {
                             }
                         }}
                         ref={scrollElRef}
-                        onMouseMove={handleMove}
-                        onMouseDown={handleDown}
-                        onMouseUp={handleUp}
-                        onMouseLeave={handleUp}
+                        onMouseDown={(e) => { 
+                            e.preventDefault()
+                            handleDown(e)
+                        }}
+                        onMouseMove={(e) => handleMove(e, scrollElRef.current)}
+                        onMouseUp={(e) => { 
+                            e.preventDefault()
+                            handleUp(e)
+                        }}
+                        onMouseLeave={(e) => { 
+                            e.preventDefault()
+                            handleUp(e)
+                        }}
                     >
                         { card.map(card => (
                             <Box 
@@ -342,7 +349,7 @@ export default function Story() {
     
                                                 <Box 
                                                     component={Link} 
-                                                    to={`/story/${card.id}`}
+                                                    to='#'
                                                     sx={{ color: theme => theme.trelloCustom.myColor }}
                                                 >
                                                     Read the story
@@ -372,7 +379,7 @@ export default function Story() {
                                         
                                         <Box 
                                             component={Link} 
-                                            to='/trello-techvalidate-survey' 
+                                            to='#' 
                                             sx={{ color: 'white' }}>
                                                 Trello TechValidate Survey
                                         </Box>
@@ -408,8 +415,8 @@ export default function Story() {
                                 key={card.id}
                                 sx={{ 
                                     ...dotStyle,
-                                    width: cardActive[card.id] ? '6rem' : dotStyle.width,
-                                    opacity: cardActive[card.id] ? 0.5 : 1
+                                    width: cardActive === card.id ? '6rem' : dotStyle.width,
+                                    opacity: cardActive === card.id ? 0.5 : 1
                                 }}
                             />
                         ))}

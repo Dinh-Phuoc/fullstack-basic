@@ -35,6 +35,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.30.0",
     "react-toastify": "^9.1.3",
+    "smoothscroll-polyfill": "^0.4.4",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

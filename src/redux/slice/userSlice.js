@@ -6,7 +6,8 @@ export const userSlice = createSlice({
     initialState: {
         loginPending: false,
         isUpdating: false,
-        isLogout: false,
+        isUploadImageHeader: false,
+        isUploadAvatar: false,
         pending: true,
         data: null
     },
@@ -29,13 +30,21 @@ export const userSlice = createSlice({
             })
 
             //uploadImageHeader
+            .addCase(uploadImageHeaderThunk.pending, (state) => {
+                state.isUploadImageHeader = true
+            })
             .addCase(uploadImageHeaderThunk.fulfilled, (state, action) => {
                 state.data = action.payload
+                state.isUploadImageHeader = false
             })
 
             //uploadAvatar
+            .addCase(uploadAvatarThunk.pending, (state) => {
+                state.isUploadAvatar = true
+            })
             .addCase(uploadAvatarThunk.fulfilled, (state, action) => {
                 state.data = action.payload
+                state.isUploadAvatar = false
             })
 
             //updateProfile

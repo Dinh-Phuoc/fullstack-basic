@@ -107,7 +107,7 @@ export default function HomeMenu() {
                 </Button>
                 <Box 
                     component={Link} 
-                    to='/pricing' 
+                    to='#' 
                     sx={{ 
                         textDecoration: 'none', 
                         position: 'relative',

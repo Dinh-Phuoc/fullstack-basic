@@ -84,7 +84,7 @@ export default function Resources({ handleClose, openResourcesMenu }) {
                         <Box 
                             component={Link}
                             className='inboxLink'
-                            to='/features/inbox'
+                            to='#'
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
@@ -120,7 +120,7 @@ export default function Resources({ handleClose, openResourcesMenu }) {
                         {/* Planner  */}
                         <Box 
                             component={Link}
-                            to='/features/planner'
+                            to='#'
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
@@ -156,7 +156,7 @@ export default function Resources({ handleClose, openResourcesMenu }) {
                         {/* Automation */}
                         <Box 
                             component={Link}
-                            to='/features/automation'
+                            to='#'
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
@@ -192,7 +192,7 @@ export default function Resources({ handleClose, openResourcesMenu }) {
                         {/* Power-Ups */}
                         <Box 
                             component={Link}
-                            to='/features/powerups'
+                            to='#'
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
@@ -228,7 +228,7 @@ export default function Resources({ handleClose, openResourcesMenu }) {
                         {/* Templates */}
                         <Box 
                             component={Link}
-                            to='/features/templates'
+                            to='#'
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',
@@ -264,7 +264,7 @@ export default function Resources({ handleClose, openResourcesMenu }) {
                         {/* Integrations */}
                         <Box 
                             component={Link}
-                            to='/features/integrations'
+                            to='#'
                             sx={{
                                 textDecoration: 'none',
                                 color: 'rgb(80, 95, 121)',

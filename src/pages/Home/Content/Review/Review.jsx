@@ -1,10 +1,14 @@
-import { Container, Paper, Typography } from '@mui/material'
+import Container from '@mui/material/Container'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+
 import { useEffect, useRef, useState } from 'react'
+
 import capitalizeFirstLetter from '~/utils/formatter'
 
 export default function Review() {
-    const [cardActive, setCardActive] = useState({ 1: true, 2: false, 3: false })
+    const [cardActive, setCardActive] = useState(1)
     const scrollImageRef = useRef()
     const scrollCardRef = useRef()
     const [isDragging, setIsDragging] = useState(false)
@@ -14,23 +18,19 @@ export default function Review() {
     useEffect(() => {
         const el = scrollImageRef.current
         const elCard = scrollCardRef.current
-        if (!el) return
+        if (!el || !elCard) return
 
         const prevHandleStart = (e) => {
             if (e.touches) {
                 handleDown(e)
                 return
             }
-            e.preventDefault()
-            handleDown(e)
         }
         const prevHandleMove = (e) => {
             if (e.touches) {
                 handleMove(e)
                 return
             }
-            e.preventDefault()
-            handleMove(e)
         }
 
         const prevHandleUp = (e) => {
@@ -38,46 +38,24 @@ export default function Review() {
                 handleUp(e)
                 return
             }
-            e.preventDefault()
-            handleUp(e)
         }
 
         el.addEventListener('touchstart', prevHandleStart, { passive: false })
         el.addEventListener('touchmove', prevHandleMove, { passive: false })
         el.addEventListener('touchend', prevHandleUp, { passive: false })
 
-        el.addEventListener('mousedown', prevHandleStart)
-        el.addEventListener('mousemove', prevHandleMove)
-        el.addEventListener('mouseup', prevHandleUp)
-        el.addEventListener('mouseleave', prevHandleUp)
-
         elCard.addEventListener('touchstart', prevHandleStart, { passive: false })
         elCard.addEventListener('touchmove', prevHandleMove, { passive: false })
         elCard.addEventListener('touchend', prevHandleUp, { passive: false })
-
-        elCard.addEventListener('mousedown', prevHandleStart)
-        elCard.addEventListener('mousemove', prevHandleMove)
-        elCard.addEventListener('mouseup', prevHandleUp)
-        elCard.addEventListener('mouseleave', prevHandleUp)
 
         return () => {
             el.removeEventListener('touchstart', prevHandleStart)
             el.removeEventListener('touchmove', prevHandleMove)
             el.removeEventListener('touchend', prevHandleUp)
 
-            el.removeEventListener('mousedown', prevHandleStart)
-            el.removeEventListener('mousemove', prevHandleMove)
-            el.removeEventListener('mouseup', prevHandleUp)
-            el.removeEventListener('mouseleave', prevHandleUp)
-
             elCard.removeEventListener('touchstart', prevHandleStart)
             elCard.removeEventListener('touchmove', prevHandleMove)
             elCard.removeEventListener('touchend', prevHandleUp)
-
-            elCard.removeEventListener('mousedown', prevHandleStart)
-            elCard.removeEventListener('mousemove', prevHandleMove)
-            elCard.removeEventListener('mouseup', prevHandleUp)
-            elCard.removeEventListener('mouseleave', prevHandleUp)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prevPosition])
@@ -145,21 +123,16 @@ export default function Review() {
         transition: 'width 0.3s'
     }
 
-    const hanldeActiveCard = (id) => () => {
+    const handleActiveCard = (id) => () => {
         const elImage = scrollImageRef.current
         const elCard = scrollCardRef.current
 
-        setCardActive({
-            1: false, 2: false, 3: false,
-            [id]: true
-        })
+        setCardActive(id)
 
-        const handleScrollTo = (...els) => {
-            els.forEach(element => {
-                element?.el?.scrollTo({
-                    left: element.distance,
-                    behavior: 'smooth'
-                })
+        const handleScrollTo = (...elements) => {
+            elements.forEach(({ el, distance }) => {
+                if (!el) return
+                el.scrollTo({ left: distance, behavior: 'smooth' })
             })
         }
 
@@ -182,7 +155,7 @@ export default function Review() {
     }
 
     const handleSetScrollLeft = (e) => {
-        const condition = e.touches ? 60 : 300
+        const condition = e.touches ? 30 : 300
         
         const getNextCardId = () => {
             if (prevPosition.scroll < condition) return prevPosition.id
@@ -191,7 +164,7 @@ export default function Review() {
             return isNegative ? 1 : 3
         }
 
-        hanldeActiveCard(getNextCardId())()
+        handleActiveCard(getNextCardId())()
     }
 
     const handleDown = (e) => {
@@ -208,10 +181,8 @@ export default function Review() {
         })
     }
 
-    const handleMove = (e) => {
+    const handleMove = (e, elementToScroll) => {
         if (!isDragging || !prevPosition) return
-        const elImage = scrollImageRef.current
-        const elTitle = scrollCardRef.current
 
         const clientX = e.touches ? e.touches[0].clientX : e.clientX
         const clientY = e.touches ? e.touches[0].clientY : e.clientY
@@ -237,11 +208,10 @@ export default function Review() {
         const scrollLeft = prevScrollLeft + dx
         const scrollTop = prevScrollTop + dy
 
-        elImage.scrollLeft = scrollLeft
-        elImage.scrollTop = scrollTop
-
-        elTitle.scrollLeft = scrollLeft
-        elTitle.scrollTop = scrollTop
+        if (!e.touches) {
+            elementToScroll.scrollLeft = scrollLeft
+            elementToScroll.scrollTop = scrollTop
+        }
         
         setPrevPosition((prev) => ({
             ...prev,
@@ -282,15 +252,15 @@ export default function Review() {
                         { card.map(card => (
                             <Paper 
                                 key={card.id} 
-                                onClick={hanldeActiveCard(card.id)}
+                                onClick={handleActiveCard(card.id)}
                                 sx={{
                                     ...styleCard,
                                     '&:after': {
                                         ...styleCard['&:after'],
-                                        visibility: cardActive[card.id] ? 'visible' : 'hidden'
+                                        visibility: cardActive === card.id ? 'visible' : 'hidden'
                                     }
                                 }} 
-                                elevation={cardActive[card.id] ? 4 : 0 }
+                                elevation={ cardActive === card.id ? 4 : 0 }
                             >
                                 <Typography 
                                     sx={{ 
@@ -324,8 +294,8 @@ export default function Review() {
                                     key={card.id}
                                     sx={{ 
                                         ...dotStyle,
-                                        width: cardActive[card.id] ? '6rem' : dotStyle.width,
-                                        opacity: cardActive[card.id] ? 0.5 : 1
+                                        width: cardActive === card.id ? '6rem' : dotStyle.width,
+                                        opacity: cardActive === card.id ? 0.5 : 1
                                     }}
                                 />
                             ))}
@@ -350,6 +320,19 @@ export default function Review() {
                                     }
                                 }}
                                 ref={scrollImageRef}
+                                onMouseDown={(e) => { 
+                                    e.preventDefault()
+                                    handleDown(e)
+                                }}
+                                onMouseMove={(e) => handleMove(e, scrollImageRef.current)}
+                                onMouseUp={(e) => { 
+                                    e.preventDefault()
+                                    handleUp(e)
+                                }}
+                                onMouseLeave={(e) => { 
+                                    e.preventDefault()
+                                    handleUp(e)
+                                }}
                             >
                                 { card.map(card => (
                                     <Box key={card.id} sx={{ width: '100%', flexShrink: 0 }} data-id={card.id}>
@@ -358,7 +341,7 @@ export default function Review() {
                                             style={{ 
                                                 userSelect: 'none',
                                                 width: '100%', 
-                                                objectFit: 'contain' 
+                                                objectFit: 'contain'
                                             }} 
                                             src={card.img} 
                                             alt={card.title} 
@@ -390,6 +373,19 @@ export default function Review() {
                                 }
                             }}
                             ref={scrollCardRef}
+                            onMouseDown={(e) => { 
+                                e.preventDefault()
+                                handleDown(e)
+                            }}
+                            onMouseMove={(e) => handleMove(e, scrollCardRef.current)}
+                            onMouseUp={(e) => { 
+                                e.preventDefault()
+                                handleUp(e)
+                            }}
+                            onMouseLeave={(e) => { 
+                                e.preventDefault()
+                                handleUp(e)
+                            }}
                         >
                             { card.map(card => (
                                 <Paper 
@@ -412,7 +408,7 @@ export default function Review() {
                                             border: '3px solid'
                                         }
                                     }} 
-                                    elevation={cardActive[card.id] ? 4 : 0 }
+                                    elevation={cardActive === card.id ? 4 : 0 }
                                 >
                                     <Typography 
                                         data-id={card.id}
@@ -452,8 +448,8 @@ export default function Review() {
                                 key={card.id}
                                 sx={{ 
                                     ...dotStyle,
-                                    width: cardActive[card.id] ? '6rem' : dotStyle.width,
-                                    opacity: cardActive[card.id] ? 0.5 : 1
+                                    width: cardActive === card.id ? '6rem' : dotStyle.width,
+                                    opacity: cardActive === card.id ? 0.5 : 1
                                 }}
                             />
                         ))}

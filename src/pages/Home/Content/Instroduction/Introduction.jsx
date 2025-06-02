@@ -115,7 +115,7 @@ export default function Introduction() {
                 <Typography >
                     Accelerate your teams&apos; work with Atlassian Intelligence (AI) 
                     features 🤖 now available for all Premium and Enterprise!&nbsp; 
-                    <Box component={Link} to='/learnmore' 
+                    <Box component={Link} to='#' 
                         sx={styleLink}>
                         Learn more.
                     </Box>
