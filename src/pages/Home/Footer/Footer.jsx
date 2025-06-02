@@ -1,13 +1,28 @@
-import { Email, ErrorOutline, FacebookOutlined, Instagram } from '@mui/icons-material'
-import { Box, Button, Container, SvgIcon, TextField, Tooltip, Typography } from '@mui/material'
+import Email from '@mui/icons-material/Email'
+import ErrorOutline from '@mui/icons-material/ErrorOutline'
+import FacebookOutlined from '@mui/icons-material/FacebookOutlined'
+import Instagram from '@mui/icons-material/Instagram'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import SvgIcon from '@mui/material/SvgIcon'
+import TextField from '@mui/material/TextField'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+
 import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { TrelloWebIcon } from '~/assets/icon'
 
+import { TrelloWebIcon } from '~/assets/icon'
 import { ReactComponent as ZaloIcon } from '~/assets/zaloIcon.svg'
+import ZaloQRCode from '~/assets/qrZalo.jpg'
+import { Divider, Menu } from '@mui/material'
+
 export default function Footer({ display='flex' }) {
     const [emailValue, setEmailValue] = useState('')
+    const [anchorQRZalo, setAnchorQRZalo] = useState(null)
     const [open, setOpen] = useState(false)
+    const openQRZalo = Boolean(anchorQRZalo)
     const emailInputRef = useRef()
     const navigate = useNavigate()
 
@@ -70,6 +85,13 @@ export default function Footer({ display='flex' }) {
 
     const handleTooltipOpen = () => {
         setOpen(true)
+    }
+
+    const handleClickQRZalo = (event) => {
+        setAnchorQRZalo(event.currentTarget)
+    }
+    const handleCloseQRZalo = () => {
+        setAnchorQRZalo(null)
     }
     return (
         <Box sx={{ width: { md: '100%' }, mt: '32px' }}>
@@ -202,7 +224,7 @@ export default function Footer({ display='flex' }) {
                                 flexDirection: 'row', 
                                 alignItems: 'center', 
                                 justifyContent: 'center',
-                                gap: 2
+                                gap: 1
                             }}
                         >
                             <Box component={'a'} href='https://www.facebook.com/saru.an.169/' target="_blank" rel="noopener noreferrer">
@@ -216,9 +238,38 @@ export default function Footer({ display='flex' }) {
                             <Box component={'a'} href='mailto:phandinhphuoc02@gmail.com'>
                                 <Email sx={styleIcon}/>
                             </Box>
-        
-                            <Box component={'a'} href="https://zalo.me/0366159200" target="_blank" rel="noopener noreferrer">
+
+                            <Box component={Button} onClick={handleClickQRZalo} sx={{ p: 0, pb: '4px', minWidth: 0 }}>
                                 <SvgIcon component={ZaloIcon} fontSize='large' inheritViewBox sx={styleIcon}/>
+                            </Box>
+                            <Menu
+                                anchorEl={anchorQRZalo}
+                                open={openQRZalo}
+                                onClose={handleCloseQRZalo}
+                            >
+                                <Box className='qrZaloCode'
+                                    component={'img'} 
+                                    src={ZaloQRCode}
+                                    sx={{ 
+                                        width: '200px', 
+                                        height: '200px'
+                                    }}>
+                                </Box>
+                            </Menu>
+                            <Divider orientation='vertical' flexItem sx={{ borderColor: 'white' }}/>
+                            <Box
+                                component={'a'} href='https://cv.fullstack.edu.vn/view/50a59a03-d012-4aa7-9f7d-c3581e906d03?token=rMzDCgAkeAS4CcwOG4G0WCgoSCwOgCW'
+                                sx={{ 
+                                    ...styleIcon,
+                                    height: '32px',
+                                    width: '32px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    border: '1px solid',
+                                    borderColor: 'white',
+                                    borderRadius: '50%'
+                                }}>CV
                             </Box>
                         </Box>
                     </Box>

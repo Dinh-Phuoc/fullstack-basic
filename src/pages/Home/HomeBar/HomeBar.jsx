@@ -9,18 +9,24 @@ import Menu from '@mui/material/Menu'
 import Email from '@mui/icons-material/Email'
 import FacebookOutlined from '@mui/icons-material/FacebookOutlined'
 import Instagram from '@mui/icons-material/Instagram'
+import Tooltip from '@mui/material/Tooltip'
+
 import HomeMenu from './HomeMenu/HomeMenu'
 import HomeMenuXS from './HomeMenuXS/HomeMenuXS'
 
-import { ReactComponent as ZaloIcon } from '~/assets/zaloIcon.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
+import { ReactComponent as ZaloIcon } from '~/assets/zaloIcon.svg'
+import ZaloQRCode from '~/assets/qrZalo.jpg'
+import { Divider } from '@mui/material'
 
 export default function HomeBar() {
     const [scrolled, setScrolled] = useState(false)
+    const [anchorElXS, setAnchorElXS] = useState(null)
+    const [anchorQRZalo, setAnchorQRZalo] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
-    const [anchorElXS, setAnchorElXS] = useState(null)
     const openXS = Boolean(anchorElXS)
+    const openQRZalo = Boolean(anchorQRZalo)
     const navbarRef = useRef()
 
     useEffect(() => {
@@ -34,8 +40,8 @@ export default function HomeBar() {
   
     const styleIcon = {
         textDecoration: 'none',
-        height: '3.4rem',
-        width: '3.4rem',
+        height: '3rem',
+        width: '3rem',
         display: 'flex',
         color: theme => theme.trelloCustom.myColor,
         transition: 'all 0.3s',
@@ -50,6 +56,13 @@ export default function HomeBar() {
 
     const handleClose = () => {
         setAnchorEl(null)
+    }
+
+    const handleClickQRZalo = (event) => {
+        setAnchorQRZalo(event.currentTarget)
+    }
+    const handleCloseQRZalo = () => {
+        setAnchorQRZalo(null)
     }
 
     const handleClickXS = (event) => {
@@ -133,7 +146,7 @@ export default function HomeBar() {
                             display: 'flex',
                             flexDirection: 'row',
                             alignItems: 'center',
-                            gap: 2
+                            gap: 1
                         }
                     }}
                 >
@@ -149,8 +162,36 @@ export default function HomeBar() {
                         <Email fontSize='large' sx={styleIcon}/>
                     </Box>
 
-                    <Box component={'a'} href="https://zalo.me/0366159200" target="_blank" rel="noopener noreferrer">
-                        <SvgIcon component={ZaloIcon} sx={styleIcon} fontSize='large' inheritViewBox />
+
+                    <Box component={Button} onClick={handleClickQRZalo} sx={{ p: 0, minWidth: 0 }}>
+                        <SvgIcon component={ZaloIcon} fontSize='large' inheritViewBox sx={styleIcon}/>
+                    </Box>
+                    <Menu
+                        anchorEl={anchorQRZalo}
+                        open={openQRZalo}
+                        onClose={handleCloseQRZalo}
+                    >
+                        <Box className='qrZaloCode'
+                            component={'img'} 
+                            src={ZaloQRCode}
+                            sx={{ 
+                                width: '200px', 
+                                height: '200px'
+                            }}>
+                        </Box>
+                    </Menu>
+                    <Divider orientation='vertical' flexItem sx={{ borderColor: theme => theme.trelloCustom.myColor }}/>
+                    <Box
+                        component={'a'} href='https://cv.fullstack.edu.vn/view/50a59a03-d012-4aa7-9f7d-c3581e906d03?token=rMzDCgAkeAS4CcwOG4G0WCgoSCwOgCW'
+                        sx={{ 
+                            ...styleIcon,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            border: '1px solid',
+                            borderColor: theme => theme.trelloCustom.myColor,
+                            borderRadius: '50%'
+                        }}>CV
                     </Box>
                 </Menu>
     
@@ -229,8 +270,25 @@ export default function HomeBar() {
                         <Box component='a' href='mailto:phandinhphuoc02@gmail.com'>
                             <Email sx={styleIcon} />
                         </Box>
-                        <Box component='a' href='https://zalo.me/0366159200' target='_blank' rel='noopener noreferrer'>
-                            <SvgIcon component={ZaloIcon} sx={styleIcon} inheritViewBox/>
+                        <Tooltip title={(
+                            <Box component={'img'} src={ZaloQRCode} sx={{ width: '200px', height: '200px' }}></Box>
+                        )}>
+                            <Box >
+                                <SvgIcon component={ZaloIcon} fontSize='large' inheritViewBox sx={styleIcon}/>
+                            </Box>
+                        </Tooltip>
+                        <Divider orientation='vertical' flexItem sx={{ borderColor: theme => theme.trelloCustom.myColor }}/>
+                        <Box
+                            component={'a'} href='https://cv.fullstack.edu.vn/view/50a59a03-d012-4aa7-9f7d-c3581e906d03?token=rMzDCgAkeAS4CcwOG4G0WCgoSCwOgCW'
+                            sx={{ 
+                                ...styleIcon,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '1px solid',
+                                borderColor: theme => theme.trelloCustom.myColor,
+                                borderRadius: '50%'
+                            }}>CV
                         </Box>
                     </Menu>
                 </Box>

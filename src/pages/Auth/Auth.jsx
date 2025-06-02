@@ -3,6 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Modal from '@mui/material/Modal'
 import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
 import Face2Outlined from '@mui/icons-material/Face2Outlined'
 import SentimentDissatisfied from '@mui/icons-material/SentimentDissatisfied'
 
@@ -20,7 +21,6 @@ import Register from '~/components/AppBar/Menus/Register'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
 import bgImageFormLoginLightMD from '~/assets/loginformlight.jpg'
 import bgImageFormLoginDarkMD from '~/assets/loginformdark.jpg'
-import { Container } from '@mui/material'
 import Footer from '../Home/Footer/Footer'
 
 export default function Auth() {
