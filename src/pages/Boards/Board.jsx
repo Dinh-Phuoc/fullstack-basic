@@ -17,7 +17,6 @@ import { setUserInfoThunk } from '~/redux/slice/userSlice'
 function Board() {
     const { status, data } = useSelector(boardSelector)
     const dispatch = useDispatch()
-    
     useEffect(() => {
         dispatch(setUserInfoThunk())
             .unwrap()

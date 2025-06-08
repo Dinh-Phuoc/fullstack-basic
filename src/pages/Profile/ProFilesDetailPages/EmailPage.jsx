@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSelector } from '~/redux/selector'
 import { updateProfileThunk } from '~/redux/slice/userSlice'
+
 const EmailPage = () => {
     const { data: user } = useSelector(userSelector)
     // States of personal information
@@ -55,29 +56,19 @@ const EmailPage = () => {
     }
 
     //Handle Edit information group
-    const handleFocus = (e, textFieldName) => {
+    const handleFocus = (e) => {
         setPreValue(e.target.value)
-        switch (textFieldName) {
-        case 'email':
-            setEmailFocus(true)
-            e.target.select()
-            return
-        default:
-            return
-        }
+        setEmailFocus(true)
+        e.target.select()
+        return
     }
 
-    const handleChangeValue = (e, textFieldName) => {
-        switch (textFieldName) {
-        case 'email':
-            setEmail(e.target.value)
-            return
-        default:
-            return
-        }
+    const handleChangeValue = (e) => {
+        setEmail(e.target.value)
+        return
     }
 
-    const handleEditTextField = async (e, textFieldName) => {
+    const handleEditTextField = async (e) => {
         if (e.target.value !== prevValue) {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             const isValid = pattern.test(e.target.value)
@@ -89,7 +80,7 @@ const EmailPage = () => {
 
             setInvalidMessage('')
             const data = {
-                fieldName: textFieldName,
+                fieldName: 'email',
                 dataToUpdate: e.target.value
             }
             dispatch(updateProfileThunk(data))
@@ -109,15 +100,10 @@ const EmailPage = () => {
         return
     }
 
-    const handleCancelEditTextField = (textFieldName) => {
-        switch (textFieldName) {
-        case 'email':
-            setEmail(prevValue)
-            setEmailFocus(false)
-            return
-        default:
-            return
-        }
+    const handleCancelEditTextField = () => {
+        setEmail(prevValue)
+        setEmailFocus(false)
+        return
     }
 
     return (
@@ -160,13 +146,13 @@ const EmailPage = () => {
                             label='Email'
                             value={ email }
                             helperText={invalidMessage}
-                            onFocus={e => handleFocus(e, 'email')}
-                            onChange={e => handleChangeValue(e, 'email')}
+                            onFocus={e => handleFocus(e)}
+                            onChange={e => handleChangeValue(e)}
                             onBlur={(e) => {
                                 const focusedElement = e.relatedTarget
                                 focusedElement?.dataset?.action === 'confirm' ? 
-                                    handleEditTextField(e, 'email') :
-                                    handleCancelEditTextField('email')
+                                    handleEditTextField(e) :
+                                    handleCancelEditTextField()
                             }}
                             sx={styleInput}
                         >

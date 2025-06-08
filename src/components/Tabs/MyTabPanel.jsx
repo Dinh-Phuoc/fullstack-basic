@@ -1,5 +1,5 @@
-import { Box } from '@mui/material'
-import { useContext } from 'react'
+import { Box, CircularProgress } from '@mui/material'
+import { Suspense, useContext } from 'react'
 import Context from './store/Context'
 
 export default function MyTabPanel({ value, myStyle, children }) {
@@ -13,7 +13,18 @@ export default function MyTabPanel({ value, myStyle, children }) {
                 value === Number(elementActive.getAttribute('data-value')) ? 'block' : 'none',
                 ...myStyle
             }}>
-            {children}
+            <Suspense fallback={
+                <Box sx={{ 
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100vh',
+                    width: '100vw',
+                    gap: 2
+                }}>
+                    <CircularProgress/>
+                </Box>}>{ (elementActive.length > 0 || elementActive instanceof Node) && 
+                value === Number(elementActive.getAttribute('data-value')) && children} </Suspense>
         </Box>
     )
 }

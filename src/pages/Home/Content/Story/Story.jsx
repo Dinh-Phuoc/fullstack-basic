@@ -1,9 +1,14 @@
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import ArrowBackIosNewOutlined from '@mui/icons-material/ArrowBackIosNewOutlined'
+import ArrowForwardIosOutlined from '@mui/icons-material/ArrowForwardIosOutlined'
+
 import { useEffect, useRef, useState } from 'react'
-import { Button, Container, Divider, Paper } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from '@mui/icons-material'
 
 export default function Story() {
     const [cardActive, setCardActive] = useState(1)
@@ -99,21 +104,19 @@ export default function Story() {
 
         setCardActive(id)
 
-        const handleScrollTo = (...els) => {
-            els.forEach(element => {
-                element?.el?.scrollTo({
-                    left: element.distance,
-                    behavior: 'smooth'
-                })
+        const handleScrollTo = (element, distance) => {
+            element.scrollTo({
+                left: distance,
+                behavior: 'smooth'
             })
         }
 
         if (id === 1) {
-            handleScrollTo({ el: scrollEl, distance: 0 })
+            handleScrollTo(scrollEl, 0)
         } else if (id === 2) {
-            handleScrollTo({ el: scrollEl, distance: scrollEl.clientWidth })
+            handleScrollTo(scrollEl, scrollEl.clientWidth)
         } else {
-            handleScrollTo({ el: scrollEl, distance: scrollEl.scrollWidth - scrollEl.clientWidth })
+            handleScrollTo(scrollEl, scrollEl.scrollWidth - scrollEl.clientWidth)
         }
     }
 
@@ -201,15 +204,13 @@ export default function Story() {
     }
 
     const handleArrowForward = () => {
-        if (cardActive['3']) return
-        const elActive = Object.entries(cardActive).filter(([, value]) => value === true)
-        hanldeActiveCard(Number(elActive[0][0]) + 1)()
+        if (cardActive === 3) return
+        hanldeActiveCard(cardActive + 1)()
     }
 
     const handleArrowBack = () => {
-        if (cardActive['1']) return
-        const elActive = Object.entries(cardActive).filter(([, value]) => value === true)
-        hanldeActiveCard(Number(elActive[0][0]) -1)()
+        if (cardActive === 1) return
+        hanldeActiveCard(cardActive - 1)()
     }
 
     return (
@@ -262,7 +263,6 @@ export default function Story() {
                     }}
                     elevation={4}>
                     <Box 
-                        // style={{ touchAction: 'none', WebkitOverflowScrolling: 'auto' }}
                         sx={{ 
                             overflow: 'auto',
                             display: 'flex',

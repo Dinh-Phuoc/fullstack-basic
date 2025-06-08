@@ -18,7 +18,7 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import Logout from '@mui/icons-material/Logout'
 import { Container, useColorScheme } from '@mui/material'
 
-import { useEffect, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -26,15 +26,17 @@ import { userSelector } from '~/redux/selector'
 import { setUserInfoThunk } from '~/redux/slice/userSlice'
 import { API_ROOT } from '~/utils/constant'
 import { ReactComponent as TrelloIcon } from '~/assets/trelloIcon.svg'
+
 import MyTabItem from '~/components/Tabs/MyTabItem'
 import MyTabList from '~/components/Tabs/MyTabList'
 import MyTabPanel from '~/components/Tabs/MyTabPanel'
 import MyTabs from '~/components/Tabs/store/MyTabs'
+
 import DocumentPage from './ProFilesDetailPages/DocumentPage'
-import EmailPage from './ProFilesDetailPages/EmailPage'
-import ChangePasswordPage from './ProFilesDetailPages/ChangePasswordPage'
-import PrivatePage from './ProFilesDetailPages/PrivatePage'
-import AccountOptionPage from './ProFilesDetailPages/AccountOptionPage'
+const EmailPage = lazy(() => import('./ProFilesDetailPages/EmailPage'))
+const ChangePasswordPage = lazy(() => import('./ProFilesDetailPages/ChangePasswordPage'))
+const PrivatePage = lazy(() => import('./ProFilesDetailPages/PrivatePage'))
+const AccountOptionPage = lazy(() => import('./ProFilesDetailPages/AccountOptionPage'))
 import { logoutApi } from '~/apis'
 
 export default function Profile() {
@@ -466,14 +468,12 @@ export default function Profile() {
                     sx={{ 
                         backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#121212' : 'white'
                     }}>
+                    
                     <MyTabPanel value={0}><DocumentPage/></MyTabPanel>
                     <MyTabPanel value={1}><EmailPage/></MyTabPanel>
                     <MyTabPanel value={2}><ChangePasswordPage/></MyTabPanel>
                     <MyTabPanel value={3}><PrivatePage/></MyTabPanel>
                     <MyTabPanel value={4}><AccountOptionPage/></MyTabPanel>
-                    {/* <MyTabPanel value={5}>Các ứng dụng được kết nối</MyTabPanel>
-                    <MyTabPanel value={6}>Tùy chọn liên kết</MyTabPanel>
-                    <MyTabPanel value={7}>Xem thêm</MyTabPanel> */}
                 </Box>
             </MyTabs>
         </Box>
