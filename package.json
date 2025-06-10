@@ -27,6 +27,7 @@
     "@reduxjs/toolkit": "^2.7.0",
     "axios": "^1.8.4",
     "cross-env": "^7.0.3",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "lodash": "^4.17.21",
     "material-ui-confirm": "^3.0.18",

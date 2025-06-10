@@ -10,13 +10,15 @@ import {
     
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
+
 import Box from '@mui/material/Box'
-import ListColumn from './ListColumns/ListColumn'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { cloneDeep, isEmpty } from 'lodash'
 
-import CardItem from './ListColumns/Column/ListCards/CardItem/CardItem'
 import Column from './ListColumns/Column/Column'
+import ListColumn from './ListColumns/ListColumn'
+import CardItem from './ListColumns/Column/ListCards/CardItem/CardItem'
 import { generatePlaceHolderCard } from '~/utils/formatter'
 import { MouseSensor, TouchSensor, PointerSensor } from '~/customLibs/DnDKitSensors'
 import { moveCardToDifferentColumnApi, updateBoardDetailsApi, updateColumnDetailsApi } from '~/apis'
@@ -28,9 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
     CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
  
-export default function BoardContent({ 
-    board
-}) {
+export default function BoardContent({ board }) {
 
     const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -45,6 +45,7 @@ export default function BoardContent({
     const [oldColumn, setOldColumn] = useState(null)
     const lastOverId = useRef(null)
     const dispatch = useDispatch()
+    
     useEffect(() => {
         setOrderedColumns(board.columns)
     }, [board])

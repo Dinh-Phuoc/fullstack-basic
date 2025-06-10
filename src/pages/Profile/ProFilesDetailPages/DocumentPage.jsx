@@ -439,7 +439,6 @@ const DocumentPage = () => {
 
                             { !isUploadAvatar ? 
                                 <Box 
-                                    className='uploadAvatarIcon'
                                     sx={{ 
                                         opacity: 0,
                                         position: 'absolute',
@@ -458,7 +457,6 @@ const DocumentPage = () => {
                                 </Box>
                                 :
                                 <Box 
-                                    className='uploadAvatarIcon'
                                     sx={{ 
                                         opacity: isUploadAvatar ? 1 : 0,
                                         position: 'absolute',

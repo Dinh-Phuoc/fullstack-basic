@@ -38,6 +38,12 @@ export const createNewCardApi = async (newCardData) => {
     return response.data
 }
 
+// Call Api Update CardModel
+export const updateCardApi = async (newCardData) => {
+    const response = await instance.patch(`${API_ROOT}/v1/cards/update`, newCardData)
+    return response.data
+}
+
 // Call Api ColumnModel
 export const createNewColumnApi = async (newColumnData) => {
     const response = await instance.post(`${API_ROOT}/v1/columns`, newColumnData)
@@ -84,6 +90,16 @@ export const uploadImageHeaderApi = async (file) => {
 
 export const uploadAvatarApi = async (file) => {
     const response = await instance.patch(`${API_ROOT}/v1/manage/users/profile/upload/avatar`, file, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            withCredentials: true
+        }
+    })
+    return response.data
+}
+
+export const uploadCardCoverApi = async (file, cardUuid) => {
+    const response = await instance.patch(`${API_ROOT}/v1/cards/upload/card-cover/${cardUuid}`, file, {
         headers: {
             'Content-Type': 'multipart/form-data',
             withCredentials: true

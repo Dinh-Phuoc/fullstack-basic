@@ -2,14 +2,15 @@ import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import Close from '@mui/icons-material/Close'
-import { toast } from 'react-toastify'
-
 import NoteAdd from '@mui/icons-material/NoteAdd'
+import TextField from '@mui/material/TextField'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+
 import { useState } from 'react'
-import { TextField } from '@mui/material'
+import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { boardSelector } from '~/redux/selector'
 import { addNewColumns } from '~/redux/slice/boardSlice'
 

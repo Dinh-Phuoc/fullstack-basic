@@ -1,36 +1,47 @@
-
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 import Attachment from '@mui/icons-material/Attachment'
 import Comment from '@mui/icons-material/Comment'
 import Group from '@mui/icons-material/Group'
-
+import AttachmentOutlined from '@mui/icons-material/AttachmentOutlined'
+import CommentOutlined from '@mui/icons-material/CommentOutlined'
+import DomainVerificationOutlined from '@mui/icons-material/DomainVerificationOutlined'
+import Image from '@mui/icons-material/Image'
+import Person2Outlined from '@mui/icons-material/Person2Outlined'
+import PersonAddAlt1Outlined from '@mui/icons-material/PersonAddAlt1Outlined'
+import RemoveRedEyeOutlined from '@mui/icons-material/RemoveRedEyeOutlined'
+import Subject from '@mui/icons-material/Subject'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-import { CircularProgress, Input, Modal, TextField } from '@mui/material'
+import Input from '@mui/material/Input'
+import Modal from '@mui/material/Modal'
+import TextField from '@mui/material/TextField'
 import Checkbox from '@mui/material/Checkbox'
-import { Box } from '@mui/joy'
-import { useEffect, useRef, useState } from 'react'
-import { getInforUserApi, uploadImageHeaderApi } from '~/apis'
+import Box from '@mui/material/Box'
+
+import { useRef, useState } from 'react'
+
 import { API_ROOT } from '~/utils/constant'
-import { AttachmentOutlined, CommentOutlined, DomainVerificationOutlined, Image, Person2Outlined, PersonAddAlt1Outlined, RemoveRedEyeOutlined, Subject } from '@mui/icons-material'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateCardThunk, uploadCardCoverThunk } from '~/redux/slice/boardSlice'
+import { boardSelector } from '~/redux/selector'
+import { CircularProgress } from '@mui/material'
 
 
 export default function CardItem({ card }) {
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
-    const [anchorEl, setAnchorEl] = useState(null)
-    const uploadHeaderImageRef = useRef()
-    const [user, setUser] = useState(null)
-    const token =localStorage.getItem('token')
+    const uploadCardCoverRef = useRef()
+    const { isCardCoverUploading, data } = useSelector(boardSelector)
+    const dispatch = useDispatch()
 
-    const [imageHeaderCardURL, setImageHeaderCardURL] = useState(null)
+    // const [cardCoverURL, setCardCoverURL] = useState(null)
     const shouldShowCardAction = () => {
         return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
     }
@@ -43,23 +54,31 @@ export default function CardItem({ card }) {
         isDragging
     } = useSortable({ id: card?.uuid, data: { ...card } })
 
-    const handleImageHeaderChange = async (e) => {
-        const imageHeader = e.target.files[0]
-        if (!imageHeader) {
+    const handleCardCoverChange = async (e) => {
+        const cardCover = e.target.files[0]
+        if (!cardCover) {
             return
         }
 
         const formData = new FormData()
-        formData.append('image-header-card', imageHeader)
+        formData.append('card-cover', cardCover)
 
-        const isUploadImageHeaderSuccess = await uploadImageHeaderApi(formData, user._id)
-        if (isUploadImageHeaderSuccess) setImageHeaderCardURL(`${API_ROOT}/v1/manage/users/profile/get-image/image-header/${user._id}/?t=${Date.now()}`)
+        dispatch(uploadCardCoverThunk({ file: formData, cardUuid: card.uuid }))
     }
+    const thisCardBelongToColumn = data[0].columns.filter( column => column.uuid === card.columnUuid)
 
     const handleClickUploadHeaderImageCard = () => {
-        setAnchorEl(uploadHeaderImageRef.current.click())
+        uploadCardCoverRef.current.click()
     }
 
+    const handleUpdateCard = (e) => {
+        const updateData = {
+            fieldName: 'expired',
+            expired: new Date(e.target.value),
+            cardUuid: card.uuid
+        }
+        dispatch(updateCardThunk(updateData))
+    }
     const style = {
         zIndex: 10,
         position: 'absolute',
@@ -100,7 +119,7 @@ export default function CardItem({ card }) {
                             height: 140, 
                             borderTopLeftRadius: '3px', 
                             borderTopRightRadius: '3px' }} 
-                        image={card?.cover || imageHeaderCardURL} 
+                        image={`${API_ROOT}/v1/cards/get-image/card-cover/${card.uuid}/?t=${Date.now()}`}
                     />
                 }
                 <CardContent sx={{ p: '8px', mt: '8px', display: 'inline-flex' }}>
@@ -189,7 +208,7 @@ export default function CardItem({ card }) {
                                                 backgroundSize: 'contain',
                                                 backgroundPosition: 'center',
                                                 backgroundRepeat: 'no-repeat',
-                                                backgroundImage: `url(${card?.cover})`
+                                                backgroundImage: `url(${API_ROOT}/v1/cards/get-image/card-cover/${card.uuid}/?t=${Date.now()})`
                                             }}
                                         >
                                         </Box> 
@@ -206,6 +225,25 @@ export default function CardItem({ card }) {
                                             overflow: 'hidden',
                                             backgroundColor: '#ffe2e2'
                                         }}>
+                                        </Box>
+                                    }
+                                    { isCardCoverUploading && 
+                                        <Box 
+                                            className='uploadAvatarIcon'
+                                            sx={{ 
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)'
+                                            }}
+                                        >
+                                            <Box sx={{ 
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}>
+                                                <CircularProgress sx={{ color: 'white' }}/>
+                                            </Box>
                                         </Box>
                                     }
                                 </Box>
@@ -232,7 +270,7 @@ export default function CardItem({ card }) {
                                     <Image />
                                     <Typography sx={{ display: { xs: 'none', sm: 'block' }, alignContent: 'center', ml: '4px' }}>Tải ảnh lên</Typography>
                                 </Box>
-                                <Input inputRef={uploadHeaderImageRef} onChange={handleImageHeaderChange} sx={{ display: 'none' }} type='file'/>
+                                <Input inputRef={uploadCardCoverRef} onChange={handleCardCoverChange} sx={{ display: 'none' }} type='file'/>
                             </Box>
                         </Box>
                     </Box>
@@ -241,7 +279,7 @@ export default function CardItem({ card }) {
                         <Checkbox sx={{ color: theme => theme.trelloCustom.myColor, '&.Mui-checked': { color: theme => theme.trelloCustom.myColor } }}></Checkbox>
                         <Box sx={{ display:'flex', flexDirection: 'column' }}>
                             <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#172b4d', fontSize: '1rem', fontWeight: 700 } }}>{card.title}</Typography>
-                            <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#44546f' } }}>trong danh sách {card.columnId}</Typography>
+                            <Typography sx={{ display: 'inline-block', '&.MuiTypography-body1': { color: theme => theme.palette.mode === 'dark' ? 'white' : '#44546f' } }}>trong danh sách {thisCardBelongToColumn[0].title}</Typography>
                         </Box>
                     </Box>
 
@@ -249,12 +287,46 @@ export default function CardItem({ card }) {
                         <Box sx={{ mt: '24px', width: { xs: '100%', sm: '70%' } }}>
                             <Box sx={{ ml: '42px', display: 'flex' }}>
                                 <Box>
-                                    <Typography>Thông báo</Typography>
-                                    <Button variant='outlined' sx={{ p: '4px', color: theme => theme.trelloCustom.myColor, borderColor: theme => theme.trelloCustom.myColor }}><RemoveRedEyeOutlined/>Theo dõi</Button>
+                                    <Button 
+                                        variant='outlined' 
+                                        sx={{ 
+                                            color: theme => theme.trelloCustom.myColor, 
+                                            borderColor: theme => theme.trelloCustom.myColor,
+                                            p: '14px',
+                                            height: '51px'
+                                        }}>
+                                        <RemoveRedEyeOutlined/>Theo dõi</Button>
                                 </Box>
                                 <Box sx={{ ml: '12px' }}>
-                                    <Typography>Ngày hết hạn</Typography>
-                                    <Box>Chưa hoàn thành</Box>
+                                    <TextField
+                                        id="date"
+                                        label="Ngày hết hạn"
+                                        type="date"
+                                        value="2025-06-10"
+                                        onChange={handleUpdateCard}
+                                        sx={{ 
+                                            width: 220,
+                                            '& .MuiInputBase-root .MuiOutlinedInput-input': {
+                                                p: '14px'
+                                            },
+                                            '& .MuiFormLabel-root.MuiInputLabel-root': {
+                                                color: theme => theme.trelloCustom.myColor
+                                            },
+                                            '& .MuiInputBase-root .MuiOutlinedInput-notchedOutline':{
+                                                borderColor: theme => theme.trelloCustom.myColor
+                                            },
+                                            '& .MuiInputBase-input.MuiOutlinedInput-input': {
+                                                color: theme => theme.trelloCustom.myColor
+                                            },
+                                            '& input[type="date"]::-webkit-calendar-picker-indicator': {
+                                                filter: 'invert(0.5)',
+                                                cursor: 'pointer'
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                    />
                                 </Box>
                             </Box>
     
@@ -323,6 +395,5 @@ export default function CardItem({ card }) {
                 </Box>
             </Modal> 
         </div>      
-
     )
 }

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { isEmpty } from 'lodash'
 import { v4 } from 'uuid'
-import { createNewCardApi, createNewColumnApi, deleteColumnDetailsApi, fetchBoardDetailsApi } from '~/apis'
+import { createNewCardApi, createNewColumnApi, deleteColumnDetailsApi, fetchBoardDetailsApi, updateCardApi, uploadCardCoverApi } from '~/apis'
 import { generatePlaceHolderCard } from '~/utils/formatter'
 import mapOrder from '~/utils/sortter'
 
@@ -9,6 +9,7 @@ export const boardSilce = createSlice({
     name: 'board',
     initialState: {
         status: false,
+        isCardCoverUploading: false,
         data: []
     },
     reducers: {
@@ -75,6 +76,19 @@ export const boardSilce = createSlice({
                     Object.assign(boardUpdate, action.payload.newBoard)
                 }
             })
+
+            //Update Card
+            .addCase(uploadCardCoverThunk.pending, (state) => {
+                state.isCardCoverUploading = true
+            })
+
+            .addCase(uploadCardCoverThunk.fulfilled, (state) => {
+                state.isCardCoverUploading = false
+            })
+
+            .addCase(updateCardThunk.fulfilled, (state) => {
+                state.isCardCoverUploading = false
+            })
     }
 })
 
@@ -110,4 +124,14 @@ export const deleteColumn = createAsyncThunk('board/deleteColumn', async(columnU
     newBoard.columnOrderIds = newBoard.columnOrderIds.filter(uuid => uuid !== columnUuid)
     const message = await deleteColumnDetailsApi(columnUuid, newBoard)
     return { newBoard, message }
+})
+
+export const updateCardThunk = createAsyncThunk('board/updateCards', async(updateData) => {
+    const result = await updateCardApi(updateData)
+    return result
+})
+
+export const uploadCardCoverThunk = createAsyncThunk('board/updateCardCover', async({ file, cardUuid }) => {
+    await uploadCardCoverApi(file, cardUuid)
+    return 
 })
